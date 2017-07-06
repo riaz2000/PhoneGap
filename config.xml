@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <widget xmlns       = "http://www.w3.org/ns/widgets"
         xmlns:gap   = "http://phonegap.com/ns/1.0"
-        id          = "org.riaz2000.employeedirectory"
+        id          = "com.phonegap.employeedirectory"
         versionCode = "10"
         version     = "1.1.0">
  
-    <name>Employee Directory1</name>
+    <name>Employee Directory</name>
  
     <description>
         A simple employee directory application
