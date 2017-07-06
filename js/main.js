@@ -14,7 +14,7 @@ var app = {
     },
 
     initialize: function() {
-        this.store = new WebSqlStore();
+        this.store = new MemoryStore();
         $('.search-key').on('keyup', $.proxy(this.findByName, this));
     }
 
