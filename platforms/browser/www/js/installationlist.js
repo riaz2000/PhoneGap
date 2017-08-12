@@ -49,12 +49,16 @@ function getEmployeeList() {
 					'<h4>' + installation.address1 + ' ' + installation.address2 + '</h4>' +
 					'<p>' + installation.nr + '</p>' +
 					'<span class="ui-li-count">' + installation.nr + '</span></li>');*/
-			var empPic = "pics/gary_donovan.jpg";
-			if(installation.inst_type == 2)
-				empPic = "pics/amy_jones.jpg";
+			var instType = "imgs/place.png";
+			if(installation.inst_type == 0 || installation.inst_type == 1 || installation.inst_type == 2)
+				instType = "imgs/place.png";
+			else if(installation.inst_type == 3 || installation.inst_type == 4 || installation.inst_type == 5 || installation.inst_type == 6 || installation.inst_type == 9)
+				instType = "imgs/plaza.png";
+			else if(installation.inst_type == 7 || installation.inst_type == 8)
+				instType = "imgs/shop.png";
 			
 			$('#installationList').append('<li>' +
-					'<img src="'+ empPic + '"/>' +
+					'<img src="'+ instType + '"/>' +
 					//'<img src="pics/amy_jones.jpg"/>' +
 					'<h4>' + installation.address1 + ' ' + installation.address2 + '</h4>' +
 					'<p>' + installation.nr + '</p>' +

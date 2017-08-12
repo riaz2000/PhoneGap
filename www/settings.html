@@ -13,20 +13,36 @@
 		<h1>Settings</h1>
 	</div>
 
-	<form>
+	<form onclick="myFunction()">
 		<p>
-			<label for="a"; align="right"> <font size="" color="000000"><B> OWLBox Address: </B></font></label>
+			<label for="a"; align="right"> <font size="" color="0000ff"><B> OWLBox Address: </B></font></label>
 			<input id="a" type="text">
 		</p>
 		<p>
 			<label for="b"; align="right"> <B>OWLServer Address: </B></label>
 			<input id="b" type="text">
 		</p>
+		<button >Click me</button>
+		
+		<p id="demo"></p>
 	</form>
 
 </div>
 
 
+
+<script>
+function myFunction() {
+    var txt;
+    var r = confirm("Press a button!");
+    if (r == true) {
+        txt = "You pressed OK!";
+    } else {
+        txt = "You pressed Cancel!";
+    }
+    document.getElementById("demo").innerHTML = txt;
+}
+</script>
 
 </body>
 
