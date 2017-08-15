@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+</head>
+
+<title>Settings</title>
+ 
+<!--body onload="myfunction3()"-->
+<body>
+
+<div id="settingsPage" data-role="page" data-add-back-btn="true">
+
+	<div data-role="header">
+		<h1>Settings</h1>
+	</div>
+<!--
+	<form>
+		<p>
+			<label for="a"; align="middle"> <font size="" color="0000ff"><B> OWLBox Address: </B></font></label>
+			<input id="a" type="text">
+		</p>
+		<p>
+			<label for="b"; align="center"> <font size="" color="ff0000"><B>OWLServer Address: </B></font></label>
+			<input id="b" onclick='myfunction2()' type="text" text="Loading . . .">
+		</p>
+		<button onclick="myfunction1()">Click me</button>
+		<!--input type="submit" id="submit" onclick="myfunction1()" value="OK">	
+		
+	</form>
+
+	<p id="demo"></p>
+-->
+<input type="text" id="textline" value="Here" onload="getVal()" placeholder="First name"/>
+<button onclick="myfunction1()">Remember</button>
+<button onclick="myfunction2()">Recall</button>
+
+</div>
+
+<script src="js/settings.js"></script>
+
+<script>
+var x = 'I have a bike';
+var y = document.getElementById('textline');
+y.value =x;
+aler
+</script>
+
+<script>
+var ar;
+function getVal() {
+  return ar = "12345";//localStorage.getItem("mynumber");;
+}
+</script>
+
+</body>
+
+</html>

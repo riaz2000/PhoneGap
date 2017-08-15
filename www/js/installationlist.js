@@ -1,5 +1,5 @@
-var serviceURL = "http://localhost/owl/services/";
-//var serviceURL = "http://192.168.1.2/owl/services/";
+//var serviceURL = "http://localhost/owl/services/";
+var serviceURL = "http://192.168.1.2/owl/services/";
 
 var installations;
 

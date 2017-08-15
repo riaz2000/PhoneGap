@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+</head>
+
+<title>Settings</title>
+ 
+<!--body onload="myfunction3()"-->
+<body>
+
+<div id="settingsPage" data-role="page" data-add-back-btn="true">
+
+	<div data-role="header">
+		<h1>Settings</h1>
+	</div>
+	
+	<form>
+		<p>
+			<label for="OBAddress"; align="middle"> <font size="" color="0000ff"><B> OWLBox Address: </B></font></label>
+			<input id="OBAddress" type="text" placeholder="OWLBox IP or URL">
+		</p>
+		<p>
+			<label for="OSAddress"; align="center"> <font size="" color="ff0000"><B>OWLServer Address: </B></font></label>
+			<input id="OSAddress" type="text" placeholder="OWLServer IP or URL">
+		</p>
+		<button onclick="update()">OK</button>
+		<button onclick="cancel()">Cancel</button>
+		<!--input type="submit" id="submit" onclick="myfunction1()" value="OK"-->	
+		
+	</form>
+
+	<!--input type="text" id="textline" value="Here" placeholder="OWLBox Address"/>
+	<button onclick="myfunction1()">OK</button>
+	<button onclick="myfunction2()">Close</button>
+	
+	<h3 id="fullName"></h3-->
+</div>
+	
+	<script src="js/settgins.js"></script>
+</body>
+
+</html>
