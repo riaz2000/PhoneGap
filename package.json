@@ -1,0 +1,12 @@
+{
+  "name": "WeatherApp",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+  },
+  "scripts": {
+    "getNpmVersion": "npm -v",
+    "getNodeVersion": "node -v",
+    "updateNPM": "npm install npm@latest"
+  }
+}

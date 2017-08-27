@@ -1,0 +1,1 @@
+F:\workspace\MSVS\ApacheCordova\WeatherApp\WeatherApp\platforms\windows\AppPackages\CordovaApp.Windows10_1.0.0.0_x64_Test\CordovaApp.Windows10_1.0.0.0_x64.appx
