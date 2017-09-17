@@ -1,1 +1,0 @@
-F:\workspace\MSVS\ApacheCordova\WeatherApp\WeatherApp\platforms\windows\CordovaApp.Windows10.jsproj;x64

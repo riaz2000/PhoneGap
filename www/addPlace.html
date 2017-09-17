@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+</head>
+
+<title>Add Place</title>
+
+<body>
+
+<div id="addplacePage" data-role="page" data-add-back-btn="true">
+
+	<div data-role="header">
+		<h1>Add Place</h1>
+	</div>
+	
+	<form>
+		<p>
+			<label for="OBID"; align="middle"> <font size="" color="0000ff"><B> OWLBox ID: </B></font></label>
+			<input id="OBID" type="text" placeholder="OWL Box Number">
+			<input id="BtnOBID" type="button" value="Add" onclick="add()" />
+			<!--button onclick="add()">Add</button-->
+		</p>
+		<!--input type="submit" id="submit" onclick="myfunction1()" value="OK"-->	
+		<p>
+			<input id="BtnSRCH" type="button" value="Search" onclick="tempFn()" />
+			<!--button onclick="findOBoxs()">Search</button-->
+			<div data-role="content">
+				<ul id="installationList2" data-role="listview" data-filter="true"></ul>
+			</div>
+		</p>
+		
+	</form>
+ 
+</div>
+
+</body>
+
+</html>

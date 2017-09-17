@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+</head>
+<script type="text/javascript">
+    function accountSetup(){
+        var submittedPayDayDate = document.getElementById("setPayDayDate").value;
+        var submittedMonthlyTakehome = document.getElementById("setMonthlyTakehome").value;
+        var submittedSavingsTarget = document.getElementById("setSavingsTarget").value;
+        window.localStorage.setItem("payDayDate", submittedPayDayDate);
+        window.localStorage.setItem("monthlyTakehome", submittedMonthlyTakehome);
+        window.localStorage.setItem("monthlySavingsTarget", submittedSavingsTarget);
+        return false;
+    }
+</script>
+<title>Settings</title>
+ 
+<body>
+<div id="Admin" data-role="page" data-add-back-btn="true">
+
+	<div data-role="header">
+		<h1>Administer</h1>
+	</div>
+	<form method="post" onSubmit="return accountSetup()" data-ajax="false">
+        <label>
+            Date of pay day:
+            <input type="text" id="setPayDayDate" name="setPayDayDate" placeholder="23" />
+        </label>
+        <label>
+            Monthly takehome:
+            <input type="text" id="setMonthlyTakehome" name="setMonthlyTakehome" placeholder="£800" />
+        </label>
+        <label>
+            Savings target:
+            <input type="text" id="setSavingsTarget" name="setSavingsTarget" placeholder="£200" />
+        </label>
+        <input type="submit" value="Calculate!" />
+    </form>
+</div>
+
+</body>
+
+</html>	
