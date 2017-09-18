@@ -33,7 +33,7 @@ function add(){
 var socketId1 = 0;
 function findOBoxs(){
 	//'use strict';
-	alert('searching  .  .            . ');
+	alert('searching  .  .          . ');
 	//chrome.sockets.udp.create({}, function(socketInfo) {
 	chrome.sockets.udp.create({}, function (createInfo) {
 		var _socketUdpId= createInfo.socketId;
