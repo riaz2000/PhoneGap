@@ -76,6 +76,44 @@ module.exports = [
         "clobbers": [
             "chrome.sockets.udp"
         ]
+    },
+    {
+        "file": "plugins/cordova-plugin-chrome-apps-system-network/system.network.js",
+        "id": "cordova-plugin-chrome-apps-system-network.system.network",
+        "pluginId": "cordova-plugin-chrome-apps-system-network",
+        "clobbers": [
+            "chrome.system.network"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-networkinterface/www/networkinterface.js",
+        "id": "cordova-plugin-networkinterface.networkinterface",
+        "pluginId": "cordova-plugin-networkinterface",
+        "clobbers": [
+            "window.networkinterface"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-networkinterface/src/browser/networkinterfaceProxy.js",
+        "id": "cordova-plugin-networkinterface.networkinterfaceProxy",
+        "pluginId": "cordova-plugin-networkinterface",
+        "runs": true
+    },
+    {
+        "file": "plugins/cordova-plugin-dialogs/www/notification.js",
+        "id": "cordova-plugin-dialogs.notification",
+        "pluginId": "cordova-plugin-dialogs",
+        "merges": [
+            "navigator.notification"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-dialogs/www/browser/notification.js",
+        "id": "cordova-plugin-dialogs.notification_browser",
+        "pluginId": "cordova-plugin-dialogs",
+        "merges": [
+            "navigator.notification"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -85,7 +123,10 @@ module.exports.metadata =
     "cordova-plugin-inappbrowser": "1.7.1",
     "cordova-plugin-network-information": "1.3.3",
     "cordova-plugin-chrome-apps-common": "1.0.7",
-    "cordova-plugin-chrome-apps-sockets-udp": "1.3.0"
+    "cordova-plugin-chrome-apps-sockets-udp": "1.3.0",
+    "cordova-plugin-chrome-apps-system-network": "1.1.2",
+    "cordova-plugin-networkinterface": "1.2.0",
+    "cordova-plugin-dialogs": "1.3.3"
 }
 // BOTTOM OF METADATA
 });
