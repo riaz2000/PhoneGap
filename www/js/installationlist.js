@@ -6,12 +6,28 @@ var installations;
 $('#installationListPage').bind('pageinit', function(event) {
 	getInstallationList();
 });
+/*
 document.addEventListener("deviceready", onDeviceReady, true);
 function onDeviceReady() {
     window.open = cordova.InAppBrowser.open;
 	//delete window.open;
 	
 }
+*/
+document.addEventListener('deviceready', function () {
+    // cordova.plugins.backgroundMode is now available
+	alert("Device Ready ");
+	window.open = cordova.InAppBrowser.open;
+}, false);
+
+document.addEventListener("offline", function () {
+	alert('You have lost internet connection');
+	console.log("lost connection");
+}, false);
+
+document.addEventListener("online", function () {
+	//alert('You have got internet connection');
+}, false);
 
 function getInstallationList() {
 	//alert('Here - 1');

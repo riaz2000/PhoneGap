@@ -19,7 +19,7 @@ function getAddPlaceInfo(){
 	
 	alert('Help us finding the OWLBox\n\nYou MUST Be on the SAME LAN to Add a new OWLBox');
 }
-
+/* moved to installationlist.js
 document.addEventListener('deviceready', function () {
     // cordova.plugins.backgroundMode is now available
 	alert("Device Ready ");
@@ -33,9 +33,10 @@ document.addEventListener("offline", function () {
 document.addEventListener("online", function () {
 	alert('You have got internet connection');
 }, false);
+*/
 
 function search1(){
-	alert('Search 1');
+	//alert('Search 1');
 	
 	var WifiIPaddr;
 	var startIP;
@@ -65,7 +66,7 @@ function search1(){
 			}
 			//count = 
 		}
-		alert('Search 2');
+		//alert('Search 2');
 		startIPoctt = startIP.split('.');
 		//alert('startIPoctt[3]: '+startIPoctt[3]);
 		
@@ -96,9 +97,16 @@ function search1(){
 				//$('#installationList2').append('<li> <img src="imgs/place.png"; width="50px"; height="50"; onclick="update1()";/> OWLBox <B>' + OWLBoxNo + ' @ ' + data[1] + '</B> <span class="ui-li-count"> 4 </span> </a> </li>');
 				$('#installationList2').listview('refresh');
 				}
-			}).success(function() { alert("second success"); })
-			.error(function() { alert("error"); })
-			.complete(function() { alert("complete"); });
+			})	.success(function() { 
+					//alert("second success"); 
+				})
+				.error(function() { 
+					//alert("error"); 
+				})
+				.complete(function() { 
+					//alert("complete"); 
+				}
+			);
 			//setTimeout(function(){ p.abort(); alert(JSON.stringify(p)); }, 500);
 			p.push(retObj);
 			
