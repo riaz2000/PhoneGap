@@ -1,11 +1,12 @@
 $('#configPage').live('pageshow', function(event) { //pageshow pageinit
+	window.open = cordova.InAppBrowser.open;
 	//getServerInfo();
-	document.addEventListener("deviceready", onDeviceReady, false);
+	//document.addEventListener("deviceready", onDeviceReady, false);
 });
 
 function onDeviceReady() {
     // Now safe to use the Codova API
- window.location="http://your.website"; 
+	//window.location="http://your.website"; 
 }
  
 function yourFunction(){
