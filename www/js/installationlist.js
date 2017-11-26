@@ -3,89 +3,71 @@ var serviceURL = "http://192.168.1.2/owl/services/";
 //var serviceURL = "http://"+localStorage.getItem('owlbaddr')+"/owl/services/";
 
 var installations;
-$('#installationListPage').bind('pageinit', function(event) {
-	getInstallationList();
-});
-/*
-document.addEventListener("deviceready", onDeviceReady, true);
-function onDeviceReady() {
-    window.open = cordova.InAppBrowser.open;
-	//delete window.open;
+//$('#installationListPage').bind('pageinit', function(event) {
+$('#installationListPage').live('pageshow', function(event) {
+	if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)) {
+		//alert("Here--");
+	  document.addEventListener("deviceready", onDeviceReady, false);
+	} else {
+		//alert("Here--2");
+	  onDeviceReady(); //this is the browser
+	}
+	//localStorage.setItem('OBsLstStr',[]);
+	//var addedOBs = localStorage.getItem('OBsLstStr');
 	
-}
-*/
-document.addEventListener('deviceready', function () {
-    // cordova.plugins.backgroundMode is now available
-	alert("Device Ready ");
-	window.open = cordova.InAppBrowser.open;
-}, false);
-
-document.addEventListener("offline", function () {
-	alert('You have lost internet connection');
-	console.log("lost connection");
-}, false);
-
-document.addEventListener("online", function () {
-	//alert('You have got internet connection');
-}, false);
+	setDeviceType();
+	getInstallationList(); // 
+});
 
 function getInstallationList() {
-	//alert('Here - 1');
-	//var owlBoxes;
 	
-	/*$.getJSON(serviceURL + 'discoverOwl.php', function(data) {
-		//owlBoxes = data.items;
-		//$.each(owlBoxes, function(index, owlBox) {
-		//		alert('Here - '+owlBox.name);
-		//});
-		
-		alert('Here - '+data[1]);
-		alert('Here - '+data[0]);
-		
-		//$fields = explode(":", data[0]);
-		//OWLBoxNo = $fields[2];
-		alert('OWLBoxNo='+data[0].split(':')[2]);
-	});*/
-	//alert('Here - 2');
-	/*
-	$.getJSON(serviceURL + 'discoverOwl.php', function(data) {
-		owlBoxes = data.items;
-		alert('InstPage-1 '+owlBoxes);
-		$.each(owlBoxes, function(index, owlBox) {
-			//alert('InstPage-1 '+myObj.value);
-		}
-	}
+	//alert("Device: "+getDeviceType());
 	
-	myObj = document.getElementById('msgObj');
-	
-	//var url = localStorage.getItem('owlbaddr');
-	//myObj.data = "http://localhost/owl/services/installation.php";
-	myObj.height = "100%";
-	
-	for (i = 1; i < 9; i++) { 
-		//text += cars[i] + "<br>";
-		myObj.data = "http://192.168.1."+i+"/owl/services/discoverOwl.php";
-		alert('InstPage-1 '+myObj.value);
-	}
-	myObj.data = "http://192.168.1.6/owl/services/discoverOwl.php";
-	
-	//if(myObj.data)
-	//alert('InstPage-1 '+myObj.data);
-	*/
+	//alert("OBsLstStr: " +localStorage.getItem('OBsLstStr'));
+	if(localStorage.getItem('OBsLstStr')=="" || localStorage.getItem('OBsLstStr')==null)
+		localStorage.setItem('OBsLstStr',"[]");
 	
 	myObj = document.getElementById('msgObj');
 	//myObj.standby = "Retrieving ...";
 	myObj.data = "http://localhost/owl/services/discoverOwl.php";
 	
+	var addedOBs = localStorage.getItem('OBsLstStr');
+	obj = JSON.parse(addedOBs);
+	//alert('addedOBs: ',addedOBs);
+	$('#installationList li').remove();
+	for (var i = 0; i < obj.length; i++){
+		//alert('InstType: ',obj[i].instType);
+		var instType = "imgs/place.png";
+		if(obj[i].instType == 0 || obj[i].instType == 1 || obj[i].instType == 2)
+			instType = "imgs/place.png";
+		else if(obj[i].instType == 3 || obj[i].instType == 4 || obj[i].instType == 5 || obj[i].instType == 6 || obj[i].instType == 9)
+			instType = "imgs/plaza.png";
+		else if(obj[i].instType == 7 || obj[i].instType == 8)
+			instType = "imgs/shop.png";
+		
+		var linkToPage;
+		if(obj[i].uLoginState == 0){
+			//linkToPage = "login.html?loginid='rhussain1'";
+			linkToPage = "login.html?OBoxID="+obj[i].OBoxNo;
+			lockImg = "imgs/pswd.png";
+			href3 = '';
+		}
+		else{
+			linkToPage = "installation.html?OBoxID="+obj[i].OBoxNo;
+			lockImg = "imgs/cnfg.png";
+			href3 = '<span class="ui-li-count"><a href="uoptions.html?OBoxID='+obj[i].OBoxNo+'"><img src="' + lockImg + '" height=30, width=25/></a></span></a>';
+		}
+		
+		$('#installationList').append('<li>' + '<a href="' + linkToPage + '">' +
+										'<img src="'+ instType + '"/>' +
+										'<h4>' + obj[i].instAddr1 + '</h4><p><B>' + obj[i].instAddr2 + ',</p></B>' +
+										'<p><B>' + obj[i].instCity + '</B> ' +  obj[i].instState + ' ' + obj[i].instZip + ' ' + obj[i].instCountry + '</p>'  +
+										'<font size="4" color="maroon"><center>' + obj[i].OBoxNo + '</center></font>' + 
+										'<span class="ui-li-count"><img src="' + lockImg + '" height=30, width=25/></span></a>' + href3 + '</li> ');
+
+	}
+	$('#installationList').listview('refresh');
 	/*
-	while(htmlDocument== null){
-	var t=document.querySelector("#msgObj");
-	var htmlDocument= t.contentDocument;
-	}*/
-	//alert('InstPage-1 '+ myObj.data);
-	//var abc = valueOf(myObj.data);
-	//alert('InstPage-1 '+ htmlDocument);
-	
 	$.getJSON(serviceURL + 'getinstallations.php', function(data) {
 		$('#installationList li').remove();
 		installations = data.items;
@@ -126,4 +108,5 @@ function getInstallationList() {
 		});
 		$('#installationList').listview('refresh');
 	});
+	*/
 }

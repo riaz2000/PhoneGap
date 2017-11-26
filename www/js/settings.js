@@ -23,7 +23,7 @@ function getServerInfo(){
 }
 
 //document.addEventListener("deviceready", //function(){
-function update(){
+function updateSettings(){
     //remember code
 	var obaddr = document.getElementById('OBAddress').value;
 	var osaddr = document.getElementById('OSAddress').value;
@@ -36,51 +36,12 @@ function update(){
 	
 	alert("Information Stored");
 	
-	var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-    if (userAgent.match(/iPad/i) || userAgent.match(/iPhone/i) || userAgent.match(/iPod/i)) {
-        // IOS DEVICE
-        history.go(-1);
-    } else if (userAgent.match(/Android/i)) {
-        // ANDROID DEVICE
-        navigator.app.backHistory();
-    } else {
-        // EVERY OTHER DEVICE
-        history.go(-1);
-    }
-	
-	//history.go(-1);
-	//navigator.app.backHistory();
-
-    //var texttosave = document.getElementById("textline").value ;
-    //localStorage.setItem("mynumber", texttosave);
-
-	//confirm("Press a button! " + texttosave);
+	goBack();
 
 }
 //, false);
 
 function cancel(){
-	//recall code
-	//history.go(-1);
-	//navigator.app.backHistory();
-	
-	var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-    if (userAgent.match(/iPad/i) || userAgent.match(/iPhone/i) || userAgent.match(/iPod/i)) {
-        // IOS DEVICE
-        history.go(-1);
-    } else if (userAgent.match(/Android/i)) {
-        // ANDROID DEVICE
-        navigator.app.backHistory();
-    } else {
-        // EVERY OTHER DEVICE
-        history.go(-1);
-    }
-	
-	
-	//history.back()
-
-	//navigator.notification.alert("PhoneGap is ready!");
-	
-    //document.getElementById("textline").innerHTML = localStorage.getItem("mynumber"); 
-	//confirm("Press a button!" + localStorage.getItem("mynumber"));
+	goBack()
 }
+

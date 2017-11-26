@@ -14,7 +14,11 @@
 		<h1>Login</h1>
 	</div>
 	
-	<p><a href="#" onclick="showConfirm(); return false;">Show Confirm</a></p>
+	<!--p><a href="#" onclick="showConfirm(); return false;">Show Confirm</a></p-->
+	
+	<div style="padding-top: 30px;"> 
+		<img id="removeInstImg" src="imgs/place_rmv.png" height=50, width=40, onclick="removeInst()">Remove from List</>
+	</div>
 	
 	<form>
 		<p>
@@ -27,15 +31,13 @@
 		</p>
 		
 		<!--button onclick="update()">OK</button-->
-		<input id="BtnLogin" type="button" value="Login" onclick="login2()" />
+		<input id="BtnLogin" type="button" value="Login" onclick="login()" />
 		<!--button onclick="cancel()">Cancel</button-->
 		<input id="BtnCancel" type="button" value="Cancel" onclick="cancel()" />
 		
 		<!--input type="submit" id="submit" onclick="myfunction1()" value="OK"-->	
 		
 	</form>
-	
-	
 
 	<object id="LoginmsgObj" standby = "Retrieving ..."; type="text/html" width="100%" topmargin='300px' style="overflow:auto; height:100%; border:5px; ridge blue">
 	</object>
