@@ -88,9 +88,8 @@ function searchOnLAN(){
 }
 
 function try2Discover(url,mode){
-	//alert('Here22 - '+serviceURL);
+	alert('try2Discover-url: '+url);
 	var isneedtoKillAjax = true; // set this true
-	//serviceURL = "http://192.168.1.6/owl/services/";
 	var timeoutTimerVal;
 	if (mode == Direct)
 		timeoutTimerVal = 300;
@@ -136,7 +135,7 @@ function try2Discover(url,mode){
 		if(isneedtoKillAjax){
 			//p[i].abort();
 			retObj.abort();
-			alert('killing after timeout');                 
+			alert('Timeout: No OWLBox Discovered');                 
 		}else{
 			//alert('no need to kill ajax');
 		}
@@ -156,7 +155,7 @@ function addListed(mode){
 		selectedOBoxIP = itemText.split('@')[1];
 		selectedOBoxId = (itemText.split('@')[0]).split(':')[1];
 		if(getIndexOfOBox(OBoxID) > -1){
-			myAlert('OWLBox No:' + selectedOBoxId + ' is already added', 0);
+			myAlert('OWLBox No:' + selectedOBoxId + ' is already in the list', 0);
 			return;
 		}
 		myAlert('selectedOBoxId: '+selectedOBoxId, 3);

@@ -29,7 +29,8 @@ function getInstallationList() {
 	
 	myObj = document.getElementById('msgObj');
 	//myObj.standby = "Retrieving ...";
-	myObj.data = "http://localhost/owl/services/discoverOwl.php";
+	obaddr = localStorage.getItem('owlbaddr');
+	myObj.data = "http://"+obaddr+"/owl/services/discoverOwl.php";
 	
 	var addedOBs = localStorage.getItem('OBsLstStr');
 	obj = JSON.parse(addedOBs);

@@ -259,12 +259,13 @@ function checkDirectAccess(IPaddr){
 	var isneedtoKillAjax = true;
 	var retObj = $.getJSON(url, function(data) {
 		isneedtoKillAjax = false;
-		//alert(JSON.stringify(data));
+		alert(JSON.stringify(data));
 		if(data != null){
 			OWLBoxNo = data[0].split(':')[2];
 			
 			if(OWLBoxNo != OBoxID){
 				alert("Ficticious OWLBox at the given address (Direct Access)");
+				alert("OWLBoxNo: " + OWLBoxNo + " ::: OBoxID: " + OBoxID);
 				return;
 			}
 			
