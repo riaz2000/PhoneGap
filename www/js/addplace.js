@@ -92,7 +92,7 @@ function try2Discover(url,mode){
 	var isneedtoKillAjax = true; // set this true
 	var timeoutTimerVal;
 	if (mode == Direct)
-		timeoutTimerVal = 300;
+		timeoutTimerVal = 1000;
 	else
 		timeoutTimerVal = 4000;
 	setTimeout(function() {
@@ -103,10 +103,11 @@ function try2Discover(url,mode){
 		//if(data == "")
 		//	continue;
 		//else
+		alert('Here: ' + url + 'discoverOwl.php');
 		isneedtoKillAjax = false;
 		
 		if(data != null){
-			//alert('DataRcvd: ' + data);
+			alert('DataRcvd: ' + JSON.stringify(data));
 			
 			OWLBoxNo = data[0].split(':')[2];
 			lstdOBs.push(OWLBoxNo+"@"+data[1]);
