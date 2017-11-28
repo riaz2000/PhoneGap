@@ -30,6 +30,7 @@ function getInstallationList() {
 	myObj = document.getElementById('msgObj');
 	//myObj.standby = "Retrieving ...";
 	obaddr = localStorage.getItem('owlbaddr');
+	alert('obaddr: '+obaddr );
 	myObj.data = "http://"+obaddr+"/owl/services/discoverOwl.php";
 	
 	var addedOBs = localStorage.getItem('OBsLstStr');
