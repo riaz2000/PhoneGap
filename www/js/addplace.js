@@ -95,9 +95,11 @@ function try2Discover(url,mode){
 		timeoutTimerVal = 1000;
 	else
 		timeoutTimerVal = 4000;
+	alert('Here: 1' );
 	setTimeout(function() {
 		checkajaxkill();
 	}, timeoutTimerVal);	//300 mSec
+	alert('Here: 2' );
 	var p = [ ];
 	var retObj = $.getJSON(url + 'discoverOwl.php', function(data) {
 		//if(data == "")
