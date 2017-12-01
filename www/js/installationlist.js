@@ -1,5 +1,5 @@
 //var serviceURL = "http://localhost/owl/services/";
-var serviceURL = "http://192.168.1.2/owl/services/";
+var serviceURL;// = "http://192.168.1.2/owl/services/";
 //var serviceURL = "http://"+localStorage.getItem('owlbaddr')+"/owl/services/";
 
 var installations;
@@ -16,13 +16,14 @@ $('#installationListPage').live('pageshow', function(event) {
 	//var addedOBs = localStorage.getItem('OBsLstStr');
 	
 	setDeviceType();
+	serviceURL = "http://192.168.1.2/owl/services/";
 	getInstallationList(); // 
 });
 
 function getInstallationList() {
 	
-	//alert("Device: "+getDeviceType());
-	
+	myAlert("Device: "+getDeviceType(),3);
+	/*
 	//alert("OBsLstStr: " +localStorage.getItem('OBsLstStr'));
 	if(localStorage.getItem('OBsLstStr')=="" || localStorage.getItem('OBsLstStr')==null)
 		localStorage.setItem('OBsLstStr',"[]");
@@ -69,8 +70,10 @@ function getInstallationList() {
 
 	}
 	$('#installationList').listview('refresh');
-	/*
+	*/
 	$.getJSON(serviceURL + 'getinstallations.php', function(data) {
+	//$.getJSON('http://192.168.1.2/owl/services/getinstallations.php', function(data) {
+		alert('Here1: ' );
 		$('#installationList li').remove();
 		installations = data.items;
 		$.each(installations, function(index, installation) {
@@ -110,5 +113,5 @@ function getInstallationList() {
 		});
 		$('#installationList').listview('refresh');
 	});
-	*/
+	
 }
