@@ -71,8 +71,8 @@ function getInstallationList() {
 	}
 	$('#installationList').listview('refresh');
 	*/
-	$.getJSON(serviceURL + 'getinstallations.php', function(data) {
-	//$.getJSON('http://192.168.1.2/owl/services/getinstallations.php', function(data) {
+	//$.getJSON(serviceURL + 'getinstallations.php', function(data) {
+	$.getJSON('http://192.168.1.2/owl/services/getinstallations.php', function(data) {
 		alert('Here1: ' );
 		$('#installationList li').remove();
 		installations = data.items;
