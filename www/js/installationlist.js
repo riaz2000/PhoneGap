@@ -22,7 +22,7 @@ $('#installationListPage').live('pageshow', function(event) {
 
 function getInstallationList() {
 	
-	myAlert("Device: "+getDeviceType(),3);
+	myAlert("Device1: "+getDeviceType(),3);
 	/*
 	//alert("OBsLstStr: " +localStorage.getItem('OBsLstStr'));
 	if(localStorage.getItem('OBsLstStr')=="" || localStorage.getItem('OBsLstStr')==null)
@@ -71,9 +71,10 @@ function getInstallationList() {
 	}
 	$('#installationList').listview('refresh');
 	*/
+	alert('Here1a: ' );
 	//$.getJSON(serviceURL + 'getinstallations.php', function(data) {
 	$.getJSON('http://192.168.1.2/owl/services/getinstallations.php', function(data) {
-		alert('Here1: ' );
+		alert('Here1bb: ' );
 		$('#installationList li').remove();
 		installations = data.items;
 		$.each(installations, function(index, installation) {
