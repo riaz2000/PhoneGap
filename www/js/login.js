@@ -29,7 +29,7 @@ function login(){
 	//window.location.href = 
 	setTimeout(function() {
 		checkajaxkill();
-	}, 300);
+	}, 3000);
 	isneedtoKillAjax = true;
 	var retObj = $.getJSON(serviceURL + 'getHashPwd.php?uid='+uid.value, function(data) {
 		//async: false,
