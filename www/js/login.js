@@ -8,6 +8,7 @@ function getInfo(){
 	OBoxID = getUrlVars()['OBoxID'];
 	alert('loginPage-getInfo-1-OBoxId: ' + OBoxID);
 	getOBoxAddress();
+	
 	//myObj = document.getElementById('LoginmsgObj');
 	//myObj.standby = "Retrieving ...";
 	//myObj.data = "http://localhost/owl/services/login.php";
@@ -17,7 +18,21 @@ function login(){
 	OBoxID = getUrlVars()['OBoxID'];
 	var uid = document.getElementById('UId');
 	var pswd = document.getElementById('UPwd');
-	var serviceURL = "http://localhost/owl/services/";
+	//var serviceURL = "http://localhost/owl/services/";
+	var serviceURL;// = "http://localhost/owl/services/";
+	
+	if(getOBdirectAccess()==1)
+		serviceURL = 'http://'+getDirectAccessIP()+'/owl/services/';
+	else if(getOBviaInternetAccess()==1){
+		osaddr = localStorage.getItem('owlsaddr');
+		port = 30000 + parseInt(OBoxID);
+		serviceURL = 'http://'+osaddr+':'+port+'/owl/services/';
+		//serviceURL = 'http://203.124.40.232:30003/owl/services/';	
+	}
+	else{
+		alert("OWLBox " + OBoxID + " Neither on LAN Nor Accessible over Internet");
+		return;
+	}
 	//alert("login-2UId" + uid.value);
 	//alert("login-3PsWd " + pswd.value);
 	/*
