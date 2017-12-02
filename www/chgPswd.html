@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+</head>
+
+<title>Change Password</title>
+ 
+<!--body onload="myfunction3()"-->
+<body>
+
+<div id="chgPswdPage" data-role="page" data-add-back-btn="true">
+
+	<div data-role="header">
+		<h1 id="pgTitle">Change Password</h1>
+	</div>
+	
+	<div align='center', topmargin='300'> 
+		<h2 id="uid">User ID</h2>
+	</div>
+	
+	<div align='center', topmargin='100'> 
+		<img id="titleImg" src="imgs/place.png" height=30, width=25, align="center"> <label id="OBoxNo"; align="middle"> <font size="" color="0000ff"><B> OWLBoxNo </B></font></label> </img>
+	</div>
+	
+	<div align='center', topmargin='300'> 
+		<label id="address"; align="middle"> <font size="" color="0000ff"><B> Address</B></font></label>
+	</div>
+	
+	<form>
+		<p>
+			<label for="OldPsWd"; align="middle"> <font size="" color="0000ff"><B> Old Password: </B></font></label>
+			<input id="OldPsWd" type="password" placeholder="Your Previous Password">
+		</p>
+		<p>
+			<label for="NewPsWd1"; align="center"> <font size="" color="0000ff"><B> Enter New Password: </B></font></label>
+			<input id="NewPsWd1" type="password" placeholder="Your New Password">
+		</p>
+		
+		<p>
+			<label for="NewPsWd2"; align="center"> <font size="" color="0000ff"><B> Confirm New Password: </B></font></label>
+			<input id="NewPsWd2" type="password" placeholder="Retype New Password">
+		</p>
+		
+		<!--button onclick="update()">OK</button-->
+		<input id="BtnOK" type="button" value="OK" onclick="update()" />
+		<!--button onclick="cancel()">Cancel</button-->
+		<input id="BtnCancel" type="button" value="Cancel" onclick="cancel()" />
+		
+		<!--input type="submit" id="submit" onclick="myfunction1()" value="OK"-->	
+		
+	</form>
+
+	<!--input type="text" id="textline" value="Here" placeholder="OWLBox Address"/>
+	<button onclick="myfunction1()">OK</button>
+	<button onclick="myfunction2()">Close</button>
+	
+	<h3 id="fullName"></h3-->
+</div>
+	<!--script src="js/settgins.js"></script-->
+</body>
+
+</html>
