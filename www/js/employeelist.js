@@ -1,4 +1,5 @@
-var serviceURL = "http://localhost/directory/services/";
+//var serviceURL = "http://localhost/directory/services/";
+var serviceURL = "http://192.168.1.2/directory/services/";
 
 var employees;
 
