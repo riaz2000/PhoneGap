@@ -1,82 +1,31 @@
 <!DOCTYPE HTML>
 <html>
-
 <head>
-<title>Online Watch and Control</title>
-<!--meta name="viewport" content="width=device-width,initial-scale=1"/-->
-<meta name="viewport" http-equiv="Content-Security-Policy" content="default-src *; script-src * 'unsafe-eval' 'unsafe-inline'; connect-src *; img-src *; style-src * 'unsafe-inline' ; media-src *; width=device-width,initial-scale=1"> 
+<title>Employee Dirc</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
 <link rel="stylesheet" href="css/jquery.mobile-1.0rc1.min.css" />
 <link rel="stylesheet" href="css/styles.css" />
 </head>
     
 <body>
- 
-<!-- 
-<div id="installationsListPage" data-role="page">
+        		
+<div id="employeeListPage" data-role="page">
 
 	<div data-role="header" data-position="fixed">
-		<h1>My Installations</h1>
+		<h1>Employee Directoryy</h1>
 	</div>
 
 	<div data-role="content">
-         <ul id="installationList" data-role="listview" data-filter="true"></ul>
+         <ul id="employeeList" data-role="listview" data-filter="true"></ul>
     </div>		
-
-</div>
--->
-<div id="installationListPage" data-role="page">
-
-	<div data-role="header" data-position="fixed">
-		<h1>My Installations</h1>
-	</div>
-
-	<div data-role="content">
-		<a href="configureOwl.html">
-			<img src="imgs/menu.png"; style="margin-left: 10px"; alt="imgs/place_add.png"; height="52" width="52"/>
-		</a>
-		<a href="addPlace.html">
-			<img src="imgs/place_add.png"; ALIGN="right"; style="margin-right: 10px"; height="52" width="52"/>
-		</a>
-	</div>
-	<div data-role="content">
-         <ul id="installationList" data-role="listview" data-filter="true"></ul>
-    </div>
-	<object id="msgObj" standby = "Retrieving ..."; type="text/html" width="100%" topmargin='300px' style="overflow:auto; height:100%; border:5px; ridge blue">
-	</object>
 
 </div>
 
 <script src="js/jquery.js"></script>
 <script src="js/jquery.mobile-1.0rc1.min.js"></script>
-<script src="cordova.js"></script>
-<script src="js/bcrypt/utfx.js"></script>
-<script src="js/bcrypt/util.js"></script>
-<script src="js/bcrypt/impl.js"></script>
-<script src="js/bcrypt/accum.js"></script>
-<script src="js/bcrypt/isaac.js"></script>
-<script src="js/bcrypt/base64.js"></script>
-<script src="js/bcrypt/bcrypt.js"></script>
-<script src="js/bcrypt/wrap.js"></script>
-<script src="js/gestures/hammer-time.min.js"></script>
-<script src="js/gestures/hammer.min.js"></script>
-<script src="js/gestures/quo.min.js"></script>
-<script src="js/common.js"></script>
-<script src="js/installationlist.js"></script>
-<script src="js/settings.js"></script>
-<script src="js/addplace.js"></script>
-<script src="js/test.js"></script>
-<script src="js/installation.js"></script>
-<script src="js/floor.js"></script>
-<script src="js/configure.js"></script>
-<script src="js/login.js"></script>
-<script src="js/uoptions.js"></script>
-<script src="js/chgpswd.js"></script>
-<!--script src="https://cdn.socket.io/socket.io-1.4.5.js"></script-->
-
-
-<!--script src="cordova.js"></script>
-<script src="dgram.js"></script-->
-<!--script src="js/reportlist.js"></script -->
+<script src="js/employeelist.js"></script>
+<script src="js/employeedetails.js"></script>
+<script src="js/reportlist.js"></script>
 
 </body>
 
