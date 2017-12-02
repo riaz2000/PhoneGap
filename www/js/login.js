@@ -7,7 +7,7 @@ $('#loginPage').live('pageshow', function(event) { //pageshow pageinit
 function getInfo(){
 	OBoxID = getUrlVars()['OBoxID'];
 	alert('loginPage-getInfo-1-OBoxId: ' + OBoxID);
-	
+	getOBoxAddress();
 	//myObj = document.getElementById('LoginmsgObj');
 	//myObj.standby = "Retrieving ...";
 	//myObj.data = "http://localhost/owl/services/login.php";
