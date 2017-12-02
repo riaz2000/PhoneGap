@@ -98,26 +98,8 @@ function try2Discover(url,mode){
 	setTimeout(function() {
 		checkajaxkill();
 	}, timeoutTimerVal);	//300 mSec
-	alert('Here: 2a' );
-	var p = [ ];
-	var retObj = $.getJSON(url + 'discoverOwl.php', function(data) {
-		//if(data == "")
-		//	continue;
-		//else
-		alert('Here: ' + url + 'discoverOwl.php');
-		isneedtoKillAjax = false;
-		
-		if(data != null){
-			alert('DataRcvd: ' + JSON.stringify(data));
-			
-			OWLBoxNo = data[0].split(':')[2];
-			lstdOBs.push(OWLBoxNo+"@"+data[1]);
-			$('#installationList2').append('<li onclick="addListed('+mode+')";><img src="imgs/place.png"; width="50px"; height="50"; />OWLBox:<B>' + OWLBoxNo + "@" + data[1] + '</B><span class="ui-li-count"><img src="imgs/add.png" height=30, width=30/></span></li>');
-			$('#installationList2').listview('refresh');
-			discoveredOwls++;
-		}
-	});
-	/*
+	alert('Here: 2b' );
+	//var p = [ ];
 	var retObj = $.getJSON(url + 'discoverOwl.php', function(data) {
 		//if(data == "")
 		//	continue;
@@ -144,9 +126,8 @@ function try2Discover(url,mode){
 			//alert("complete"); 
 		}
 	);
-	*/
 	//setTimeout(function(){ p.abort(); alert(JSON.stringify(p)); }, 500);
-	p.push(retObj);
+	//p.push(retObj);
 	
 	function checkajaxkill(){
 
