@@ -2,43 +2,6 @@ var OBoxID;
 var floors;
 $('#installation').live('pageshow', function(event) { //pageshow pageinit
 	getOBoxAddress();
-	
-	/*
-	wait(2000);
-	alert('getOBdirectAccess: ' + getOBdirectAccess());
-	alert('getOBviaInternetAccess: ' + getOBviaInternetAccess());
-	if(getOBdirectAccess()==1 || getOBviaInternetAccess()==1)
-		alert('OBox Reached!!!');
-	*/
-	
-	//getInstallationInfo();
-	
-	
-	/*
-	var stop = 0;
-	setTimeout(function() {
-		//break;
-		stop = 1;
-	}, 2000);
-	
-	alert('stop= ' + stop);
-	var counter = 0;
-	while(OBdirectAccess==0 && OBviaInternetAccess==0 && stop==0){
-		wait(200);
-		alert(counter ' stop= ' + stop);
-		counter++;
-		if(counter==5)
-			break;
-		//Wait in loop	
-	}
-	
-	if(OBdirectAccess==1 || OBviaInternetAccess==1)
-		getInstallationInfo();
-	else{
-		alert("OWLBox Can NOT be Reached");
-		goBack();
-	}
-	*/
 });
 
 function getInstallationInfo(){
@@ -118,7 +81,7 @@ function getInstallationInfo(){
 						FloorNumber = "Floor " + i;
 					else if (i < -1)
 						FloorNumber = "Basement " + i;
-					//$('#floorList').append('<li onclick="addListed()";><img src="imgs/place.png"; width="50px"; height="50"; /><B><center>' + FloorNumber + '</center></B><span class="ui-li-count"><img src="imgs/add.png" height=30, width=30/></span></li>');
+
 					$('#floorList').append('<li style="background-color:#FF0000;">' + '<a href="' + linkToPage + '">' + '<B><center>' + FloorNumber + '</center></B></li>');
 				}
 				$('#floorList').listview('refresh');
@@ -235,14 +198,16 @@ function updateDirectAccessIP(updatedIP){
 		myAlert("OBox Not Registered",1);
 	else{
 		OBox = JSON.parse(oboxObjStr);
-
+		/*
 		var updatedObj = {"OBoxNo":OBoxID, "instType":OBox.instType, 					"ctrlAtomicLvl":OBox.ctrlAtomicLvl,
 							"loginRqrdInside":OBox.loginRqrdInside, "instAddr1":OBox.instAddr1, "instAddr2":OBox.instAddr2,
 							"instCity":OBox.instCity, "instState":OBox.instState, "instZip":OBox.instZip, "instCountry":OBox.instCountry,
 							"instLastDirectAccessip":updatedIP, "unr":OBox.unr, "ufname":OBox.ufname, "ulname":OBox.ulname, "userId":OBox.userId, "userPwd":"",	"uLoginLvl":OBox.uLoginLvl, "uLoginState":1};
 		
 		updateOBox(OBoxID, updatedObj);
-		
+		*/
+		OBox.instLastDirectAccessip = updatedIP;
+		updateOBox(OBoxID, OBox);
 		checkDirectAccess(updatedIP);
 		
 	}

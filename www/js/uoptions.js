@@ -72,14 +72,17 @@ function onConfirmLogout(button){
 			OBox = JSON.parse(oboxObjStr);
 			
 			//alert("StoredObj: " + oboxObjStr);
-			
-			var updatedObj = {"OBoxNo":OBoxID, "instType":OBox.instType, "ctrlAtomicLvl":OBox.ctrlAtomicLvl,
+			/*
+			var updatedObj = {"OBoxNo":OBoxID, "instType":OBox.instType, 					"ctrlAtomicLvl":OBox.ctrlAtomicLvl,
 								"loginRqrdInside":OBox.loginRqrdInside, "instAddr1":OBox.instAddr1, "instAddr2":OBox.instAddr2,
 								"instCity":OBox.instCity, "instState":OBox.instState, "instZip":OBox.instZip, "instCountry":OBox.instCountry,
 								"instLastDirectAccessip":selectedOBoxIP, "unr":OBox.unr, "ufname":OBox.ufname, "ulname":OBox.ulname, "userId":OBox.userId, "userPwd":"",
 								"uLoginLvl":OBox.uLoginLvl, "uLoginState":0};
-			
 			updateOBox(OBoxID, updatedObj);
+			*/
+		
+			OBox.uLoginState = 0;
+			updateOBox(OBoxID, OBox);
 		}
 		
 		alert('Logged out ');

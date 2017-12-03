@@ -2,14 +2,26 @@
     //mycode
 var OBoxID;
 var userNR;
+var serviceURL;
 $('#chgPswdPage').live('pageshow', function(event) { //pageshow pageinit
-	getInfo();
+	initChgPsWdPg();
 });
 
 //});
-function getInfo(){
+function initChgPsWdPg(){
 	OBoxID = getUrlVars()['OBoxID'];
 	
+	if(getOBdirectAccess()==1)
+		serviceURL = 'http://'+getDirectAccessIP()+'/owl/services/';
+	else if(getOBviaInternetAccess()==1){
+		osaddr = localStorage.getItem('owlsaddr');
+		port = 30000 + parseInt(OBoxID);
+		serviceURL = 'http://'+osaddr+':'+port+'/owl/services/';
+	}
+	else{
+		alert("OWLBox " + OBoxID + " Neither on LAN Nor Accessible over Internet");
+		//return;
+	}
 	//alert("OBoxID: " + OBoxID);
 	oboxObjStr = getOBoxObjstr(OBoxID);
 	//alert("oboxObjStr: " + oboxObjStr);
@@ -44,7 +56,7 @@ function getInfo(){
 								OBox.instCity + ", " + OBox.instState + ", " +
 								OBox.instZip + ", \n" + OBox.instCountry;
 								
-								}
+		}
 }
 
 //document.addEventListener("deviceready", //function(){
@@ -77,9 +89,9 @@ function update(){
 	
 	setTimeout(function() {
 		checkajaxkill();
-	}, 300);	//300 mSec
+	}, 3000);	//300 mSec
 	//var p = [ ];
-	serviceURL = 'http://localhost/owl/services/';
+	//serviceURL = 'http://localhost/owl/services/';
 	
 	//First check if the password entered is correct
 	var isneedtoKillAjax = true;
@@ -88,9 +100,10 @@ function update(){
 		users = data.items;
 		
 		if(users!=null && users.length==1){
-			hashPsWd = users[0].login_pswd;
-			if(bcrypt.compareSync(oldpswd.value, hashPsWd) || hashPsWd.value=="1234"){
-				alert("You are Ready for Password Change");
+			var hashPsWd = users[0].login_pswd;
+			alert('hashPsWd: ' + hashPsWd);
+			if(bcrypt.compareSync(oldpswd.value, hashPsWd) || hashPsWd=="1234"){
+				myAlert("You are Ready for Password Change",3);
 				userNR = users[0].nr;
 				updatePsWd(userNR, newpswd1.value);
 			}
@@ -103,10 +116,10 @@ function update(){
 		}
 		
 	})	.success(function() { 
-			alert("second success"); 
+			//alert("second success"); 
 		})
 		.error(function() { 
-			alert("error2"); 
+			myAlert("error2");
 		})
 		.complete(function() { 
 			//alert("complete"); 
@@ -129,22 +142,25 @@ function update(){
 }
 
 function updatePsWd(nr, pswd){
-	serviceURL = 'http://localhost/owl/services/';
+	//serviceURL = 'http://localhost/owl/services/';
+	//serviceURL = 'http://192.168.1.2/owl/services/';
 	//UPDATE tab_users SET login_lvl = 8, lname = 'Riaz' WHERE login_id = 'hriaz'
 	hashedPsWd = bcrypt.hashSync(pswd, 12);
 	
 	var query = "UPDATE tab_users SET login_pswd = '" + hashedPsWd + "' WHERE nr = '" +nr+ "'";
-	alert(query +":" + hashedPsWd);
+	//alert(query +":" + hashedPsWd);
+	
+	//alert('serviceURL: ' + serviceURL);
 	
 	setTimeout(function() {
 		checkajaxkill();
-	}, 300);	//300 mSec
+	}, 3000);	//300 mSec
 	isneedtoKillAjax = true;
 	
 	var retObj = $.getJSON(serviceURL + 'update.php?sql='+query, function(data) {
 		isneedtoKillAjax = false;	
 
-		alert("RcvdResp:" + data);
+		alert("RcvdResp:" + JSON.stringify(data));
 		
 	})	.success(function() { 
 			alert("Passwod Updated");

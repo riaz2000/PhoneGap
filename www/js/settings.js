@@ -1,11 +1,11 @@
 //document.addEventListener("deviceready", function(){
     //mycode
 $('#settingsPage').live('pageshow', function(event) { //pageshow pageinit
-	getServerInfo();
+	getSettings();
 });
 
 //});
-function getServerInfo(){
+function getSettings(){
 	obaddr = document.getElementById('OBAddress');
 	osaddr = document.getElementById('OSAddress');
 	verbos = document.getElementById('Verbosity');

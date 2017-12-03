@@ -14,10 +14,20 @@
 		<h1>Login</h1>
 	</div>
 	
-	<!--p><a href="#" onclick="showConfirm(); return false;">Show Confirm</a></p-->
+	<!--p><a href="#" onclick="showConfirm(); return false;">Show Confirm</a></p>
 	
 	<div style="padding-top: 30px;"> 
 		<img id="removeInstImg" src="imgs/place_rmv.png" height=50, width=40, onclick="removeInst()">Remove from List</>
+	</div-->
+	
+	<div data-role="content">
+		<img id="titleImg" src="imgs/place.png" height=50, width=50, align="left"> <label id="OBoxNo";> <font id="fontTitleImg" size="" color="0000ff"><B> OWLBoxNo </B></font></label> </img>
+		
+		<img id="removeInstImg" src="imgs/place_rmv.png" height=50, width=50, align="right" onclick="removeInst()"> </img>
+		
+	</div>
+	<div align='center', topmargin='300'> 
+		<label id="address"; align="middle"> <font size="" color="0000ff"><B> Address</B></font></label>
 	</div>
 	
 	<form>
@@ -33,7 +43,7 @@
 		<!--button onclick="update()">OK</button-->
 		<input id="BtnLogin" type="button" value="Login" onclick="login()" />
 		<!--button onclick="cancel()">Cancel</button-->
-		<input id="BtnCancel" type="button" value="Cancel" onclick="cancel()" />
+		<input id="BtnCancel" type="button" value="Cancel" onclick="cancelLogin()" />
 		
 		<!--input type="submit" id="submit" onclick="myfunction1()" value="OK"-->	
 		

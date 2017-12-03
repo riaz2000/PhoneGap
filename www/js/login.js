@@ -1,24 +1,47 @@
 var OBoxID;
 var users;
 $('#loginPage').live('pageshow', function(event) { //pageshow pageinit
-	getInfo();
+	initLoginPg();
 });
 
-function getInfo(){
+function initLoginPg(){
 	OBoxID = getUrlVars()['OBoxID'];
-	alert('loginPage-getInfo-1-OBoxId: ' + OBoxID);
-	getOBoxAddress();
+	myAlert('LoginJs-initLoginPg(): ' + OBoxID, 4);
 	
-	//myObj = document.getElementById('LoginmsgObj');
-	//myObj.standby = "Retrieving ...";
-	//myObj.data = "http://localhost/owl/services/login.php";
+	oboxObjStr = getOBoxObjstr(OBoxID);
+	//alert("oboxObjStr: " + oboxObjStr);
+	if(oboxObjStr == "InvalidOBox")
+		myAlert("OBox Not Registered",1);
+	else{
+		OBox = JSON.parse(oboxObjStr);
+		
+		titleObj = document.getElementById('titleImg');
+		
+		//titleObj.src = "imgs/place.png";
+		//titleObj.height = "50";
+		//titleObj.width = "70";
+		titleObj.text = "OWLBox#";
+		//titleObj.text.fontColor = 00ff00;
+		//titleObj.align = "mid";
+		document.getElementById('OBoxNo').innerHTML = OBoxID;
+		//document.getElementById('fontTitleImg').color = "00ff00";
+		
+		addressObj = document.getElementById('address');
+		addressObj.innerHTML = OBox.instAddr1 + ", " + OBox.instAddr2 + ", \n" + 
+								OBox.instCity + ", " + OBox.instState + ", " +
+								OBox.instZip + ", \n" + OBox.instCountry;
+								
+	}
+	getOBoxAddress();
+}
+function cancelLogin(){
+	goBack();
 }
 
 function login(){
 	OBoxID = getUrlVars()['OBoxID'];
 	var uid = document.getElementById('UId');
 	var pswd = document.getElementById('UPwd');
-	//var serviceURL = "http://localhost/owl/services/";
 	var serviceURL;// = "http://localhost/owl/services/";
 	
 	if(getOBdirectAccess()==1)
@@ -27,28 +50,17 @@ function login(){
 		osaddr = localStorage.getItem('owlsaddr');
 		port = 30000 + parseInt(OBoxID);
 		serviceURL = 'http://'+osaddr+':'+port+'/owl/services/';
-		//serviceURL = 'http://203.124.40.232:30003/owl/services/';	
 	}
 	else{
 		alert("OWLBox " + OBoxID + " Neither on LAN Nor Accessible over Internet");
 		return;
 	}
-	//alert("login-2UId" + uid.value);
-	//alert("login-3PsWd " + pswd.value);
-	/*
-	$.ajaxSetup({
-        async: false
-    });
-	*/
-	//var response;
-	//window.location.href = 
+
+	isneedtoKillAjax = true;
 	setTimeout(function() {
 		checkajaxkill();
 	}, 3000);
-	isneedtoKillAjax = true;
 	var retObj = $.getJSON(serviceURL + 'getHashPwd.php?uid='+uid.value, function(data) {
-		//async: false,
-		//alert("Data: " + JSON.stringify(data));
 		isneedtoKillAjax = false;
 		users = data.items;
 		var loggedin = 0;
@@ -77,20 +89,28 @@ function login(){
 						myAlert("OBox Not Registered",1);
 					else{
 						OBox = JSON.parse(oboxObjStr);
-						
-						//alert("StoredObj: " + oboxObjStr);
-						//alert("OBoxNo"+OBoxID);
+						/*
 						var updatedObj = {"OBoxNo":OBoxID, "instType":OBox.instType, 					"ctrlAtomicLvl":OBox.ctrlAtomicLvl,
 											"loginRqrdInside":OBox.loginRqrdInside, "instAddr1":OBox.instAddr1, "instAddr2":OBox.instAddr2,
 											"instCity":OBox.instCity, "instState":OBox.instState, "instZip":OBox.instZip, "instCountry":OBox.instCountry,
 											"instLastDirectAccessip":selectedOBoxIP, "unr":user.nr, "ufname":user.fname, "ulname":user.lname, "userId":uid.value, "userPwd":"",
 											"uLoginLvl":user.user_control_lvl, "uLoginState":1};
 						
-						
 						updateOBox(OBoxID, updatedObj);
 						//alert ("Successfully LoggedIn");
+						*/
+						OBox.instLastDirectAccessip = selectedOBoxIP;
+						OBox.unr = user.nr;
+						OBox.ufname = user.fname;
+						OBox.ulname = user.lname;
+						OBox.userId = uid.value;
+						OBox.userPwd = "";
+						OBox.uLoginLvl = user.user_control_lvl;
+						OBox.uLoginState = 1;
+
+						updateOBox(OBoxID, OBox);
 						//Successfully LoggedIN, now go to main pageX
-						//goBack();
+						goBack();
 					}
 				} else {
 					// Passwords don't match
@@ -100,33 +120,27 @@ function login(){
 		});
 
 	})	.success(function() { 
-			alert("Login Successful");
+			myAlert("LoginJs-login().success()", 4);
 			//goBack();
 		})
-		.error(function() { 
-			alert("error"); 
+		.error(function() {
+			myAlert("LoginJs-login().error()", 4);
 		})
 		.complete(function() { 
 			//alert("complete"); 
 		}
 	);
 	function checkajaxkill(){
-
-		// Check isneedtoKillAjax is true or false, 
-		// if true abort the getJsonRequest
-
 		if(isneedtoKillAjax){
-			//p[i].abort();
 			retObj.abort();
-			alert('Request Timeout');                 
+			alert('Timeout: Login Request');                 
 		}else{
 			//alert('no need to kill ajax');
 		}
 	}
-
 	
 }
-
+/*
 function allowEntry(){
 	OBoxID = getUrlVars()['OBoxID'];
 	// Update Info
@@ -150,9 +164,9 @@ function allowEntry(){
 		alert ("Successfully LoggedIn");
 		//Successfully LoggedIN, now go to main pageX
 		goBack();
-	}
-	
+	}	
 }
+*/
 
 function removeInst(){
 	OBoxID = getUrlVars()['OBoxID'];
@@ -168,7 +182,7 @@ function onConfirmRemoveInst(button){
 	OBoxID = getUrlVars()['OBoxID'];
 	if(button == 1){
 		removeOBox(OBoxID);
-		alert('Installation Removed ');
+		alert('OBox No: ' + OBoxID + ' Removed ');
 		goBack();
 	}
 	else{
