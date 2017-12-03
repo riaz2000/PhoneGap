@@ -213,9 +213,9 @@ function addListeners(img, redId){
 	  //alert(e.pageX);
 		alert("EventQuo: tap" + redId);
 		var socket = new Socket();
-		
+		var OBipAddr = localStorage.getItem('owlbaddr');
 		socket.open(
-			"192.168.1.3",
+			OBipAddr,//"192.168.1.3",
 			1213,
 			function() {
 				// invoked after successful opening of socket
