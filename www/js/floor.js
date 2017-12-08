@@ -4,17 +4,24 @@ var CtrlAtomicLvl;
 var arr = [];
 var webServer='';
 var appliances = "[]";
+var OBoxIP = '';
+var OBoxPort = 0;
 $('#floor').live('pageshow', function(event) { //pageshow pageinit
 	OBoxID = getUrlVars()['OBoxID'];
 	FloorNo = getUrlVars()['FloorNo'];
 	CtrlAtomicLvl = getUrlVars()['CtrlAtmcLvl'];
 	
-	if(getOBdirectAccess()==1)
-		webServer = 'http://'+getDirectAccessIP();
+	if(getOBdirectAccess()==1){
+		OBoxIP = getDirectAccessIP();
+		OBoxPort = 1213;
+		webServer = 'http://'+OBoxIP;
+	}
 	else if(getOBviaInternetAccess()==1){
-		osaddr = localStorage.getItem('owlsaddr');
+		//osaddr = localStorage.getItem('owlsaddr');
+		OBoxIP = localStorage.getItem('owlsaddr');
+		OBoxPort = 10000 + parseInt(OBoxID);
 		port = 30000 + parseInt(OBoxID);
-		webServer = 'http://'+osaddr+':'+port;
+		webServer = 'http://'+OBoxIP+':'+port;
 	}
 	else{
 		alert("OWLBox " + OBoxID + " Neither on LAN Nor Accessible over Internet");
@@ -178,7 +185,7 @@ function addAppliance(appliance){
 	arr.push(img1);
 }
 
-function addListeners(img, redId){
+function addListeners(img, resId){
 	/*
 	//Note: user_control_lvl 0=CanNotSeeRes 1-5=OBSERVER, 6-10=User, 11-15=Admin
 	if(0 < parseInt(appliance.usrCtrlLvlonRes) < 6)
@@ -198,9 +205,24 @@ function addListeners(img, redId){
 	  alert("EventQuo: DoubleTap");
 	});
 	
+	$$(img).swipeUp(function(e) {
+	  //alert(e.pageX);
+	  alert("EventQuo: swipeUp");
+	});
+	
 	$$(img).swipeDown(function(e) {
 	  //alert(e.pageX);
 	  alert("EventQuo: swipeDown");
+	});
+	
+	$$(img).swipeLeft(function(e) {
+	  //alert(e.pageX);
+	  alert("EventQuo: swipeLeft");
+	});
+	
+	$$(img).swipeRight(function(e) {
+	  //alert(e.pageX);
+	  alert("EventQuo: swipeRight");
 	});
 	
 	$$(img).hold(function(e) {//
@@ -211,7 +233,15 @@ function addListeners(img, redId){
 	
 	$$(img).tap(function(e) {
 	  //alert(e.pageX);
-		alert("EventQuo: tap" + redId);
+		alert("EventQuo: tap" + resId);
+		//sendRequest2OBox(MsgType, Msg, ResOpPairs, Schedule, isRegSoc){ //RegSock Remains Open
+		MsgType = MessageType.REQUEST;
+		Msg = Message.DO_NOT_CARE;
+		ResOpPairs = resId + ":" + Operation.TOGGLE_STATE;
+		Schedule = [];
+		isRegSoc = false;
+		sendRequest2OBox(MsgType, Msg, ResOpPairs, Schedule, isRegSoc);
+		/*
 		var socket = new Socket();
 		var OBipAddr = localStorage.getItem('owlbaddr');
 		socket.open(
@@ -246,7 +276,7 @@ function addListeners(img, redId){
 		  // invoked after connection close
 		  alert("Connection Closed with ErrorStatus = " + hasError);
 		};
-		
+		*/
 	});
 	
 	$$(img).drag(function(e) {
@@ -366,7 +396,86 @@ function getResImg(ResType, state){
 	return app;
 }
 
-function getDPI() {
-  return document.getElementById("dpi").offsetHeight;
-}
+function sendRequest2OBox(MsgType, Msg, ResOpPairs, Schedule, isRegSoc){ //RegSock Remains Open
+	var socket = new Socket();
+	
+	setTimeout(function() {	checkajaxkill(); }, 4000);
+	var isneedtoKillAjax = true;
+	socket.open(
+		OBoxIP,
+		OBoxPort,
+		function() {
+			// invoked after successful opening of socket
+			owlMsg = new Object();
+			owlMsg.role = Role.OWLUser;
+			owlMsg.msgType = MsgType;//parseInt(reqs[1]);
+			owlMsg.instIdOrSocStrg = OBoxID;//reqs[2];
+			owlMsg.message = Msg;//parseInt(reqs[3]);
+			if(owlMsg.message==Message.SCHEDULE_RETURN){
+				
+			}
+			else if( owlMsg.message==Message.SCHEDULE_ADD || 
+				owlMsg.message==Message.SCHEDULE_REMOVE ){
+				owlMsg.day = Schedule.day;
+				owlMsg.month = Schedule.month;
+				owlMsg.year = Schedule.year;
+				owlMsg.hr = Schedule.hr;
+				owlMsg.min = Schedule.min;
+				owlMsg.sec = Schedule.sec;
+				owlMsg.repeatPattern = Schedule.repeatPattern;
+				owlMsg.forNdays= Schedule.forNdays;
+			}
+			var j=0;
+			owlMsg.resourceID = [];	//new int[(reqs.length-4-addParms)/2];
+			owlMsg.operation = [];//new int[(reqs.length-4-addParms)/2];
+			resOpPairsArr = ResOpPairs.split(":");
+			for (var i=0; i<resOpPairsArr.length; i=i+2) {
+					owlMsg.resourceID[j] = resOpPairsArr[i];
+					owlMsg.operation[j] = parseInt(reqs[i+1]);
+					j++;
+			}
+			var dataString = constructOwlMessage(owlMsg) + "\n";
+			//var dataString = Role.OWLUser+':'+MsgType+':'+OBoxID+':'+Msg+':'+ ResOpPairs+"\n";//"2:2:3:2:5:2\n";
+			var data = new Uint8Array(dataString.length);
+			for (var i = 0; i < data.length; i++) {
+			  data[i] = dataString.charCodeAt(i);
+			}
+			socket.write(data);
+			isneedtoKillAjax = false;
+		},
+		function(errorMessage) {
+			// invoked after unsuccessful opening of socket
+			alert("Socket Open Error: " + errorMessage);
+		}
+	);
+	
+	function checkajaxkill(){
+		if(isneedtoKillAjax){
+			socket.close();
+			myAlert('Request Timeout',0);                 
+		}else{
+			//alert('no need to kill ajax');
+		}
+	}
+	
+	socket.onData = function(data) {
+	  // invoked after new batch of data is received (typed array of bytes Uint8Array)
+	  rcvdMsg = uintToString(data);
+	  alert("Rcvd: " + rcvdMsg);
+	  //check if the response is for the specfic resource for which request was sent
+	  //ResOpPairs compare the resNo ResOpPairs with resNo in ResponseMsg  RiazH
+	  
+	};
+	socket.onError = function(errorMessage) {
+	  // invoked after error occurs during connection
+	  alert("errorMessage: " + errorMessage);
+	  socket.close();
+	};
+	socket.onClose = function(hasError) {
+	  // invoked after connection close
+	  alert("Connection Closed with ErrorStatus = " + hasError);
+	};
+}  
+
+
 

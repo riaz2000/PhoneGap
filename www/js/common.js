@@ -157,6 +157,10 @@ function getDirectAccessIP(){
 	return directAccessIP;
 }
 
+function getDPI() {
+  return document.getElementById("dpi").offsetHeight;
+}
+
 function setOBdirectAccess(OBdrctAccssStatus){
 	OBdirectAccess = OBdrctAccssStatus;
 }
@@ -177,41 +181,6 @@ function wait(ms){
    while(end < start + ms) {
      end = new Date().getTime();
   }
-}
-
-State ={
-	OFF : 0,	
-	ON	: 1,
-	UK	: 2,	//UnKnown state
-	UR	: 3		//UnRecognized resource i.e. UnRegistered
-}
-
-ResourceType = {
-    ceilingFan		:	1, //{value: 1, name: "ceilingFan", imageName: "ceilingFan"}, 
-	bracketFan		:	2,
-	pedestalFan		:	3,
-	exhaustFan		:	4,
-	tubeLight		:	5,
-	bulb			:	6,
-	energySaverBulb	:	7,
-	ledBulb			:	8,
-	chandelier		:	9,
-	teleVision		:	10,
-	plasmaTV		:	11,
-	ledTV			:	12,
-	airConditioner	:	13,
-	microwaveOven	:	14,
-	oven			:	15,
-	refrigerator	:	16,
-	freezer			:	17,
-	dispenser		:	18,
-	waterPump		:	19,
-	motor			:	20,
-	socket			:	21,
-	geyser			:	22,
-	thermometer		:	23,
-	remote_control	:	24,
-	video_camera	:	25		 
 }
 
 function uintToString(uintArray) {
