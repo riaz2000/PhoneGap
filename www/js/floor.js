@@ -6,6 +6,7 @@ var webServer='';
 var appliances = "[]";
 var OBoxIP = '';
 var OBoxPort = 0;
+var regSoc = null;
 $('#floor').live('pageshow', function(event) { //pageshow pageinit
 	OBoxID = getUrlVars()['OBoxID'];
 	FloorNo = getUrlVars()['FloorNo'];
@@ -46,12 +47,15 @@ function getFloorInfo(){
 	myObj = document.getElementById('floorObj');
 	
 	myObj.data = webServer+"/OWL/FloorPlans/I1F"+FloorNo+".png";
-	alert("myObj.data "+ JSON.stringify(myObj.data));
+	//alert("myObj.data "+ JSON.stringify(myObj.data));
 	if(myObj.data.match(404))
 		myObj.data = webServer + "/OWL/FloorPlans/I0F0default.png";
 	myObj.style="margin: 0px 0px 0px 0px; "; //top bottom right left
 	
+	registerOUser();
 	retrieveAppliances();
+	
+	getStatusofAllApps();
 
 }
 
@@ -175,18 +179,12 @@ function addAppliance(appliance){
 	//posX = 1.6*parseInt(appliance.pos_x) + 0;
 	posX = parseInt(appliance.pos_x);//*value/16;
 	posY = parseInt(appliance.pos_y);// + 600;
-	//img1.src = 'imgs/add.png';
-	alert("Here: 3a: " + appliance.appliance );
-	//img1.src = 'imgs/apps/' + getResImg(appliance.appliance, State.UK)+".png";
-	//img1.src = 'imgs/apps/cfan_on.png';// + getResImg(appliance.appliance, State.UK)+".png";
-	alert("Here: 3b: " +  State.UK);
+	
 	img1.src = 'imgs/apps/' + getResImg(appliance.appliance, State.UK)+ ".png";
 	img1.height=60;
 	img1.width=60;
-	alert("Here: 3c" );
+	
 	img1.style="position: absolute; left:"+posX+"px; top:"+posY+"px;";
-	//addListeners(img1, appliance.nr);
-	alert("Here: 3d" );
 	addListeners(img1, appliance.resource_id);
 	arr.push(img1);
 }
@@ -404,7 +402,7 @@ function getResImg(ResType, state){
 	return app;
 }
 
-function sendRequest2OBox(MsgType, Msg, ResOpPairs, Schedule, isRegSoc){ //RegSock Remains Open
+function sendRequest2OBox(MsgType, Msg, ResOpPairs, Schedule, isRegMsg){ //RegSock Remains Open
 	var socket = new Socket();
 	var owlMsg = new Object();
 	owlMsg.role = Role.OWLUser;
@@ -465,16 +463,25 @@ function sendRequest2OBox(MsgType, Msg, ResOpPairs, Schedule, isRegSoc){ //RegSo
 	function checkajaxkill(){
 		if(isneedtoKillAjax){
 			socket.close();
-			myAlert('Request Timeout',0);                 
+			myAlert('Request Timeout: \n'+dataString,0);                 
 		}else{
 			//alert('no need to kill ajax');
 		}
 	}
 	
 	socket.onData = function(data) {
-	  // invoked after new batch of data is received (typed array of bytes Uint8Array)
-	  rcvdMsg = uintToString(data);
-	  alert("Rcvd: " + rcvdMsg);
+		// invoked after new batch of data is received (typed array of bytes Uint8Array)
+		rcvdMsg = uintToString(data);
+		alert("Rcvd: " + rcvdMsg);
+		if(isRegMsg){
+			owlMsg = parseOwlMessage(rcvdMsg);
+			if(owlMsg.msgType == MessageType.REGISTRATION && 
+				owlMsg.message == Message.SUCCESSFUL){
+				regSoc = socket;
+				isneedtoKillAjax = true;
+				myAlert("Registration Successful ",0);
+			}
+		}
 	  //check if the response is for the specfic resource for which request was sent
 	  //ResOpPairs compare the resNo ResOpPairs with resNo in ResponseMsg  RiazH
 	  
@@ -491,4 +498,35 @@ function sendRequest2OBox(MsgType, Msg, ResOpPairs, Schedule, isRegSoc){ //RegSo
 }  
 
 
+function getStatusofAllApps(){
+	MsgType = MessageType.REQUEST;
+	Msg = Message.DO_NOT_CARE;
+	ResOpPairs='';
+	for(var i=0; i<appliances.length; i++){
+		ResOpPairs = appliances[i].resource_id + ":" + Operation.RETURN_STATE + ":";
+	}
+	Schedule = [];
+	isRegMsg = false;
 
+	sendRequest2OBox(MsgType, Msg, ResOpPairs, Schedule, isRegMsg);
+}
+
+function registerOUser(){
+	oboxObjStr = getOBoxObjstr(OBoxID);
+	//alert("oboxObjStr: " + oboxObjStr);
+	if(oboxObjStr == "InvalidOBox"){
+		myAlert("OBox Not Registered",1);
+		return;
+	}
+	else{
+		OBox = JSON.parse(oboxObjStr);
+		
+		MsgType = MessageType.REGISTRATION;
+		Msg = OBox.unr;	//Message.DO_NOT_CARE;
+		ResOpPairs='';
+		Schedule = [];
+		isRegMsg = true;
+
+		sendRequest2OBox(MsgType, Msg, ResOpPairs, Schedule, isRegMsg);
+	}
+}
