@@ -1,19 +1,19 @@
-Role ={
+Role = {
 	OWLServer	: 0,
 	OWLBox		: 1,
 	OWLUser		: 2,
 	OWLSwitchBox: 3
 }
 
-MessageType ={
+MessageType = {
 	REGISTRATION	: 1,
 	REQUEST			: 2,
 	RESPONSE		: 3,
 	UPDATE 			: 4,
-	CONNECTIVITY 	: 5 
+	CONNECTIVITY 	: 5
 }
 
-Message ={
+Message = {
 	FAILED 					: 0,
 	SUCCESSFUL				: 1,
 	DO_NOT_CARE				: 2,
@@ -30,7 +30,7 @@ Message ={
 	SCHEDULE_RETURN			: 13
 }
 
-class Operation{
+Operation = {
 	TURN_OFF		: 0,
 	TURN_ON			: 1,
 	TOGGLE_STATE	: 2,
@@ -54,7 +54,7 @@ class Operation{
 	RES_NOT_REACHABLE  	: 31
 }
 
-State ={
+State = {
 	OFF : 0,	
 	ON	: 1,
 	UK	: 2,	//UnKnown state
@@ -89,9 +89,10 @@ ResourceType = {
 	video_camera	:	25		 
 }
 
-OwlMessage ={
+/*
+OwlMessage = {
 	role,			
-	msgType;		
+	msgType,		
 	instIdOrSocStrg,	//OWLBoxID to contact
 	message,
 	resourceID,
@@ -106,8 +107,9 @@ OwlMessage ={
 	forNdays,		//Including the 1st day, 0Means Continue Indefinitely
 	schedule
 }
+*/
 
-parseOwlMessage(receivedMsg){ // receivedMsg is an string
+function parseOwlMessage(receivedMsg){ // receivedMsg is a string
 	alert(receivedMsg);
 	recs = receivedMsg.split("::");	// RECordS
 	reqs = recs[0].split(":");			// REQuestS
@@ -129,7 +131,7 @@ parseOwlMessage(receivedMsg){ // receivedMsg is an string
 												"0"+":"+"0"+":"+"0"+":"+"0";
 		}
 		
-		for(int i=1; i<recs.length; i++){
+		for(var i=1; i<recs.length; i++){
 			var reqs1 = recs[i].split(":");
 			if(reqs1.length>2)
 				Schedule[i] = recs[i];
@@ -142,7 +144,7 @@ parseOwlMessage(receivedMsg){ // receivedMsg is an string
 		
 		return owlMsg;
 	} // else move forward and parse other types of messages
-	int addParms = 0;	//Additional Parameters
+	var addParms = 0;	//Additional Parameters
 	if( owlMsg.message==Message.SCHEDULE_ADD || 
 			owlMsg.message==Message.SCHEDULE_REMOVE ){
 		owlMsg.day = parseInt(reqs[4]);
@@ -157,10 +159,10 @@ parseOwlMessage(receivedMsg){ // receivedMsg is an string
 		addParms = 8;
 	}
 	
-	int j=0;
+	var j=0;
 	owlMsg.resourceID = [];	//new int[(reqs.length-4-addParms)/2];
 	owlMsg.operation = [];//new int[(reqs.length-4-addParms)/2];
-	for (int i=4+addParms; i<reqs.length; i=i+2) {
+	for (var i=4+addParms; i<reqs.length; i=i+2) {
 			owlMsg.resourceID[j] = parseInt(reqs[i]);
 			owlMsg.operation[j] = parseInt(reqs[i+1]);
 			j++;
@@ -171,11 +173,15 @@ parseOwlMessage(receivedMsg){ // receivedMsg is an string
 
 // creates a string for transmission, don't forget to append "\n" when sending data over TCP
 // myOWLmsg is an object
-constructOwlMessage(myOWLmsg){ 
+function constructOwlMessage(myOWLmsg){ 
+	response = '';
+	alert('Role: ' + myOWLmsg.role);
+	
 	response = myOWLmsg.role + ":" +
 				myOWLmsg.msgType + ":" +
 				myOWLmsg.instIdOrSocStrg + ":" +
 				myOWLmsg.message;
+				
 	
 	if(myOWLmsg.message == Message.SCHEDULE_ADD || myOWLmsg.message == Message.SCHEDULE_REMOVE ){
 		response = response + 	":" + myOWLmsg.day + 
@@ -187,11 +193,11 @@ constructOwlMessage(myOWLmsg){
 								":" + myOWLmsg.repeatPattern +
 								":" + myOWLmsg.forNdays;							
 	}
-	
+	alert('myOWLmsg.resourceID: ' + myOWLmsg.resourceID.length);
 	if(myOWLmsg.resourceID.length!=0){
-	for(int i=0; i<myOWLmsg.resourceID.length; i++)
-		response = response + ":" + myOWLmsg.resourceID[i] + ":" + myOWLmsg.operation[i];
+		for(var i=0; i<myOWLmsg.resourceID.length; i++)
+			response = response + ":" + myOWLmsg.resourceID[i] + ":" + myOWLmsg.operation[i];
 	}
-
+	
 	return response;
 }
