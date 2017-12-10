@@ -251,11 +251,13 @@ function addListeners(img, resId){
 		//sendRequest2OBox(MsgType, Msg, ResOpPairs, Schedule, isRegSoc){ //RegSock Remains Open
 		MsgType = MessageType.REQUEST;
 		Msg = Message.DO_NOT_CARE;
-		ResOpPairs = resId + ":" + Operation.TOGGLE_STATE;
+		//ResOpPairs = resId + ":" + Operation.TOGGLE_STATE + ":"; 
+		ResIdArr = [resId];
+		OpArr = [Operation.TOGGLE_STATE];
 		Schedule = [];
 		isRegSoc = false;
 		
-		sendRequest2OBox(MsgType, Msg, ResOpPairs, Schedule, isRegSoc);
+		sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, isRegSoc);
 		/*
 		var socket = new Socket();
 		var OBipAddr = localStorage.getItem('owlbaddr');
@@ -411,7 +413,7 @@ function getResImg(ResType, state){
 	return app;
 }
 
-function sendRequest2OBox(MsgType, Msg, ResOpPairs, Schedule, isRegMsg){ //RegSock Remains Open
+function sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, isRegMsg){ //RegSock Remains Open
 	var socket = new Socket();
 	var owlMsg = new Object();
 	owlMsg.role = Role.OWLUser;
@@ -433,6 +435,7 @@ function sendRequest2OBox(MsgType, Msg, ResOpPairs, Schedule, isRegMsg){ //RegSo
 		owlMsg.repeatPattern = Schedule.repeatPattern;
 		owlMsg.forNdays= Schedule.forNdays;
 	}
+	/*
 	var j=0;
 	owlMsg.resourceID = [];	//new int[(reqs.length-4-addParms)/2];
 	owlMsg.operation = [];//new int[(reqs.length-4-addParms)/2];
@@ -447,6 +450,9 @@ function sendRequest2OBox(MsgType, Msg, ResOpPairs, Schedule, isRegMsg){ //RegSo
 				j++;
 		}
 	}
+	*/
+	owlMsg.resourceID = ResIdArr;
+	owlMsg.operation  = OpArr;
 	var dataString = constructOwlMessage(owlMsg) + "\n";
 	alert(dataString);
 	//var dataString = Role.OWLUser+':'+MsgType+':'+OBoxID+':'+Msg+':'+ ResOpPairs+"\n";//"2:2:3:2:5:2\n";
@@ -485,7 +491,7 @@ function sendRequest2OBox(MsgType, Msg, ResOpPairs, Schedule, isRegMsg){ //RegSo
 	socket.onData = function(data) {
 		// invoked after new batch of data is received (typed array of bytes Uint8Array)
 		rcvdMsg = uintToString(data);
-		alert("Rcvd: " + rcvdMsg);
+		myAlert("Rcvd: " + rcvdMsg,3);
 		if(isRegMsg){
 			owlMsg = parseOwlMessage(rcvdMsg);
 			if(owlMsg.msgType == MessageType.REGISTRATION && 
@@ -517,15 +523,20 @@ function sendRequest2OBox(MsgType, Msg, ResOpPairs, Schedule, isRegMsg){ //RegSo
 function getStatusofAllApps(){
 	MsgType = MessageType.REQUEST;
 	Msg = Message.DO_NOT_CARE;
-	ResOpPairs='';
+	ResIdArr = [];
+	//ResOpPairs='';
+	alert('appliances.length: ' + appliances.length);
 	for(var i=0; i<appliances.length; i++){
-		ResOpPairs = ResOpPairs + appliances[i].resource_id + ":" + Operation.RETURN_STATE + ":";
-		alert('ResOpPairs: ' + ResOpPairs);
+		ResIdArr.push(appliances[i].resource_id);
+		OpArr.push(Operation.RETURN_STATE);
+		//ResOpPairs = ResOpPairs + appliances[i].resource_id + ":" + Operation.RETURN_STATE + ":";
+		//alert('ResOpPairs: ' + ResOpPairs);
 	}
+	
 	Schedule = [];
 	isRegMsg = false;
 
-	sendRequest2OBox(MsgType, Msg, ResOpPairs, Schedule, isRegMsg);
+	sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, isRegMsg);
 }
 
 function registerOUser(){
@@ -540,11 +551,13 @@ function registerOUser(){
 		
 		MsgType = MessageType.REGISTRATION;
 		Msg = OBox.unr;	//Message.DO_NOT_CARE;
-		ResOpPairs='';
+		//ResOpPairs='';
+		ResIdArr = [];
+		OpArr    = [];
 		Schedule = [];
 		isRegMsg = true;
 
-		sendRequest2OBox(MsgType, Msg, ResOpPairs, Schedule, isRegMsg);
+		sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, isRegMsg);
 	}
 }
 
