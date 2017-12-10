@@ -418,7 +418,7 @@ function sendRequest2OBox(MsgType, Msg, ResOpPairs, Schedule, isRegMsg){ //RegSo
 	owlMsg.msgType = MsgType;//parseInt(reqs[1]);
 	owlMsg.instIdOrSocStrg = OBoxID;//reqs[2];
 	owlMsg.message = Msg;//parseInt(reqs[3]);
-	alert('owlMsg.message: ' + owlMsg.message + ":::" + 'Message.SCHEDULE_RETURN: ' + Message.SCHEDULE_RETURN);
+	//alert('owlMsg.message: ' + owlMsg.message + ":::" + 'Message.SCHEDULE_RETURN: ' + Message.SCHEDULE_RETURN);
 	if(owlMsg.message==Message.SCHEDULE_RETURN){
 		
 	}

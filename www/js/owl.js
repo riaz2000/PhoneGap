@@ -175,7 +175,7 @@ function parseOwlMessage(receivedMsg){ // receivedMsg is a string
 // myOWLmsg is an object
 function constructOwlMessage(myOWLmsg){ 
 	response = '';
-	alert('Role: ' + myOWLmsg.role);
+	//alert('Role: ' + myOWLmsg.role);
 	
 	response = myOWLmsg.role + ":" +
 				myOWLmsg.msgType + ":" +
@@ -193,7 +193,7 @@ function constructOwlMessage(myOWLmsg){
 								":" + myOWLmsg.repeatPattern +
 								":" + myOWLmsg.forNdays;							
 	}
-	alert('myOWLmsg.resourceID: ' + myOWLmsg.resourceID.length);
+	//alert('myOWLmsg.resourceID: ' + myOWLmsg.resourceID.length);
 	if(myOWLmsg.resourceID.length!=0){
 		for(var i=0; i<myOWLmsg.resourceID.length; i++)
 			response = response + ":" + myOWLmsg.resourceID[i] + ":" + myOWLmsg.operation[i];
