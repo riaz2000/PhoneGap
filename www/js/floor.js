@@ -1,7 +1,8 @@
 var OBoxID;
 var FloorNo;
 var CtrlAtomicLvl;
-var arr = [];
+//var ImgsArr = [];
+//var resIdsArr = [];
 var webServer='';
 var appliances = "[]";
 var OBoxIP = '';
@@ -166,6 +167,13 @@ function retrieveAppliances(){
 }
 
 function addAppliance(appliance){
+	var indexOfAppInApps = -1;
+	for (var i=0 ; i<appliances.length ; i++){
+		if (appliances[i].nr == appliance.nr) {
+			indexOfAppInApps = i;
+		}
+	}
+	appliances[indexOfAppInApps].usrCtrlLvlonRes = appliance.usrCtrlLvlonRes;
 	if(parseInt(appliance.usrCtrlLvlonRes)<1)
 		return;
 	var img1 = new Image();
@@ -174,6 +182,7 @@ function addAppliance(appliance){
 	img1.onload = function() {
 	  div.appendChild(img1);
 	};
+	appliances[indexOfAppInApps].img = img1;
 	//value = window.devicePixelRatio;
 	value = getDPI();
 	//posX = 1.6*parseInt(appliance.pos_x) + 0;
@@ -186,7 +195,8 @@ function addAppliance(appliance){
 	
 	img1.style="position: absolute; left:"+posX+"px; top:"+posY+"px;";
 	addListeners(img1, appliance.resource_id);
-	arr.push(img1);
+	//ImgsArr.push(img1);
+	//resIdsArr.push(appliance.resource_id);
 }
 
 function addListeners(img, resId){
@@ -301,7 +311,6 @@ function addListeners(img, resId){
 }
 
 function getResImg(ResType, state){
-	alert("Here: 4a" );
 	app = "";
 	switch(parseInt(ResType)) {
 	case ResourceType.ceilingFan:
@@ -482,6 +491,9 @@ function sendRequest2OBox(MsgType, Msg, ResOpPairs, Schedule, isRegMsg){ //RegSo
 				myAlert("Registration Successful ",0);
 			}
 		}
+		else{ //handle the response
+			handleResponse(rcvdMsg);
+		}
 	  //check if the response is for the specfic resource for which request was sent
 	  //ResOpPairs compare the resNo ResOpPairs with resNo in ResponseMsg  RiazH
 	  
@@ -529,4 +541,41 @@ function registerOUser(){
 
 		sendRequest2OBox(MsgType, Msg, ResOpPairs, Schedule, isRegMsg);
 	}
+}
+
+function handleResponse(rcvdMsg){
+	owlMsg = parseOwlMessage(rcvdMsg);
+	if(parseInt(owlMsg.instIdOrSocStrg) != OBoxID){
+		myAlert("Message from Invalid OBox: " + parseInt(owlMsg.instIdOrSocStrg));
+		return;
+	}
+	if(owlMsg.msgType == MessageType.REGISTRATION){
+		
+	}
+	else if(owlMsg.msgType == MessageType.RESPONSE){
+		if(owlMsg.Message == Message.SCHEDULE_RETURN){
+			
+		}
+		else{
+			for(var i=0; i<owlMsg.resourceID.length; i++){
+				updateResIcon(owlMsg.resourceID[i], owlMsg.operation[i]);
+			}
+		}
+	}
+	else if(owlMsg.msgType == MessageType.UPDATE){ // Update from the OwlSwitch
+		
+	}
+	else if(owlMsg.msgType == MessageType.CONNECTIVITY){
+		
+	}
+}
+
+function updateResIcon(resId, resStatus){
+	for (var i=0 ; i<appliances.length ; i++){
+		if (appliances[i].resource_id == resId) {
+			appliances[i].img.src =	'imgs/apps/' + getResImg(appliances[i].appliance, resStatus)+ ".png";
+			
+			//img1.src = 'imgs/apps/' + getResImg(appliance.appliance, State.UK)+ ".png";
+		}
+	}	
 }
