@@ -126,7 +126,7 @@ function getOBoxAddress(){
 		osaddr = localStorage.getItem('owlsaddr');
 		port = 30000 + parseInt(OBoxID);
 		url = 'http://'+osaddr+':'+port+'/owl/services/discoverOwl.php';
-		alert('url: ' + url);
+		//alert('url: ' + url);
 		
 		setTimeout(function() {
 			checkajaxkill();

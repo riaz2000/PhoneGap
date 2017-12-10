@@ -515,7 +515,8 @@ function getStatusofAllApps(){
 	Msg = Message.DO_NOT_CARE;
 	ResOpPairs='';
 	for(var i=0; i<appliances.length; i++){
-		ResOpPairs = appliances[i].resource_id + ":" + Operation.RETURN_STATE + ":";
+		ResOpPairs = ResOpPairs + appliances[i].resource_id + ":" + Operation.RETURN_STATE + ":";
+		alert('ResOpPairs: ' + ResOpPairs);
 	}
 	Schedule = [];
 	isRegMsg = false;
