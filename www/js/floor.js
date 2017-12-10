@@ -56,7 +56,7 @@ function getFloorInfo(){
 	registerOUser();
 	retrieveAppliances();
 	
-	getStatusofAllApps();
+	//getStatusofAllApps();
 
 }
 
@@ -98,6 +98,7 @@ function retrieveAppliances(){
 		isneedtoKillAjax = false;
 		
 		appliances = data.items;
+		
 		//alert('appliances: ' + JSON.stringify(appliances));
 		if(appliances.length == 0)
 			alert("No Registered Appliances on This Floor");
@@ -138,8 +139,11 @@ function retrieveAppliances(){
 				
 			}
 		});
+		
+		
 	})	.success(function() { 
 			//alert("second success"); 
+			getStatusofAllApps();
 		})
 		.error(function() { 
 			myAlert("error", 4); 
@@ -494,8 +498,8 @@ function sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, isRegMsg){ //
 		myAlert("Rcvd: " + rcvdMsg,3);
 		if(isRegMsg){
 			owlMsg = parseOwlMessage(rcvdMsg);
-			if(owlMsg.msgType == MessageType.REGISTRATION && 
-				owlMsg.message == Message.SUCCESSFUL){
+			//if(owlMsg.msgType == MessageType.REGISTRATION && 
+			if(owlMsg.message == Message.SUCCESSFUL){
 				regSoc = socket;
 				isneedtoKillAjax = true;
 				myAlert("Registration Successful ",0);
