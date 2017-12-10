@@ -436,7 +436,9 @@ function sendRequest2OBox(MsgType, Msg, ResOpPairs, Schedule, isRegMsg){ //RegSo
 	var j=0;
 	owlMsg.resourceID = [];	//new int[(reqs.length-4-addParms)/2];
 	owlMsg.operation = [];//new int[(reqs.length-4-addParms)/2];
+	alert('ResOpPairs1:' + ResOpPairs);
 	resOpPairsArr = ResOpPairs.split(":");
+	alert('resOpPairsArr:' + resOpPairsArr.length);
 	for (var i=0; i<resOpPairsArr.length; i=i+2) {
 			owlMsg.resourceID[j] = resOpPairsArr[i];
 			owlMsg.operation[j] = parseInt(resOpPairsArr[i+1]);
