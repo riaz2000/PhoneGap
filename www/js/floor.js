@@ -417,7 +417,7 @@ function getResImg(ResType, state){
 	return app;
 }
 
-function sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, isRegMsg){ //RegSock Remains Open
+function sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, trackResp){ //RegSock Remains Open
 	var socket = new Socket();
 	var owlMsg = new Object();
 	owlMsg.role = Role.OWLUser;
@@ -439,43 +439,39 @@ function sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, isRegMsg){ //
 		owlMsg.repeatPattern = Schedule.repeatPattern;
 		owlMsg.forNdays= Schedule.forNdays;
 	}
-	/*
-	var j=0;
-	owlMsg.resourceID = [];	//new int[(reqs.length-4-addParms)/2];
-	owlMsg.operation = [];//new int[(reqs.length-4-addParms)/2];
-	if(ResOpPairs!=''){
-		alert('ResOpPairs1:' + ResOpPairs);
-		resOpPairsArr = ResOpPairs.split(":");
-		alert('resOpPairsArr:' + resOpPairsArr.length);
-		
-		for (var i=0; i<resOpPairsArr.length; i=i+2) {
-				owlMsg.resourceID[j] = resOpPairsArr[i];
-				owlMsg.operation[j] = parseInt(resOpPairsArr[i+1]);
-				j++;
-		}
-	}
-	*/
+
 	owlMsg.resourceID = ResIdArr;
 	owlMsg.operation  = OpArr;
 	var dataString = constructOwlMessage(owlMsg) + "\n";
-	alert(dataString);
-	//var dataString = Role.OWLUser+':'+MsgType+':'+OBoxID+':'+Msg+':'+ ResOpPairs+"\n";//"2:2:3:2:5:2\n";
+	
 	var data = new Uint8Array(dataString.length);
 	for (var i = 0; i < data.length; i++) {
 	  data[i] = dataString.charCodeAt(i);
 	}
 	
-	setTimeout(function() {	checkajaxkill(); }, 4000);
-	var isneedtoKillAjax = true;
-	//alert('OBoxIP' + OBoxIP);
-	//alert('OBoxPort' + OBoxPort);
+	var isneedtoKillAjax;
+	if(owlMsg.msgType == MessageType.REGISTRATION){
+		setTimeout(function() {checkajaxkill(); }, 4000);
+		isneedtoKillAjax = true;
+	}
+
 	socket.open(
 		OBoxIP,
 		OBoxPort,
 		function() {
 			// invoked after successful opening of socket
 			socket.write(data);
-			isneedtoKillAjax = false;
+			myAlert("Txd: " + dataString, 3);
+			//isneedtoKillAjax = false;
+			if(owlMsg.msgType != MessageType.REGISTRATION)
+				socket.close();
+			if(trackResp){
+				// track each resource of in message if it has got the response for the action or not
+				// in case of timeout get the updated status as it has been observed that OBox sometimes
+				// performs the action but does not respond.
+				//
+			}
+				
 		},
 		function(errorMessage) {
 			// invoked after unsuccessful opening of socket
@@ -484,7 +480,7 @@ function sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, isRegMsg){ //
 	);
 	
 	function checkajaxkill(){
-		if(isneedtoKillAjax){
+		if(isneedtoKillAjax && isRegReq){
 			socket.close();
 			myAlert('Request Timeout: \n'+dataString,0);                 
 		}else{
@@ -496,18 +492,21 @@ function sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, isRegMsg){ //
 		// invoked after new batch of data is received (typed array of bytes Uint8Array)
 		rcvdMsg = uintToString(data);
 		myAlert("Rcvd: " + rcvdMsg,3);
-		if(isRegMsg){
+		handleResponse(rcvdMsg);
+		/*
+		if(isRegReq){
 			owlMsg = parseOwlMessage(rcvdMsg);
-			//if(owlMsg.msgType == MessageType.REGISTRATION && 
-			if(owlMsg.message == Message.SUCCESSFUL){
+			if(owlMsg.msgType == MessageType.REGISTRATION && 
+				owlMsg.message == Message.SUCCESSFUL){
 				regSoc = socket;
-				isneedtoKillAjax = true;
+				//isneedtoKillAjax = true;
 				myAlert("Registration Successful ",0);
 			}
 		}
 		else{ //handle the response
 			handleResponse(rcvdMsg);
 		}
+		*/
 	  //check if the response is for the specfic resource for which request was sent
 	  //ResOpPairs compare the resNo ResOpPairs with resNo in ResponseMsg  RiazH
 	  
@@ -538,9 +537,9 @@ function getStatusofAllApps(){
 	}
 	
 	Schedule = [];
-	isRegMsg = false;
+	trackResp = false;
 
-	sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, isRegMsg);
+	sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, trackResp);
 }
 
 function registerOUser(){
@@ -559,9 +558,9 @@ function registerOUser(){
 		ResIdArr = [];
 		OpArr    = [];
 		Schedule = [];
-		isRegMsg = true;
+		trackResp = true;
 
-		sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, isRegMsg);
+		sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, trackResp);
 	}
 }
 
@@ -572,7 +571,8 @@ function handleResponse(rcvdMsg){
 		return;
 	}
 	if(owlMsg.msgType == MessageType.REGISTRATION){
-		
+		if(owlMsg.message == Message.SUCCESSFUL)
+			myAlert("Registration Successful ",0);
 	}
 	else if(owlMsg.msgType == MessageType.RESPONSE){
 		if(owlMsg.Message == Message.SCHEDULE_RETURN){

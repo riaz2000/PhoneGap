@@ -174,17 +174,17 @@ function parseOwlMessage(receivedMsg){ // receivedMsg is a string
 // creates a string for transmission, don't forget to append "\n" when sending data over TCP
 // myOWLmsg is an object
 function constructOwlMessage(myOWLmsg){ 
-	response = '';
+	myOWLmsgStr = '';
 	//alert('Role: ' + myOWLmsg.role);
 	
-	response = myOWLmsg.role + ":" +
+	myOWLmsgStr = myOWLmsg.role + ":" +
 				myOWLmsg.msgType + ":" +
 				myOWLmsg.instIdOrSocStrg + ":" +
 				myOWLmsg.message;
 				
 	
 	if(myOWLmsg.message == Message.SCHEDULE_ADD || myOWLmsg.message == Message.SCHEDULE_REMOVE ){
-		response = response + 	":" + myOWLmsg.day + 
+		myOWLmsgStr = myOWLmsgStr + 	":" + myOWLmsg.day + 
 								":" + myOWLmsg.month +
 								":" + myOWLmsg.year +
 								":" + myOWLmsg.hr +
@@ -193,11 +193,11 @@ function constructOwlMessage(myOWLmsg){
 								":" + myOWLmsg.repeatPattern +
 								":" + myOWLmsg.forNdays;							
 	}
-	alert('myOWLmsg.resourceID: ' + myOWLmsg.resourceID.length);
+	//alert('myOWLmsg.resourceID: ' + myOWLmsg.resourceID.length);
 	if(myOWLmsg.resourceID.length!=0){
 		for(var i=0; i<myOWLmsg.resourceID.length; i++)
-			response = response + ":" + myOWLmsg.resourceID[i] + ":" + myOWLmsg.operation[i];
+			myOWLmsgStr = myOWLmsgStr + ":" + myOWLmsg.resourceID[i] + ":" + myOWLmsg.operation[i];
 	}
 	
-	return response;
+	return myOWLmsgStr;
 }
