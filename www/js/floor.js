@@ -584,6 +584,7 @@ function handleResponse(rcvdMsg){
 		else{
 			alert('owlMsg.resourceID.length1 ' + owlMsg.resourceID.length);
 			for(var i=0; i<owlMsg.resourceID.length; i++){
+				state = State.UK;
 				switch(parseInt(owlMsg.operation[i])){
 					case Operation.TURN_OFF:
 						state = State.OFF;
