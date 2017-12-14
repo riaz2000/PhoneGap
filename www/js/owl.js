@@ -110,7 +110,7 @@ OwlMessage = {
 */
 
 function parseOwlMessage(receivedMsg){ // receivedMsg is a string
-	alert(receivedMsg);
+	//alert(receivedMsg);
 	recs = receivedMsg.split("::");	// RECordS
 	reqs = recs[0].split(":");			// REQuestS
 	//OwlMessage owlMsg = new OwlMessage();

@@ -70,7 +70,7 @@ function retrieveAppliances(){
 		serviceURL = 'http://'+osaddr+':'+port+'/owl/services/';
 	}
 	else{
-		alert("OWLBox " + OBoxID + " Neither on LAN Nor Accessible over Internet");
+		myAlert("OWLBox " + OBoxID + " Neither on LAN Nor Accessible over Internet", 0);
 		return;
 	}
 	
@@ -101,7 +101,7 @@ function retrieveAppliances(){
 		
 		//alert('appliances: ' + JSON.stringify(appliances));
 		if(appliances.length == 0)
-			alert("No Registered Appliances on This Floor");
+			MyAlert("No Registered Appliances on This Floor", 0);
 
 		$.each(appliances, function(index, appliance) {
 			if(CtrlAtomicLvl == 0){
@@ -251,7 +251,7 @@ function addListeners(img, resId){
 	
 	$$(img).tap(function(e) {
 	  //alert(e.pageX);
-		alert("EventQuo: tap" + resId);
+		alert("EventQuo: tap " + resId);
 		//sendRequest2OBox(MsgType, Msg, ResOpPairs, Schedule, isRegSoc){ //RegSock Remains Open
 		MsgType = MessageType.REQUEST;
 		Msg = Message.DO_NOT_CARE;
@@ -518,7 +518,8 @@ function sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, trackResp){ /
 	};
 	socket.onClose = function(hasError) {
 	  // invoked after connection close
-	  alert("Connection Closed with ErrorStatus = " + hasError);
+	  if(hasError)
+		myAlert("Connection Closed with ErrorStatus = " + hasError, 4);
 	};
 }  
 
@@ -528,7 +529,7 @@ function getStatusofAllApps(){
 	Msg = Message.DO_NOT_CARE;
 	ResIdArr = [];
 	//ResOpPairs='';
-	alert('appliances.length: ' + appliances.length);
+	//alert('appliances.length: ' + appliances.length);
 	for(var i=0; i<appliances.length; i++){
 		ResIdArr.push(appliances[i].resource_id);
 		OpArr.push(Operation.RETURN_STATE);
@@ -566,8 +567,9 @@ function registerOUser(){
 
 function handleResponse(rcvdMsg){
 	owlMsg = parseOwlMessage(rcvdMsg);
+	myAlert("MsgType:Msg " + owlMsg.msgType+":"+owlMsg.message,3);
 	if(parseInt(owlMsg.instIdOrSocStrg) != OBoxID){
-		myAlert("Message from Invalid OBox: " + parseInt(owlMsg.instIdOrSocStrg));
+		myAlert("Message from Invalid OBox: " + parseInt(owlMsg.instIdOrSocStrg), 0);
 		return;
 	}
 	
