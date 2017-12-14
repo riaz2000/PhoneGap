@@ -570,6 +570,7 @@ function handleResponse(rcvdMsg){
 		myAlert("Message from Invalid OBox: " + parseInt(owlMsg.instIdOrSocStrg));
 		return;
 	}
+	
 	if(owlMsg.msgType == MessageType.REGISTRATION){
 		if(owlMsg.message == Message.SUCCESSFUL)
 			myAlert("Registration Successful ",0);
@@ -596,6 +597,7 @@ function updateResIcon(resId, resStatus){
 	for (var i=0 ; i<appliances.length ; i++){
 		if (appliances[i].resource_id == resId) {
 			appliances[i].img.src =	'imgs/apps/' + getResImg(appliances[i].appliance, resStatus)+ ".png";
+			myAlert("Image: " + 'imgs/apps/' + getResImg(appliances[i].appliance, resStatus)+ ".png")
 			
 			//img1.src = 'imgs/apps/' + getResImg(appliance.appliance, State.UK)+ ".png";
 		}
