@@ -582,8 +582,26 @@ function handleResponse(rcvdMsg){
 			
 		}
 		else{
+			alert('owlMsg.resourceID.length1 ' + owlMsg.resourceID.length);
 			for(var i=0; i<owlMsg.resourceID.length; i++){
-				updateResIcon(owlMsg.resourceID[i], owlMsg.operation[i]);
+				switch(parseInt(owlMsg.operation[i])){
+					case Operation.TURN_OFF:
+						state = State.OFF;
+						break;
+					case Operation.TURN_ON:
+						state = State.ON;
+						break;
+					case Operation.RES_NOT_RECOGNIZED:
+						state = State.UK;
+						break;
+					case Operation.RES_NOT_REACHABLE:
+						state = State.UR;
+						break;
+					default:
+						state = State.UR;
+				}
+
+				updateResIcon(owlMsg.resourceID[i], state);
 			}
 		}
 	}
@@ -595,11 +613,12 @@ function handleResponse(rcvdMsg){
 	}
 }
 
-function updateResIcon(resId, resStatus){
+function updateResIcon(resId, resState){
+	alert('appliances.length1 ' + appliances.length);
 	for (var i=0 ; i<appliances.length ; i++){
 		if (appliances[i].resource_id == resId) {
-			appliances[i].img.src =	'imgs/apps/' + getResImg(appliances[i].appliance, resStatus)+ ".png";
-			myAlert("Image: " + 'imgs/apps/' + getResImg(appliances[i].appliance, resStatus)+ ".png")
+			appliances[i].img.src =	'imgs/apps/' + getResImg(appliances[i].appliance, resState)+ ".png";
+			myAlert("Image: " + 'imgs/apps/' + getResImg(appliances[i].appliance, resState)+ ".png")
 			
 			//img1.src = 'imgs/apps/' + getResImg(appliance.appliance, State.UK)+ ".png";
 		}
