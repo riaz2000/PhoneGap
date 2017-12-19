@@ -197,7 +197,8 @@ function addAppliance(appliance){
 	img1.height=60;
 	img1.width=60;
 	
-	img1.style="position: absolute; left:"+posX+"px; top:"+posY+"px;";
+	//img1.style="position: absolute; left:"+posX+"px; top:"+posY+"px;";
+	img1.style="left:"+posX+"px; top:"+posY+"px;";
 	addListeners(img1, appliance.resource_id);
 	//ImgsArr.push(img1);
 	//resIdsArr.push(appliance.resource_id);
