@@ -22,7 +22,7 @@ $('#installationListPage').live('pageshow', function(event) {
 
 function getInstallationList() {
 	
-	myAlert("Device2: "+getDeviceType(),3);
+	myAlert("Device2: "+getDeviceType(),4);
 	//alert("OBsLstStr: " +localStorage.getItem('OBsLstStr'));
 	if(localStorage.getItem('OBsLstStr')=="" || localStorage.getItem('OBsLstStr')==null)
 		localStorage.setItem('OBsLstStr',"[]");

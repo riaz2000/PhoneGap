@@ -47,7 +47,8 @@ function getFloorInfo(){
 	
 	myObj = document.getElementById('floorObj');
 	
-	myObj.data = webServer+"/OWL/FloorPlans/I1F"+FloorNo+".png";
+	//myObj.data = webServer+"/OWL/FloorPlans/I1F"+FloorNo+".png";
+	myObj.data = webServer+"/owl/services/test1.php";
 	//alert("myObj.data "+ JSON.stringify(myObj.data));
 	if(myObj.data.match(404))
 		myObj.data = webServer + "/OWL/FloorPlans/I0F0default.png";
@@ -181,7 +182,7 @@ function addAppliance(appliance){
 	if(parseInt(appliance.usrCtrlLvlonRes)<1)
 		return;
 	var img1 = new Image();
-	var div = document.getElementById('main');
+	var div = document.getElementById('floor');
 
 	img1.onload = function() {
 	  div.appendChild(img1);
@@ -198,7 +199,8 @@ function addAppliance(appliance){
 	img1.width=60;
 	
 	//img1.style="position: absolute; left:"+posX+"px; top:"+posY+"px;";
-	img1.style="left:"+posX+"px; top:"+posY+"px;";
+	img1.style="position: absolute; left:"+posX+"px; top:"+posY+"px;";
+	//img1.style="left:"+posX+"px; top:"+posY+"px;";
 	addListeners(img1, appliance.resource_id);
 	//ImgsArr.push(img1);
 	//resIdsArr.push(appliance.resource_id);
