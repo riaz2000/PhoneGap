@@ -89,7 +89,9 @@ function searchOnLAN(){
 	});
 	}
 	else{ //DeviceType == ANDORID | iPhone
+		alert("Here-0a");
 		sendTo("2:5:0:7\n", "192.168.1.2", 1214);
+		alert("Here-0b");
 	}
 }
 
@@ -321,10 +323,11 @@ function arrayBuffer2Text(buffer /* ArrayBuffer */ ) {
 }
 
 function sendTo(data, addr, port) {
-    chrome.sockets.udp.create(function(createInfo) {
-      chrome.sockets.udp.bind(createInfo.socketId, '0.0.0.0', 0, function(result) {
+	alert("Here-1a");
+    chrome.sockets.udp.create(function(createInfo) {alert("Here-1b");
+      chrome.sockets.udp.bind(createInfo.socketId, '0.0.0.0', 0, function(result) {alert("Here-1c");
 		delay = 4000;	//4 seconds  
-		chrome.sockets.udp.onReceive.addListener(function (info) {
+		chrome.sockets.udp.onReceive.addListener(function (info) {alert("Here-1d");
 			/*
 			if (typeof $localStorage.list === 'undefined') {
 				$localStorage.list= new Array();
@@ -347,7 +350,7 @@ function sendTo(data, addr, port) {
 			});
 		}, delay);
 		
-        chrome.sockets.udp.send(createInfo.socketId, text2ArrayBuffer(data), addr, port, function(result) {
+        chrome.sockets.udp.send(createInfo.socketId, text2ArrayBuffer(data), addr, port, function(result) {alert("Here-1e");
           if (result < 0) {
             alert('send fail: ' + result);
             chrome.sockets.udp.close(createInfo.socketId);
