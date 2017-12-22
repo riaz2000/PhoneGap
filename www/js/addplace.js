@@ -48,6 +48,8 @@ function searchOnLAN(){
 	var count;
 	$('#installationList2 li').remove();
 	
+	if(getDeviceType() == "BROWSER"){
+	
 	networkinterface.getWiFiIPAddress(function (ip) {
 		var obip = document.getElementById('OBIP').value;
 		if(obip == ''){
@@ -85,6 +87,10 @@ function searchOnLAN(){
 			try2Discover(serviceURL,Direct);
 		}
 	});
+	}
+	else{ //DeviceType == ANDORID | iPhone
+		sendTo("2:5:0:7\n", "192.168.1.2", 1214);
+	}
 }
 
 function try2Discover(url,mode){
@@ -301,6 +307,22 @@ function updateOBox(OBoxNo, OBstring){
 	
 }
 
+function sendTo(data, addr, port) {
+    chrome.sockets.udp.create(function(createInfo) {
+      chrome.sockets.udp.bind(createInfo.socketId, '0.0.0.0', 0, function(result) {
+        chrome.sockets.udp.send(createInfo.socketId, data, addr, port, function(result) {
+          if (result < 0) {
+            alert('send fail: ' + result);
+            chrome.sockets.udp.close(createInfo.socketId);
+          } else {
+            console.log('sendTo: success ' + port);
+			alert('sendTo: success ' + port);
+            chrome.sockets.udp.close(createInfo.socketId);
+          }
+        });
+      });
+    });
+  }
 /*
 
 function addListed2(){
