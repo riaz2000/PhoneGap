@@ -307,10 +307,47 @@ function updateOBox(OBoxNo, OBstring){
 	
 }
 
+// translate text string to Arrayed buffer
+function text2ArrayBuffer(str /* String */ ) {
+    var encoder = new TextEncoder('utf-8');
+    return encoder.encode(str).buffer;
+}
+
+// translate Arrayed buffer to text string
+function arrayBuffer2Text(buffer /* ArrayBuffer */ ) {
+    var dataView = new DataView(buffer);
+    var decoder = new TextDecoder('utf-8');
+    return decoder.decode(dataView);
+}
+
 function sendTo(data, addr, port) {
     chrome.sockets.udp.create(function(createInfo) {
       chrome.sockets.udp.bind(createInfo.socketId, '0.0.0.0', 0, function(result) {
-        chrome.sockets.udp.send(createInfo.socketId, data, addr, port, function(result) {
+		delay = 4000;	//4 seconds  
+		chrome.sockets.udp.onReceive.addListener(function (info) {
+			/*
+			if (typeof $localStorage.list === 'undefined') {
+				$localStorage.list= new Array();
+			}
+			var data= arrayBuffer2str(info.data);
+			var row= { 
+				"addr": info.remoteAddress,
+				"data": data
+			};
+			$localStorage.list.push(row);
+			*/
+			alert("info.remoteAddress: " + info.remoteAddress + " Data: " +  arrayBuffer2str(info.data));
+		});
+		/// the timeout set the end of the listening
+		setTimeout(function() {
+			chrome.sockets.udp.close(_socketUdpId, function() {
+				/// close the socket
+				$ionicLoading.hide();
+				deferred.resolve($localStorage.list);
+			});
+		}, delay);
+		
+        chrome.sockets.udp.send(createInfo.socketId, text2ArrayBuffer(data), addr, port, function(result) {
           if (result < 0) {
             alert('send fail: ' + result);
             chrome.sockets.udp.close(createInfo.socketId);
