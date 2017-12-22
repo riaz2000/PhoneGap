@@ -325,7 +325,8 @@ function arrayBuffer2Text(buffer /* ArrayBuffer */ ) {
 function sendTo(data, addr, port) {
 	alert("Here-1a");
     chrome.sockets.udp.create(function(createInfo) {alert("Here-1b");
-      chrome.sockets.udp.bind(createInfo.socketId, '0.0.0.0', 0, function(result) {alert("Here-1c");
+      chrome.sockets.udp.bind(createInfo.socketId, '0.0.0.0', 0, function(result) {alert("Here-1c SocketID: " + createInfo.socketId);
+	  
 		chrome.sockets.udp.send(createInfo.socketId, text2ArrayBuffer(data), addr, port, function(result) {alert("Here-1e");
           if (result < 0) {
             alert('send fail: ' + result);
@@ -353,10 +354,11 @@ function sendTo(data, addr, port) {
 		});
 		/// the timeout set the end of the listening
 		setTimeout(function() {
-			chrome.sockets.udp.close(_socketUdpId, function() {
+			chrome.sockets.udp.close(createInfo.socketId, function() {
 				/// close the socket
-				$ionicLoading.hide();
-				deferred.resolve($localStorage.list);
+				//$ionicLoading.hide();
+				//deferred.resolve($localStorage.list);
+				alert("UDP Socket Closed");
 			});
 		}, delay);
 		
