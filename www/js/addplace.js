@@ -326,6 +326,16 @@ function sendTo(data, addr, port) {
 	alert("Here-1a");
     chrome.sockets.udp.create(function(createInfo) {alert("Here-1b");
       chrome.sockets.udp.bind(createInfo.socketId, '0.0.0.0', 0, function(result) {alert("Here-1c");
+		chrome.sockets.udp.send(createInfo.socketId, text2ArrayBuffer(data), addr, port, function(result) {alert("Here-1e");
+          if (result < 0) {
+            alert('send fail: ' + result);
+            chrome.sockets.udp.close(createInfo.socketId);
+          } else {
+            console.log('sendTo: success ' + port);
+			alert('sendTo: success ' + port);
+            chrome.sockets.udp.close(createInfo.socketId);
+          }
+        });
 		delay = 4000;	//4 seconds  
 		chrome.sockets.udp.onReceive.addListener(function (info) {alert("Here-1d");
 			/*
@@ -350,16 +360,6 @@ function sendTo(data, addr, port) {
 			});
 		}, delay);
 		
-        chrome.sockets.udp.send(createInfo.socketId, text2ArrayBuffer(data), addr, port, function(result) {alert("Here-1e");
-          if (result < 0) {
-            alert('send fail: ' + result);
-            chrome.sockets.udp.close(createInfo.socketId);
-          } else {
-            console.log('sendTo: success ' + port);
-			alert('sendTo: success ' + port);
-            chrome.sockets.udp.close(createInfo.socketId);
-          }
-        });
       });
     });
   }
