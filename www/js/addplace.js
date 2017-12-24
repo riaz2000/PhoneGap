@@ -48,7 +48,7 @@ function searchOnLAN(){
 	var count;
 	$('#installationList2 li').remove();
 	
-	if(getDeviceType() == "BROWSER"){
+	/*if(getDeviceType() == "BROWSER"){*/
 	
 	networkinterface.getWiFiIPAddress(function (ip) {
 		var obip = document.getElementById('OBIP').value;
@@ -87,12 +87,12 @@ function searchOnLAN(){
 			try2Discover(serviceURL,Direct);
 		}
 	});
-	}
+	/*}
 	else{ //DeviceType == ANDORID | iPhone
 		alert("Here-0a");
 		sendTo("2:5:0:7\n", "192.168.1.2", 1214);
 		alert("Here-0b");
-	}
+	}*/
 }
 
 function try2Discover(url,mode){

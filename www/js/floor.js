@@ -183,7 +183,7 @@ function addAppliance(appliance){
 	if(parseInt(appliance.usrCtrlLvlonRes)<1)
 		return;
 	var img1 = new Image();
-	var div = document.getElementById('main');
+	var div = document.getElementById('top');
 
 	img1.onload = function() {
 	  div.appendChild(img1);
@@ -200,7 +200,7 @@ function addAppliance(appliance){
 	img1.width=60;
 	
 	//img1.style="position: absolute; left:"+posX+"px; top:"+posY+"px;";
-	img1.style="position: relative; left:"+posX+"px; top:"+posY+"px;";
+	img1.style="position: absolute; left:"+posX+"px; top:"+posY+"px;";
 	//img1.style="left:"+posX+"px; top:"+posY+"px;";
 	addListeners(img1, appliance.resource_id);
 	//ImgsArr.push(img1);
