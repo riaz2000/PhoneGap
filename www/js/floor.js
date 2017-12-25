@@ -192,7 +192,9 @@ function addAppliance(appliance){
 	var img1 = new Image();
 	//var div = document.getElementById('top');
 	var div = document.createElement('div');
-	document.getElementById('floor').appendChild(div);
+	//var div = new Division();
+	//document.getElementById('floor').appendChild(div);
+	document.body.appendChild(div);
 	div.style="position: absolute; left:"+posX+"px; top:"+posY+"px;";
 	img1.onload = function() {
 	  div.appendChild(img1);
