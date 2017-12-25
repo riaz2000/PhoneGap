@@ -255,7 +255,8 @@ function addListeners(img, resId){
 	$$(img).hold(function(e) {//
 	  //alert(e.pageX);
 	  alert("EventQuo: hold");
-	  img.style="position: absolute; left: 70px; top: 70px; background-color:yellow";
+	  //img.style="position: absolute; left: 70px; top: 70px; background-color:yellow";
+	  img.style="background-color:green";
 	});
 	
 	$$(img).tap(function(e) {
