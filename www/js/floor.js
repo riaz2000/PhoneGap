@@ -282,7 +282,8 @@ function addAppliance(appliance){
 	//var div = document.getElementById('top1');
 	//var div = new Division();
 	document.getElementById('floor').appendChild(div);
-	//document.body.appendChild(div);
+	div.id = "div:"+indexOfAppInApps;
+	//document.body.appendChild(div); 
 	div.style="position: absolute; left:"+posX+"px; top:"+posY+"px;";
 	img.onload = function() {
 	  div.appendChild(img);
@@ -488,8 +489,11 @@ function addListeners(div, img, resId, indexOfAppInApps){
 				if (appliances[i].resource_id == resId) {
 					document.getElementById("lbl_reqStatus:"+i).innerHTML = "&#9775";
 					document.getElementById("lbl_reqStatus:"+i).style.color = "blue";
+					
+					document.getElementById('div:'+i).style="position: absolute; left:"+appliances[i].pos_x+"px; top:"+appliances[i].pos_y+"px;";
 				}
 			}
+			
 			//img.style="background-color:transparent";
 		}
 		else if(FloorInMode == FloorMode.SELECTION){
@@ -668,7 +672,7 @@ function getResImg(ResType, state){
 		app="cfan" ;
 	}
 	
-	switch(state){
+	switch(parseInt(state)){
 	case State.OFF:
 		app=app+"_off";
 		break;
