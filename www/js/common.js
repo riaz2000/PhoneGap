@@ -4,6 +4,11 @@ var connType;		// if WiFi
 var directAccessIP = "";
 var OBdirectAccess = 0;
 var OBviaInternetAccess = 0;
+
+FloorMode = {
+	OPERATION 				: 0,
+	SELECTION				: 1
+}
 //timeoutTimer = 4000;
 function myAlert(msg, msgPriority){ // msgPriority = 1 - 5 (1:Highest, 5:Lowest)
 	

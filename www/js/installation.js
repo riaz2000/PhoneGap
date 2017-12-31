@@ -82,7 +82,7 @@ function getInstallationInfo(){
 					else if (i < -1)
 						FloorNumber = "Basement " + i;
 
-					$('#floorList').append('<li style="background-color:#FF0000;">' + '<a href="' + linkToPage + '">' + '<B><center>' + FloorNumber + '</center></B></li>');
+					$('#floorList').append('<li style="background-color:#FF0000;">' + '<a href="' + linkToPage + '">' + '<B><center>' + FloorNumber + '</center></B></a></li>');
 				}
 				$('#floorList').listview('refresh');
 			}

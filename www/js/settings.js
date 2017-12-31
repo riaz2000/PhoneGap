@@ -8,11 +8,15 @@ $('#settingsPage').live('pageshow', function(event) { //pageshow pageinit
 function getSettings(){
 	obaddr = document.getElementById('OBAddress');
 	osaddr = document.getElementById('OSAddress');
-	verbos = document.getElementById('Verbosity');
+	//verbos = document.getElementById('Verbosity');
+	verbosSldr = document.getElementById('VerbositySldr');
 	
 	obaddr.value = localStorage.getItem('owlbaddr');
 	osaddr.value = localStorage.getItem('owlsaddr');
-	verbos.value = localStorage.getItem('verboseLvl');
+	//verbos.value = localStorage.getItem('verboseLvl');
+	verbosSldr.value=parseInt(localStorage.getItem('verboseLvl'));
+	verbosSldr.slider("option", "value", verbosSldr.value);
+	verbosSldr.slider('refresh');
 	/*
 	y = document.getElementById('textline');
 	y.value = localStorage.getItem("mynumber");
@@ -27,7 +31,8 @@ function updateSettings(){
     //remember code
 	var obaddr = document.getElementById('OBAddress').value;
 	var osaddr = document.getElementById('OSAddress').value;
-	var verbos = document.getElementById('Verbosity').value;
+	//var verbos = document.getElementById('Verbosity').value;
+	var verbos = document.getElementById('VerbositySldr').value;
 	
 	localStorage.setItem('owlbaddr',obaddr);
 	localStorage.setItem('owlsaddr',osaddr);
