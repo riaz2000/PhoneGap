@@ -304,7 +304,7 @@ function addAppliance(appliance){
 	//img1.style="position: absolute; left:"+posX+"px; top:"+posY+"px;";
 	//img1.style="position: absolute; left:"+posX+"px; top:"+posY+"px;";
 	//img1.style="left:"+posX+"px; top:"+posY+"px;";
-	addListeners(div, img, appliance.resource_id, indexOfAppInApps);
+	//addListeners(div, img, appliance.resource_id, indexOfAppInApps);
 	//ImgsArr.push(img1);
 	//resIdsArr.push(appliance.resource_id);
 }
@@ -611,7 +611,6 @@ function addListeners(div, img, resId, indexOfAppInApps){
 	  alert("EventQuo: rotateRight");
 	});
 	
-	document.getElementById('div:'+indexOfAppInApps).style="position: absolute; left:"+appliances[indexOfAppInApps].pos_x+"px; top:"+appliances[indexOfAppInApps].pos_y+"px;";
 }
 
 function getResImg(ResType, state){
