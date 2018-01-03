@@ -610,7 +610,6 @@ function addListeners(div, img, resId, indexOfAppInApps){
 	  //alert(e.pageX);
 	  alert("EventQuo: rotateRight");
 	});
-	
 }
 
 function getResImg(ResType, state){
