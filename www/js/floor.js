@@ -285,9 +285,9 @@ function addAppliance(appliance){
 	div.id = "div:"+indexOfAppInApps;
 	//document.body.appendChild(div); 
 	div.style="position: absolute; left:"+posX+"px; top:"+posY+"px;";
-	//img.onload = function() {
+	img.onload = function() {
 	  div.appendChild(img);
-	//};
+	};
 	//appliances[indexOfAppInApps].img = img1;
 	appliances[indexOfAppInApps].div = div;
 		
@@ -610,6 +610,8 @@ function addListeners(div, img, resId, indexOfAppInApps){
 	  //alert(e.pageX);
 	  alert("EventQuo: rotateRight");
 	});
+	
+	document.getElementById('div:'+indexOfAppInApps).style="position: absolute; left:"+appliances[indexOfAppInApps].pos_x+"px; top:"+appliances[indexOfAppInApps].pos_y+"px;";
 }
 
 function getResImg(ResType, state){
