@@ -285,9 +285,9 @@ function addAppliance(appliance){
 	div.id = "div:"+indexOfAppInApps;
 	//document.body.appendChild(div); 
 	div.style="position: absolute; left:"+posX+"px; top:"+posY+"px;";
-	img.onload = function() {
+	//img.onload = function() {
 	  div.appendChild(img);
-	};
+	//};
 	//appliances[indexOfAppInApps].img = img1;
 	appliances[indexOfAppInApps].div = div;
 		
@@ -319,7 +319,7 @@ function addListeners(div, img, resId, indexOfAppInApps){
 	if(10 < parseInt(appliance.usrCtrlLvlonRes) < 16)
 		Can Add/Remove/Update Appliance
 	*/
-	/*
+	
 	var lbl_slct = document.createElement("Label");
 	lbl_slct.id = "lbl_slct:"+indexOfAppInApps;
 	lbl_slct.style="position: absolute; right:3px; top:3px; ";
@@ -346,7 +346,6 @@ function addListeners(div, img, resId, indexOfAppInApps){
 	lbl_reqStatus.style.color = "yellow";
 	lbl_reqStatus.innerHTML = "&#9728";	// Toggle: 9775
 	div.appendChild(lbl_reqStatus);
-	*/
 	
 	/*
 	$$(img).swipe(function(e) {
@@ -366,13 +365,13 @@ function addListeners(div, img, resId, indexOfAppInApps){
 		isRegSoc = false;
 		
 		sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, isRegSoc);
-		/*
+		
 		for (var i=0 ; i<appliances.length ; i++){
 			if (appliances[i].resource_id == resId) {
 				document.getElementById("lbl_reqStatus:"+i).innerHTML = "&#63";
 				document.getElementById("lbl_reqStatus:"+i).style.color = "yellow";
 			}
-		}*/
+		}
 	});
 	
 	$$(img).swipeUp(function(e) {
@@ -386,12 +385,12 @@ function addListeners(div, img, resId, indexOfAppInApps){
 		isRegSoc = false;
 		
 		sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, isRegSoc);
-		/*for (var i=0 ; i<appliances.length ; i++){
+		for (var i=0 ; i<appliances.length ; i++){
 			if (appliances[i].resource_id == resId) {
 				document.getElementById("lbl_reqStatus:"+i).innerHTML = "&#9728";
 				document.getElementById("lbl_reqStatus:"+i).style.color = "yellow";
 			}
-		}*/
+		}
 	});
 	
 	$$(img).swipeDown(function(e) {
@@ -405,12 +404,12 @@ function addListeners(div, img, resId, indexOfAppInApps){
 		isRegSoc = false;
 		
 		sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, isRegSoc);
-		/*for (var i=0 ; i<appliances.length ; i++){
+		for (var i=0 ; i<appliances.length ; i++){
 			if (appliances[i].resource_id == resId) {
 				document.getElementById("lbl_reqStatus:"+i).innerHTML = "&#9728";
 				document.getElementById("lbl_reqStatus:"+i).style.color = "black";
 			}
-		}*/
+		}
 	});
 	
 	$$(img).swipeLeft(function(e) {
@@ -432,7 +431,7 @@ function addListeners(div, img, resId, indexOfAppInApps){
 				if(selectedResArr[i].ResId == appliances[j].resource_id){			
 					//appliances[j].div.removeChild(document.getElementById("lbl:"+selectedResArr[i].ResId));
 					//document.getElementById("lbl:"+selectedResArr[i].ResId).innerHTML = "";
-					//document.getElementById("lbl_slct:"+j).innerHTML = "";
+					document.getElementById("lbl_slct:"+j).innerHTML = "";
 				}
 			}
 		}
@@ -453,10 +452,10 @@ function addListeners(div, img, resId, indexOfAppInApps){
 		
 		document.getElementById('a2').href="schedule.html?OBoxID="+OBoxID+"&FloorNo="+FloorNo+"&ResArr="+JSON.stringify(selectedResArr);
 
-		/*for(var i=0; i<appliances.length; i++){
+		for(var i=0; i<appliances.length; i++){
 			if(appliances[i].resource_id == resId)
 				document.getElementById("lbl_slct:"+i).innerHTML = "&#10004";
-		}*/
+		}
 		//lbl.innerHTML = "&#10004";
 		
 		
@@ -487,14 +486,14 @@ function addListeners(div, img, resId, indexOfAppInApps){
 			
 			sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, isRegSoc);
 			
-			/*for (var i=0 ; i<appliances.length ; i++){
+			for (var i=0 ; i<appliances.length ; i++){
 				if (appliances[i].resource_id == resId) {
 					document.getElementById("lbl_reqStatus:"+i).innerHTML = "&#9775";
 					document.getElementById("lbl_reqStatus:"+i).style.color = "blue";
 					
 					document.getElementById('div:'+i).style="position: absolute; left:"+appliances[i].pos_x+"px; top:"+appliances[i].pos_y+"px;";
 				}
-			}*/
+			}
 			
 			//img.style="background-color:transparent";
 		}
@@ -522,13 +521,13 @@ function addListeners(div, img, resId, indexOfAppInApps){
 					if(selectedResArr.length == 0){
 						chgMode();
 					}
-					/*for(var i=0; i<appliances.length; i++){
+					for(var i=0; i<appliances.length; i++){
 						if(appliances[i].resource_id == resId){
 							document.getElementById("lbl_slct:"+i).innerHTML = "";
 							//isResSlctd = true;
 							// Remove form the selectedResArr
 						}
-					}*/
+					}
 				}
 			}
 			if(!isResSlctd){// so select
