@@ -270,7 +270,7 @@ function addAppliance(appliance){
 		return;
 	
 	//value = window.devicePixelRatio;
-	value = getDPI();
+	//value = getDPI();
 	//posX = 1.6*parseInt(appliance.pos_x) + 0;
 	posX = parseInt(appliance.pos_x);//*value/16;
 	posY = parseInt(appliance.pos_y);// + 600;
@@ -286,10 +286,10 @@ function addAppliance(appliance){
 	//document.body.appendChild(div); 
 	newDiv.style="position: absolute; left:"+posX+"px; top:"+posY+"px;";
 	newImg.onload = function() {
-	  div.appendChild(newImg);
+	  newDiv.appendChild(newImg);
 	};
 	//appliances[indexOfAppInApps].img = img1;
-	appliances[indexOfAppInApps].div = newDiv;
+	//appliances[indexOfAppInApps].div = newDiv;
 		
 	newImg.src = 'imgs/apps/' + getResImg(appliance.appliance, State.UK)+ ".png";
 	newImg.height=60;
