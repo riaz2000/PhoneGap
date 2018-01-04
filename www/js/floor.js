@@ -324,7 +324,10 @@ function addListeners(div, img, resId, indexOfAppInApps){
 	
 	var lbl_slct = document.createElement("Label");
 	lbl_slct.id = "lbl_slct:"+indexOfAppInApps;
-	lbl_slct.style="position: absolute; right:3px; top:3px; ";
+	//lbl_slct.style="position: absolute; right:3px; top:3px; ";
+	lbl_slct.style.position="absolute";
+	lbl_slct.style.right="3px";
+	lbl_slct.style.top="3px";
 	lbl_slct.style.color = "green";
 	div.appendChild(lbl_slct);
 	
