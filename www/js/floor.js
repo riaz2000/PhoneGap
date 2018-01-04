@@ -275,25 +275,25 @@ function addAppliance(appliance){
 	posX = parseInt(appliance.pos_x);//*value/16;
 	posY = parseInt(appliance.pos_y);// + 600;
 	
-	var img = new Image();
-	img.id = "img:"+indexOfAppInApps;
+	var newImg = new Image();
+	newImg.id = "img:"+indexOfAppInApps;
 	//var div = document.getElementById('top');
-	var div = document.createElement('div');
+	var newDiv = document.createElement('div');
 	//var div = document.getElementById('top1');
 	//var div = new Division();
-	document.getElementById('floor').appendChild(div);
-	div.id = "div:"+indexOfAppInApps;
+	document.getElementById('floor').appendChild(newDiv);
+	newDiv.id = "div:"+indexOfAppInApps;
 	//document.body.appendChild(div); 
-	div.style="position: absolute; left:"+posX+"px; top:"+posY+"px;";
-	img.onload = function() {
-	  div.appendChild(img);
+	newDiv.style="position: absolute; left:"+posX+"px; top:"+posY+"px;";
+	newImg.onload = function() {
+	  div.appendChild(newImg);
 	};
 	//appliances[indexOfAppInApps].img = img1;
-	appliances[indexOfAppInApps].div = div;
+	appliances[indexOfAppInApps].div = newDiv;
 		
-	img.src = 'imgs/apps/' + getResImg(appliance.appliance, State.UK)+ ".png";
-	img.height=60;
-	img.width=60;
+	newImg.src = 'imgs/apps/' + getResImg(appliance.appliance, State.UK)+ ".png";
+	newImg.height=60;
+	newImg.width=60;
 	//img1.text = "";
 	/*
 	var lbl = document.createElement("Label");
@@ -304,7 +304,7 @@ function addAppliance(appliance){
 	//img1.style="position: absolute; left:"+posX+"px; top:"+posY+"px;";
 	//img1.style="position: absolute; left:"+posX+"px; top:"+posY+"px;";
 	//img1.style="left:"+posX+"px; top:"+posY+"px;";
-	//addListeners(div, img, appliance.resource_id, indexOfAppInApps);
+	addListeners(newDiv, newImg, appliance.resource_id, indexOfAppInApps);
 	//ImgsArr.push(img1);
 	//resIdsArr.push(appliance.resource_id);
 }
@@ -708,7 +708,7 @@ function getResImg(ResType, state){
 		app=app+"_ur";
 		break;
 	default:
-		app="_uk" ;
+		app=app+"_uk" ;
 	}
 	return app;
 }
