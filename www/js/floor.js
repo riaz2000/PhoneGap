@@ -284,7 +284,7 @@ function addAppliance(appliance){
 	document.getElementById('floor').appendChild(newDiv);
 	newDiv.id = "div:"+indexOfAppInApps;
 	//document.body.appendChild(div); 
-	newDiv.style="position: absolute; left:"+posX+"px; top:"+posY+"px;";
+	//newDiv.style="position: absolute; left:"+posX+"px; top:"+posY+"px;";
 	newImg.onload = function() {
 	  newDiv.appendChild(newImg);
 	};
@@ -305,8 +305,10 @@ function addAppliance(appliance){
 	//img1.style="position: absolute; left:"+posX+"px; top:"+posY+"px;";
 	//img1.style="left:"+posX+"px; top:"+posY+"px;";
 	addListeners(newDiv, newImg, appliance.resource_id, indexOfAppInApps);
-	//ImgsArr.push(img1);
-	//resIdsArr.push(appliance.resource_id);
+	//newDiv.style="position: absolute; left:"+posX+"px; top:"+posY+"px;";
+	newDiv.style.position="absolute";
+	newDiv.style.left=posX+"px";
+	newDiv.style.top=posY+"px";
 }
 
 function addListeners(div, img, resId, indexOfAppInApps){
