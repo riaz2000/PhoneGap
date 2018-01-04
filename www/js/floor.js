@@ -334,10 +334,13 @@ function addListeners(div, img, resId, indexOfAppInApps){
 	var lbl_resId = document.createElement("Label");
 	lbl_resId.id = "lbl_resId:"+indexOfAppInApps;
 	//lbl_resId.style="position: absolute; left:3px; bottom:3px; ";
-	lbl_resId.style="position: absolute; left:30%; bottom:50%; ";
+	//lbl_resId.style="position: absolute; left:30%; bottom:50%; ";
 	lbl_resId.style.color = "blue";
 	lbl_resId.innerHTML = resId;
 	div.appendChild(lbl_resId);
+	lbl_resId.style.position="absolute";
+	lbl_resId.style.left="30%";
+	lbl_resId.style.bottom="50%";
 	
 	// RequestForON: &#9732/&#9728;, RequestToOFF:&#10042; RequestToToggle: &#9775; RequestForStatusUpdate: &#63; RequestTimeout: &#128336
 	// RequestForON: &#9728; color yellow
