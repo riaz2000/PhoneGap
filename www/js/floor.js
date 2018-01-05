@@ -350,11 +350,11 @@ function addListeners(div, img, resId, indexOfAppInApps){
 	// RequestTimeout: &#128336: red
 	var lbl_reqStatus = document.createElement("Label");
 	lbl_reqStatus.id = "lbl_reqStatus:"+indexOfAppInApps;
-	lbl_reqStatus.style="position: absolute; left:3px; top:3px; ";
+	//lbl_reqStatus.style="position: absolute; left:3px; top:3px; ";
 	lbl_reqStatus.style.color = "yellow";
 	lbl_reqStatus.innerHTML = "&#9728";	// Toggle: 9775
 	div.appendChild(lbl_reqStatus);
-	
+	lbl_reqStatus.style="position: absolute; left:3px; top:3px; ";
 	/*
 	$$(img).swipe(function(e) {
 	  //alert(e.pageX);
