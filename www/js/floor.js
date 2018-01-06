@@ -32,7 +32,7 @@ $('#floor').live('pageshow', function(event) { //pageshow pageinit
 		webServer = 'http://'+OBoxIP+':'+port;
 	}
 	else{
-		alert("OWLBox " + OBoxID + " Neither on LAN Nor Accessible over Internet");
+		myAlert("OWLBox " + OBoxID + " Neither on LAN Nor Accessible over Internet",0);
 		return;
 	}
 	getFloorInfo();
@@ -198,11 +198,6 @@ function addActionIcons(){
 	//img1.onClick = "fn2()";
 }
 
-function fn2(){
-	alert("Here111");
-	return false;
-}
-
 function chgMode(){
 	var div = document.getElementById('footer');
 	//var iconImg = document.getElementById('bulbImg');
@@ -304,14 +299,19 @@ function addAppliance(appliance){
 	//img1.style="position: absolute; left:"+posX+"px; top:"+posY+"px;";
 	//img1.style="position: absolute; left:"+posX+"px; top:"+posY+"px;";
 	//img1.style="left:"+posX+"px; top:"+posY+"px;";
-	addListeners(newDiv, newImg, appliance.resource_id, indexOfAppInApps);
+	//addListeners(newDiv, newImg, appliance.resource_id, indexOfAppInApps);
+	addListeners(indexOfAppInApps);
 	//newDiv.style="position: absolute; left:"+posX+"px; top:"+posY+"px;";
 	newDiv.style.position="absolute";
 	newDiv.style.left=posX+"px";
 	newDiv.style.top=posY+"px";
 }
 
-function addListeners(div, img, resId, indexOfAppInApps){
+//function addListeners(div, img, resId, indexOfAppInApps){
+function addListeners(indexOfAppInApps){
+	var mDiv   = document.getElementById("div:"+indexOfAppInApps);
+	var mImg   = document.getElementById("img:"+indexOfAppInApps);
+	var mResId = appliances[indexOfAppInApps].resource_id;
 	/*
 	//Note: user_control_lvl 0=CanNotSeeRes 1-5=OBSERVER, 6-10=User, 11-15=Admin
 	if(0 < parseInt(appliance.usrCtrlLvlonRes) < 6)
@@ -326,7 +326,7 @@ function addListeners(div, img, resId, indexOfAppInApps){
 	lbl_slct.id = "lbl_slct:"+indexOfAppInApps;
 	//lbl_slct.style="position: absolute; right:3px; top:3px; ";
 	lbl_slct.style.color = "green";
-	div.appendChild(lbl_slct);
+	mDiv.appendChild(lbl_slct);
 	lbl_slct.style.position="absolute";
 	lbl_slct.style.right="3px";
 	lbl_slct.style.top="3px";
@@ -336,8 +336,8 @@ function addListeners(div, img, resId, indexOfAppInApps){
 	//lbl_resId.style="position: absolute; left:3px; bottom:3px; ";
 	//lbl_resId.style="position: absolute; left:30%; bottom:50%; ";
 	lbl_resId.style.color = "blue";
-	lbl_resId.innerHTML = resId;
-	div.appendChild(lbl_resId);
+	lbl_resId.innerHTML = mResId;
+	mDiv.appendChild(lbl_resId);
 	lbl_resId.style.position="absolute";
 	lbl_resId.style.left="30%";
 	lbl_resId.style.bottom="50%";
@@ -353,21 +353,24 @@ function addListeners(div, img, resId, indexOfAppInApps){
 	//lbl_reqStatus.style="position: absolute; left:3px; top:3px; ";
 	lbl_reqStatus.style.color = "yellow";
 	lbl_reqStatus.innerHTML = "&#9728";	// Toggle: 9775
-	div.appendChild(lbl_reqStatus);
-	lbl_reqStatus.style="position: absolute; left:3px; top:3px; ";
+	mDiv.appendChild(lbl_reqStatus);
+	lbl_reqStatus.style.position="absolute";
+	lbl_reqStatus.style.left="3px";
+	lbl_reqStatus.style.top="3px";
+	//lbl_reqStatus.style="position: absolute; left:3px; top:3px; ";
 	/*
-	$$(img).swipe(function(e) {
+	$$(mImg).swipe(function(e) {
 	  //alert(e.pageX);
 	  alert("EventQuo: Swipe");
 	});
 	*/
 	
-	$$(img).doubleTap(function(e) {
+	$$(mImg).doubleTap(function(e) {
 		//alert(e.pageX);
 		alert("EventQuo: DoubleTap");
 		MsgType = MessageType.REQUEST;
 		Msg = Message.DO_NOT_CARE;
-		ResIdArr = [resId];
+		ResIdArr = [mResId];
 		OpArr = [Operation.RETURN_STATE];
 		Schedule = [];
 		isRegSoc = false;
@@ -375,80 +378,80 @@ function addListeners(div, img, resId, indexOfAppInApps){
 		sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, isRegSoc);
 		
 		for (var i=0 ; i<appliances.length ; i++){
-			if (appliances[i].resource_id == resId) {
+			if (appliances[i].resource_id == mResId) {
 				document.getElementById("lbl_reqStatus:"+i).innerHTML = "&#63";
 				document.getElementById("lbl_reqStatus:"+i).style.color = "yellow";
 			}
 		}
 	});
 	
-	$$(img).swipeUp(function(e) {
+	$$(mImg).swipeUp(function(e) {
 		//alert(e.pageX);
 		alert("EventQuo: swipeUp");
 		MsgType = MessageType.REQUEST;
 		Msg = Message.DO_NOT_CARE;
-		ResIdArr = [resId];
+		ResIdArr = [mResId];
 		OpArr = [Operation.TURN_ON];
 		Schedule = [];
 		isRegSoc = false;
 		
 		sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, isRegSoc);
 		for (var i=0 ; i<appliances.length ; i++){
-			if (appliances[i].resource_id == resId) {
+			if (appliances[i].resource_id == mResId) {
 				document.getElementById("lbl_reqStatus:"+i).innerHTML = "&#9728";
 				document.getElementById("lbl_reqStatus:"+i).style.color = "yellow";
 			}
 		}
 	});
 	
-	$$(img).swipeDown(function(e) {
+	$$(mImg).swipeDown(function(e) {
 		//alert(e.pageX);
 		alert("EventQuo: swipeDown");
 		MsgType = MessageType.REQUEST;
 		Msg = Message.DO_NOT_CARE;
-		ResIdArr = [resId];
+		ResIdArr = [mResId];
 		OpArr = [Operation.TURN_OFF];
 		Schedule = [];
 		isRegSoc = false;
 		
 		sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, isRegSoc);
 		for (var i=0 ; i<appliances.length ; i++){
-			if (appliances[i].resource_id == resId) {
+			if (appliances[i].resource_id == mResId) {
 				document.getElementById("lbl_reqStatus:"+i).innerHTML = "&#9728";
 				document.getElementById("lbl_reqStatus:"+i).style.color = "black";
 			}
 		}
 	});
 	
-	$$(img).swipeLeft(function(e) {
+	$$(mImg).swipeLeft(function(e) {
 		//alert(e.pageX);
 		alert("EventQuo: swipeLeft");
 		
 	});
 	
-	$$(img).swipeRight(function(e) {
+	$$(mImg).swipeRight(function(e) {
 	  //alert(e.pageX);
 	  alert("EventQuo: swipeRight");
 	});
 	
-	$$(img).hold(function(e) {//
+	$$(mImg).hold(function(e) {//
 		//alert(e.pageX);
 		alert("EventQuo: hold");
 		for(var i=0; i<selectedResArr.length; i++){
 			for (var j=0; j<appliances.length; j++){
 				if(selectedResArr[i].ResId == appliances[j].resource_id){			
-					//appliances[j].div.removeChild(document.getElementById("lbl:"+selectedResArr[i].ResId));
+					//appliances[j].mDiv.removeChild(document.getElementById("lbl:"+selectedResArr[i].ResId));
 					//document.getElementById("lbl:"+selectedResArr[i].ResId).innerHTML = "";
 					document.getElementById("lbl_slct:"+j).innerHTML = "";
 				}
 			}
 		}
 		selectedResArr = []; //empty the array and restart selection
-		var selectedRes = {ResId:resId};
+		var selectedRes = {ResId:mResId};
 		selectedResArr.push(selectedRes);
 		/*for(var i=0; i<appliances.length; i++){
 			var lbl2rmv = document.getElementById('lbl'+i);
-			appliances[i].div.removeChild(lbl2rmv);
+			appliances[i].mDiv.removeChild(lbl2rmv);
 		}*/
 	
 		//state = 1;
@@ -461,13 +464,13 @@ function addListeners(div, img, resId, indexOfAppInApps){
 		document.getElementById('a2').href="schedule.html?OBoxID="+OBoxID+"&FloorNo="+FloorNo+"&ResArr="+JSON.stringify(selectedResArr);
 
 		for(var i=0; i<appliances.length; i++){
-			if(appliances[i].resource_id == resId)
+			if(appliances[i].resource_id == mResId)
 				document.getElementById("lbl_slct:"+i).innerHTML = "&#10004";
 		}
 		//lbl.innerHTML = "&#10004";
 		
 		
-		//div.appendChild(lbl);
+		//mDiv.appendChild(lbl);
 		//img.style="background-color:green";
 		
 /*	//window.location.replace("schedule.html?OBoxID="+OBoxID+"&FloorNo="+FloorNo+"&ResId="+resId);
@@ -479,15 +482,15 @@ function addListeners(div, img, resId, indexOfAppInApps){
 	  
 	});
 	
-	$$(img).tap(function(e) {
+	$$(mImg).tap(function(e) {
 	  //alert(e.pageX);
-		alert("EventQuo: tap " + resId);
+		alert("EventQuo: tap " + mResId);
 		if(FloorInMode == FloorMode.OPERATION){
 		//sendRequest2OBox(MsgType, Msg, ResOpPairs, Schedule, isRegSoc){ //RegSock Remains Open
 			MsgType = MessageType.REQUEST;
 			Msg = Message.DO_NOT_CARE;
-			//ResOpPairs = resId + ":" + Operation.TOGGLE_STATE + ":"; 
-			ResIdArr = [resId];
+			//ResOpPairs = mResId + ":" + Operation.TOGGLE_STATE + ":"; 
+			ResIdArr = [mResId];
 			OpArr = [Operation.TOGGLE_STATE];
 			Schedule = [];
 			isRegSoc = false;
@@ -495,23 +498,29 @@ function addListeners(div, img, resId, indexOfAppInApps){
 			sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, isRegSoc);
 			
 			for (var i=0 ; i<appliances.length ; i++){
-				if (appliances[i].resource_id == resId) {
-					document.getElementById("lbl_reqStatus:"+i).innerHTML = "&#9775";
-					document.getElementById("lbl_reqStatus:"+i).style.color = "blue";
+				if (appliances[i].resource_id == mResId) {
+					var m_lbl_reqStatus = document.getElementById("lbl_reqStatus:"+i);
+					m_lbl_reqStatus.innerHTML = "&#9775";
+					m_lbl_reqStatus.style.color = "blue";
 					
-					document.getElementById('div:'+i).style="position: absolute; left:"+appliances[i].pos_x+"px; top:"+appliances[i].pos_y+"px;";
+					var m_div = document.getElementById('div:'+i);
+					m_div.style.position = "absolute"; 
+					m_div.style.left = appliances[i].pos_x+"px"; 
+					m_div.style.top  = appliances[i].pos_y+"px"; 
+					
+					//document.getElementById('div:'+i).style="position: absolute; left:"+appliances[i].pos_x+"px; top:"+appliances[i].pos_y+"px;";
 				}
 			}
 			
-			//img.style="background-color:transparent";
+			//mImg.style="background-color:transparent";
 		}
 		else if(FloorInMode == FloorMode.SELECTION){
 			/*
 			for(var i=0; i<appliances.length; i++){
-				if(appliances[i].resource_id == resId){
+				if(appliances[i].resource_id == mResId){
 					var isResSlctd =  false;
 					for(var j=0; j<selectedResArr.length; j++){
-						if(selectedResArr[j].ResId == resId){
+						if(selectedResArr[j].ResId == mResId){
 							document.getElementById("lbl_slct:"+i).innerHTML = "";
 						}
 					}
@@ -523,14 +532,14 @@ function addListeners(div, img, resId, indexOfAppInApps){
 			*/
 			var isResSlctd =  false;
 			for(var j=0; j<selectedResArr.length; j++){
-				if(selectedResArr[j].ResId == resId){// i.e. already selected, so unselect it and remove from selectedResArr
+				if(selectedResArr[j].ResId == mResId){// i.e. already selected, so unselect it and remove from selectedResArr
 					selectedResArr.splice(j,1);
 					isResSlctd = true;
 					if(selectedResArr.length == 0){
 						chgMode();
 					}
 					for(var i=0; i<appliances.length; i++){
-						if(appliances[i].resource_id == resId){
+						if(appliances[i].resource_id == mResId){
 							document.getElementById("lbl_slct:"+i).innerHTML = "";
 							//isResSlctd = true;
 							// Remove form the selectedResArr
@@ -539,10 +548,10 @@ function addListeners(div, img, resId, indexOfAppInApps){
 				}
 			}
 			if(!isResSlctd){// so select
-				var selectedRes = {ResId:resId};
+				var selectedRes = {ResId:mResId};
 				selectedResArr.push(selectedRes);
 				for(var i=0; i<appliances.length; i++){
-					if(appliances[i].resource_id == resId)
+					if(appliances[i].resource_id == mResId)
 						document.getElementById("lbl_slct:"+i).innerHTML = "&#10004";
 				}
 			}
@@ -560,7 +569,7 @@ function addListeners(div, img, resId, indexOfAppInApps){
 			
 			//document.getElementById("lbl:"+selectedResArr[i].ResId).innerHTML
 			
-			//img.style="background-color:green";
+			//mImg.style="background-color:green";
 			//lbl.innerHTML = "&#10004";
 			//lbl.style="position: absolute; right:3px; top:3px; color=green;";
 			
@@ -604,17 +613,17 @@ function addListeners(div, img, resId, indexOfAppInApps){
 		*/
 	});
 	
-	$$(img).drag(function(e) {
+	$$(mImg).drag(function(e) {
 	  //alert(e.pageX);
 	  alert("EventQuo: drag");
 	});
 	
-	$$(img).rotateLeft(function(e) {
+	$$(mImg).rotateLeft(function(e) {
 	  //alert(e.pageX);
 	  alert("EventQuo: rotateLeft");
 	});
 	
-	$$(img).rotateRight(function(e) {
+	$$(mImg).rotateRight(function(e) {
 	  //alert(e.pageX);
 	  alert("EventQuo: rotateRight");
 	});

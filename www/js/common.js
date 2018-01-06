@@ -46,7 +46,6 @@ document.addEventListener("online", function () {
 }, false);
 
 function goBack(){
-	
 	var userAgent = navigator.userAgent || navigator.vendor || window.opera;
     if (userAgent.match(/iPad/i) || userAgent.match(/iPhone/i) || userAgent.match(/iPod/i)) {
         // IOS DEVICE
@@ -62,7 +61,6 @@ function goBack(){
         // EVERY OTHER DEVICE
         history.go(-1);
     }
-
 }
 
 function getUrlVars() {
