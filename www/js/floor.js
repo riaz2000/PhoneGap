@@ -605,7 +605,7 @@ function addListeners(mDiv, mImg, mResId, indexOfAppInApps){
 		};
 		*/
 	});
-	
+	/*
 	$$(mImg).drag(function(e) {
 	  //alert(e.pageX);
 	  alert("EventQuo: drag");
@@ -620,6 +620,7 @@ function addListeners(mDiv, mImg, mResId, indexOfAppInApps){
 	  //alert(e.pageX);
 	  alert("EventQuo: rotateRight");
 	});
+	*/
 }
 
 function getResImg(ResType, state){
@@ -798,7 +799,7 @@ function sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, trackResp){ /
 	socket.onData = function(data) {
 		// invoked after new batch of data is received (typed array of bytes Uint8Array)
 		rcvdMsg = uintToString(data);
-		myAlert("Rcvd: " + rcvdMsg,3);
+		myAlert("Rcvdd: " + rcvdMsg,3);
 		handleResponse(rcvdMsg);
 		/*
 		if(isRegReq){
