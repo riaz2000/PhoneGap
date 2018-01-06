@@ -289,29 +289,22 @@ function addAppliance(appliance){
 	newImg.src = 'imgs/apps/' + getResImg(appliance.appliance, State.UK)+ ".png";
 	newImg.height=60;
 	newImg.width=60;
-	//img1.text = "";
-	/*
-	var lbl = document.createElement("Label");
-	lbl.innerHTML = "&#10004";
-	lbl.style="position: absolute; right:3px; top:3px; color=green;";
-	div.appendChild(lbl);
-	*/
-	//img1.style="position: absolute; left:"+posX+"px; top:"+posY+"px;";
-	//img1.style="position: absolute; left:"+posX+"px; top:"+posY+"px;";
-	//img1.style="left:"+posX+"px; top:"+posY+"px;";
-	//addListeners(newDiv, newImg, appliance.resource_id, indexOfAppInApps);
-	addListeners(indexOfAppInApps);
-	//newDiv.style="position: absolute; left:"+posX+"px; top:"+posY+"px;";
+
+	addListeners(newDiv, newImg, appliance.resource_id, indexOfAppInApps);
+	//addListeners(indexOfAppInApps);
+	
 	newDiv.style.position="absolute";
 	newDiv.style.left=posX+"px";
 	newDiv.style.top=posY+"px";
 }
 
 //function addListeners(div, img, resId, indexOfAppInApps){
-function addListeners(indexOfAppInApps){
-	var mDiv   = document.getElementById("div:"+indexOfAppInApps);
-	var mImg   = document.getElementById("img:"+indexOfAppInApps);
-	var mResId = appliances[indexOfAppInApps].resource_id;
+//function addListeners(indexOfAppInApps){
+function addListeners(mDiv, mImg, mResId, indexOfAppInApps){
+	//var mDiv   = document.getElementById("div:"+indexOfAppInApps);
+	//var mImg   = document.getElementById("img:"+indexOfAppInApps);
+	//var mResId = appliances[indexOfAppInApps].resource_id;
+	
 	/*
 	//Note: user_control_lvl 0=CanNotSeeRes 1-5=OBSERVER, 6-10=User, 11-15=Admin
 	if(0 < parseInt(appliance.usrCtrlLvlonRes) < 6)
