@@ -290,7 +290,7 @@ function addAppliance(appliance){
 	newImg.height=60;
 	newImg.width=60;
 
-	addListeners(newDiv, newImg, appliance.resource_id, indexOfAppInApps);
+	addListeners2(newDiv, newImg, appliance.resource_id, indexOfAppInApps);
 	//addListeners(indexOfAppInApps);
 	
 	newDiv.style.position="absolute";
@@ -298,6 +298,219 @@ function addAppliance(appliance){
 	newDiv.style.top=posY+"px";
 }
 
+function addListeners2(mDiv, mImg, mResId, indexOfAppInApps){
+	var lbl_slct = document.createElement("Label");
+	lbl_slct.id = "lbl_slct:"+indexOfAppInApps;
+	//lbl_slct.style="position: absolute; right:3px; top:3px; ";
+	lbl_slct.style.color = "green";
+	mDiv.appendChild(lbl_slct);
+	lbl_slct.style.position="absolute";
+	lbl_slct.style.right="3px";
+	lbl_slct.style.top="3px";
+	
+	var lbl_resId = document.createElement("Label");
+	lbl_resId.id = "lbl_resId:"+indexOfAppInApps;
+	lbl_resId.style.color = "blue";
+	lbl_resId.innerHTML = mResId;
+	mDiv.appendChild(lbl_resId);
+	lbl_resId.style.position="absolute";
+	lbl_resId.style.left="30%";
+	lbl_resId.style.bottom="50%";
+	
+	// RequestForON: &#9732/&#9728;, RequestToOFF:&#10042; RequestToToggle: &#9775; RequestForStatusUpdate: &#63; RequestTimeout: &#128336
+	// RequestForON: &#9728; color yellow
+	// RequestForON: &#9728;	color black
+	// RequestToToggle: &#9775; color blue
+	// RequestForStatusUpdate: &#63; color yellow
+	// RequestTimeout: &#128336: red
+	var lbl_reqStatus = document.createElement("Label");
+	lbl_reqStatus.id = "lbl_reqStatus:"+indexOfAppInApps;
+	lbl_reqStatus.style.color = "yellow";
+	lbl_reqStatus.innerHTML = "&#9728";	// Toggle: 9775
+	mDiv.appendChild(lbl_reqStatus);
+	lbl_reqStatus.style.position="absolute";
+	lbl_reqStatus.style.left="3px";
+	lbl_reqStatus.style.top="3px";
+	
+	// create a simple instance
+	// by default, it only adds horizontal recognizers
+	var mc = new Hammer(mImg);
+
+	mc.get('swipe').set({ direction: Hammer.DIRECTION_ALL });
+	
+	/*
+	var singleTap = new Hammer.Tap({ event: 'singletap' });
+	var doubleTap = new Hammer.Tap({event: 'doubletap', taps: 2 });
+	var tripleTap = new Hammer.Tap({event: 'tripletap', taps: 3 });
+
+	mc.add([tripleTap, doubleTap, singleTap]);
+
+	tripleTap.recognizeWith([doubleTap, singleTap]);
+	doubleTap.recognizeWith(singleTap);
+
+	doubleTap.requireFailure(tripleTap);
+	singleTap.requireFailure([tripleTap, doubleTap]);	
+	*/
+	
+	mc.on("tap press swipeup swipedown swipeleft swiperight", function(ev) {
+		//myElement.textContent = ev.type +" gesture detected.";
+		//alert(ev.type +" gesture detected.");
+		
+		switch(ev.type) {
+			case "tap":
+				alert("You Tapped");
+				
+				if(FloorInMode == FloorMode.OPERATION){
+				//sendRequest2OBox(MsgType, Msg, ResOpPairs, Schedule, isRegSoc){ //RegSock Remains Open
+					MsgType = MessageType.REQUEST;
+					Msg = Message.DO_NOT_CARE;
+					//ResOpPairs = mResId + ":" + Operation.TOGGLE_STATE + ":"; 
+					ResIdArr = [mResId];
+					OpArr = [Operation.TOGGLE_STATE];
+					Schedule = [];
+					isRegSoc = false;
+					
+					sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, isRegSoc);
+					
+					for (var i=0 ; i<appliances.length ; i++){
+						if (appliances[i].resource_id == mResId) {
+							var m_lbl_reqStatus = document.getElementById("lbl_reqStatus:"+i);
+							m_lbl_reqStatus.innerHTML = "&#9775";
+							m_lbl_reqStatus.style.color = "blue";
+							
+							var m_div = document.getElementById('div:'+i);
+							m_div.style.position = "absolute"; 
+							m_div.style.left = appliances[i].pos_x+"px"; 
+							m_div.style.top  = appliances[i].pos_y+"px"; 
+						}
+					}
+				}
+				else if(FloorInMode == FloorMode.SELECTION){
+					var isResSlctd =  false;
+					for(var j=0; j<selectedResArr.length; j++){
+						if(selectedResArr[j].ResId == mResId){// i.e. already selected, so unselect it and remove from selectedResArr
+							selectedResArr.splice(j,1);
+							isResSlctd = true;
+							if(selectedResArr.length == 0){
+								chgMode();
+							}
+							for(var i=0; i<appliances.length; i++){
+								if(appliances[i].resource_id == mResId){
+									document.getElementById("lbl_slct:"+i).innerHTML = "";
+									//isResSlctd = true;
+									// Remove form the selectedResArr
+								}
+							}
+						}
+					}
+					if(!isResSlctd){// so select
+						var selectedRes = {ResId:mResId};
+						selectedResArr.push(selectedRes);
+						for(var i=0; i<appliances.length; i++){
+							if(appliances[i].resource_id == mResId)
+								document.getElementById("lbl_slct:"+i).innerHTML = "&#10004";
+						}
+					}
+				}
+				
+				break;
+			case "press":
+				alert("You Pressed");
+				
+				for(var i=0; i<selectedResArr.length; i++){
+					for (var j=0; j<appliances.length; j++){
+						if(selectedResArr[i].ResId == appliances[j].resource_id){			
+							//appliances[j].mDiv.removeChild(document.getElementById("lbl:"+selectedResArr[i].ResId));
+							//document.getElementById("lbl:"+selectedResArr[i].ResId).innerHTML = "";
+							document.getElementById("lbl_slct:"+j).innerHTML = "";
+						}
+					}
+				}
+				selectedResArr = []; //empty the array and restart selection
+				var selectedRes = {ResId:mResId};
+				selectedResArr.push(selectedRes);
+
+				FloorInMode = FloorMode.SELECTION;
+				document.getElementById('footerLstImg').src='imgs/test/release1.jpg';
+
+				document.getElementById('footerOpImg').style.visibility = 'visible';
+				document.getElementById('footerSchImg').style.visibility = 'visible';
+				
+				document.getElementById('a2').href="schedule.html?OBoxID="+OBoxID+"&FloorNo="+FloorNo+"&ResArr="+JSON.stringify(selectedResArr);
+
+				for(var i=0; i<appliances.length; i++){
+					if(appliances[i].resource_id == mResId)
+						document.getElementById("lbl_slct:"+i).innerHTML = "&#10004";
+				}
+				
+				break;
+			case "swipeup":
+				alert("You SwipedUp");
+				
+				MsgType = MessageType.REQUEST;
+				Msg = Message.DO_NOT_CARE;
+				ResIdArr = [mResId];
+				OpArr = [Operation.TURN_ON];
+				Schedule = [];
+				isRegSoc = false;
+				
+				sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, isRegSoc);
+				for (var i=0 ; i<appliances.length ; i++){
+					if (appliances[i].resource_id == mResId) {
+						document.getElementById("lbl_reqStatus:"+i).innerHTML = "&#9728";
+						document.getElementById("lbl_reqStatus:"+i).style.color = "yellow";
+					}
+				}
+				
+				break;
+			case "swipedown":
+				alert("You SwipedDown");
+				
+				MsgType = MessageType.REQUEST;
+				Msg = Message.DO_NOT_CARE;
+				ResIdArr = [mResId];
+				OpArr = [Operation.TURN_OFF];
+				Schedule = [];
+				isRegSoc = false;
+				
+				sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, isRegSoc);
+				for (var i=0 ; i<appliances.length ; i++){
+					if (appliances[i].resource_id == mResId) {
+						document.getElementById("lbl_reqStatus:"+i).innerHTML = "&#9728";
+						document.getElementById("lbl_reqStatus:"+i).style.color = "black";
+					}
+				}
+				
+				break;
+			case "swipeleft":
+				alert("You SwipedLeft");
+				
+				MsgType = MessageType.REQUEST;
+				Msg = Message.DO_NOT_CARE;
+				ResIdArr = [mResId];
+				OpArr = [Operation.RETURN_STATE];
+				Schedule = [];
+				isRegSoc = false;
+				
+				sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, isRegSoc);
+				
+				for (var i=0 ; i<appliances.length ; i++){
+					if (appliances[i].resource_id == mResId) {
+						document.getElementById("lbl_reqStatus:"+i).innerHTML = "&#63&#63&#63";
+						document.getElementById("lbl_reqStatus:"+i).style.color = "purple";
+					}
+				}
+				
+				break;
+			case "swiperight":
+				alert("You SwipedRight");
+				break;
+			default:
+				alert("You Defaulted");
+		}
+	});
+	
+}
 //function addListeners(div, img, resId, indexOfAppInApps){
 //function addListeners(indexOfAppInApps){
 function addListeners(mDiv, mImg, mResId, indexOfAppInApps){
@@ -315,6 +528,8 @@ function addListeners(mDiv, mImg, mResId, indexOfAppInApps){
 		Can Add/Remove/Update Appliance
 	*/
 	
+	//var myElement = document.getElementById('img:'+indexOfAppInApps);
+
 	var lbl_slct = document.createElement("Label");
 	lbl_slct.id = "lbl_slct:"+indexOfAppInApps;
 	//lbl_slct.style="position: absolute; right:3px; top:3px; ";
@@ -927,7 +1142,7 @@ function updateResIcon(resId, resState){
 	//alert('appliances.length1 ' + appliances.length);
 	alert("updateResIcon: "+ resId + "::" + resState);
 	for (var i=0 ; i<appliances.length ; i++){
-		if (appliances[i].resource_id == resId) {
+		if ( parseInt(appliances[i].resource_id) == parseInt(resId) ) {
 			//document.getElementById("lbl_slct:"+j).innerHTML = "";
 			document.getElementById("img:"+j).src =	'imgs/apps/' + getResImg(appliances[i].appliance, resState)+ ".png";
 			//appliances[i].img.src =	'imgs/apps/' + getResImg(appliances[i].appliance, resState)+ ".png";
