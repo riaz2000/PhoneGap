@@ -1,5 +1,6 @@
 //document.addEventListener("deviceready", function(){
     //mycode
+var vis=1;
 $('#settingsPage').live('pageshow', function(event) { //pageshow pageinit
 	getSettings();
 });
@@ -15,18 +16,13 @@ function getSettings(){
 	osaddr.value = localStorage.getItem('owlsaddr');
 	//verbos.value = localStorage.getItem('verboseLvl');
 	verbosSldr.value=parseInt(localStorage.getItem('verboseLvl'));
-	verbosSldr.slider("option", "value", verbosSldr.value);
-	verbosSldr.slider('refresh');
-	/*
-	y = document.getElementById('textline');
-	y.value = localStorage.getItem("mynumber");
-	//alert("Hey There!!!");
-	$('#fullName').text(localStorage.getItem("mynumber"));
-	//$('#textline').text(localStorage.getItem("mynumber"));
-	*/
+	//verbosSldr.slider("option", "value", verbosSldr.value);
+	//verbosSldr.slider('refresh');
+	
+	document.getElementById('popupLgMenu').style.visibility = 'hidden';
+	vis = 0;
 }
 
-//document.addEventListener("deviceready", //function(){
 function updateSettings(){
     //remember code
 	var obaddr = document.getElementById('OBAddress').value;
@@ -39,14 +35,52 @@ function updateSettings(){
 	localStorage.setItem('verboseLvl',verbos);
 	
 	
-	alert("Information Stored");
+	alert("Information Updated");
 	
 	goBack();
 
 }
-//, false);
 
 function cancel(){
 	goBack()
+}
+
+function test(){
+	//document.getElementById('colDiv').hide;
+	if(vis==1){
+		document.getElementById('popupMen').style.visibility = 'hidden';
+		vis = 0;
+	}
+	else if(vis==0){
+		document.getElementById('popupMen').style.visibility = 'visible';
+		vis = 1;
+	}
+	/*
+	var myDiv = document.createElement('div');
+	var myH2 = document.createElement('h2');
+	document.getElementById('settingsPage').appendChild(myDiv);
+	myDiv.style.position="absolute";
+	myDiv.style.left="200px";
+	myDiv.style.top="200px";
+	//myDiv.data-role="collapsible";
+	//myDiv.data-inset="false";
+	myH2.text = "Operations";
+	myDiv.appendChild(myH2);
+	*/
+}
+
+function ShowOld(){
+	alert("Function Called");
+}
+
+function popupLogin1(){
+	if(vis==1){
+		document.getElementById('popupLgMenu').style.visibility = 'hidden';
+		vis = 0;
+	}
+	else if(vis==0){
+		document.getElementById('popupLgMenu').style.visibility = 'visible';
+		vis = 1;
+	}
 }
 

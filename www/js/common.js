@@ -41,7 +41,7 @@ document.addEventListener("offline", function () {
 }, false);
 
 document.addEventListener("online", function () {
-	alert('You have got internet connection');
+	//alert('You have got internet connection');
 	internetStatus = 1;
 }, false);
 

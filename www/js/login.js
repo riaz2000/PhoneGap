@@ -120,7 +120,7 @@ function login(){
 		});
 
 	})	.success(function() { 
-			myAlert("LoginJs-login().success()", 4);
+			myAlert("LoginJs-login().success()", 5);
 			//goBack();
 		})
 		.error(function() {

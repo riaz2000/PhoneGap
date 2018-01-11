@@ -60,7 +60,7 @@ function getInstallationList() {
 			href3 = '<span class="ui-li-count"><a href="uoptions.html?OBoxID='+obj[i].OBoxNo+'"><img src="' + lockImg + '" height=30, width=25/></a></span></a>';
 		}
 		
-		$('#installationList').append('<li>' + '<a href="' + linkToPage + '">' +
+		$('#installationList').append('<li>' + '<a href="' + linkToPage + '" >' +
 										'<img src="'+ instType + '"/>' +
 										'<h4>' + obj[i].instAddr1 + '</h4><p><B>' + obj[i].instAddr2 + ',</p></B>' +
 										'<p><B>' + obj[i].instCity + '</B> ' +  obj[i].instState + ' ' + obj[i].instZip + ' ' + obj[i].instCountry + '</p>'  +

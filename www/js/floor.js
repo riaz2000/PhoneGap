@@ -485,6 +485,27 @@ function addListeners2(mDiv, mImg, mResId, indexOfAppInApps){
 			case "swipeleft":
 				alert("You SwipedLeft");
 				
+				/*
+				<div data-role="collapsible" data-inset="false">
+					<h2>Farm animals</h2>
+					<ul data-role="listview">
+						<li><a href="configureOwl.html" data-rel="dialog">Configure</a></li>
+						<li><a href="#" data-rel="dialog">Cow</a></li>
+						<li><a href="#" data-rel="dialog">Duck</a></li>
+						<li><a href="#" data-rel="dialog">Sheep</a></li>
+					</ul>
+				</div>
+				*/
+				var myDiv = document.createElement('div');
+				var myH2 = document.createElement('h2');
+				//myDiv.data-role="collapsible";
+				//myDiv.data-inset="false";
+				myH2.text = "Operations";
+				myDiv.appendChild(myH2);
+				
+				break;
+			case "swiperight":
+				alert("You SwipedRight");
 				MsgType = MessageType.REQUEST;
 				Msg = Message.DO_NOT_CARE;
 				ResIdArr = [mResId];
@@ -500,16 +521,20 @@ function addListeners2(mDiv, mImg, mResId, indexOfAppInApps){
 						document.getElementById("lbl_reqStatus:"+i).style.color = "purple";
 					}
 				}
-				
-				break;
-			case "swiperight":
-				alert("You SwipedRight");
 				break;
 			default:
 				alert("You Defaulted");
 		}
 	});
 	
+}
+
+function onConfirm1(buttonIndex) {
+	alert('You selected button ' + buttonIndex);
+}
+
+function onPrompt1(results) {
+	alert("You selected button number " + results.buttonIndex + " and entered " + results.input1);
 }
 //function addListeners(div, img, resId, indexOfAppInApps){
 //function addListeners(indexOfAppInApps){
