@@ -11,6 +11,8 @@ var regSoc = null;
 //var state = 0;
 var selectedResArr;// = "[]";
 var FloorInMode;
+var vis = 0;
+selctdAppindexOfAppInApps = -1;
 $('#floor').live('pageshow', function(event) { //pageshow pageinit
 	//state = 0;
 	FloorInMode = FloorMode.OPERATION;
@@ -41,6 +43,9 @@ $('#floor').live('pageshow', function(event) { //pageshow pageinit
 function getFloorInfo(){
 	oboxObjStr = getOBoxObjstr(OBoxID);
 	//alert("oboxObjStr: " + oboxObjStr);
+	
+	document.getElementById('popupMen1').style.visibility = 'hidden';
+	
 	if(oboxObjStr == "InvalidOBox"){
 		myAlert("OBox Not Registered",1);
 		return;
@@ -290,7 +295,7 @@ function addAppliance(appliance){
 	newImg.height=60;
 	newImg.width=60;
 
-	addListeners2(newDiv, newImg, appliance.resource_id, indexOfAppInApps);
+	addListeners(newDiv, newImg, appliance.resource_id, indexOfAppInApps);
 	//addListeners(indexOfAppInApps);
 	
 	newDiv.style.position="absolute";
@@ -417,6 +422,9 @@ function addListeners2(mDiv, mImg, mResId, indexOfAppInApps){
 			case "press":
 				alert("You Pressed");
 				
+				openMenu(indexOfAppInApps);
+				
+				/*
 				for(var i=0; i<selectedResArr.length; i++){
 					for (var j=0; j<appliances.length; j++){
 						if(selectedResArr[i].ResId == appliances[j].resource_id){			
@@ -442,6 +450,7 @@ function addListeners2(mDiv, mImg, mResId, indexOfAppInApps){
 					if(appliances[i].resource_id == mResId)
 						document.getElementById("lbl_slct:"+i).innerHTML = "&#10004";
 				}
+				*/
 				
 				break;
 			case "swipeup":
@@ -485,6 +494,7 @@ function addListeners2(mDiv, mImg, mResId, indexOfAppInApps){
 			case "swipeleft":
 				alert("You SwipedLeft");
 				
+				openMenu(indexOfAppInApps);
 				/*
 				<div data-role="collapsible" data-inset="false">
 					<h2>Farm animals</h2>
@@ -495,14 +505,14 @@ function addListeners2(mDiv, mImg, mResId, indexOfAppInApps){
 						<li><a href="#" data-rel="dialog">Sheep</a></li>
 					</ul>
 				</div>
-				*/
+				
 				var myDiv = document.createElement('div');
 				var myH2 = document.createElement('h2');
 				//myDiv.data-role="collapsible";
 				//myDiv.data-inset="false";
 				myH2.text = "Operations";
 				myDiv.appendChild(myH2);
-				
+				*/
 				break;
 			case "swiperight":
 				alert("You SwipedRight");
@@ -557,23 +567,20 @@ function addListeners(mDiv, mImg, mResId, indexOfAppInApps){
 
 	var lbl_slct = document.createElement("Label");
 	lbl_slct.id = "lbl_slct:"+indexOfAppInApps;
-	//lbl_slct.style="position: absolute; right:3px; top:3px; ";
 	lbl_slct.style.color = "green";
 	mDiv.appendChild(lbl_slct);
 	lbl_slct.style.position="absolute";
-	lbl_slct.style.right="3px";
-	lbl_slct.style.top="3px";
+	lbl_slct.style.left="0px";
+	lbl_slct.style.top="0px";
 	
 	var lbl_resId = document.createElement("Label");
 	lbl_resId.id = "lbl_resId:"+indexOfAppInApps;
-	//lbl_resId.style="position: absolute; left:3px; bottom:3px; ";
-	//lbl_resId.style="position: absolute; left:30%; bottom:50%; ";
 	lbl_resId.style.color = "blue";
 	lbl_resId.innerHTML = mResId;
 	mDiv.appendChild(lbl_resId);
 	lbl_resId.style.position="absolute";
-	lbl_resId.style.left="30%";
-	lbl_resId.style.bottom="50%";
+	lbl_resId.style.left="0px";//lbl_resId.style.left="30%";
+	lbl_resId.style.top="20px";//lbl_resId.style.bottom="50%";
 	
 	// RequestForON: &#9732/&#9728;, RequestToOFF:&#10042; RequestToToggle: &#9775; RequestForStatusUpdate: &#63; RequestTimeout: &#128336
 	// RequestForON: &#9728; color yellow
@@ -583,21 +590,13 @@ function addListeners(mDiv, mImg, mResId, indexOfAppInApps){
 	// RequestTimeout: &#128336: red
 	var lbl_reqStatus = document.createElement("Label");
 	lbl_reqStatus.id = "lbl_reqStatus:"+indexOfAppInApps;
-	//lbl_reqStatus.style="position: absolute; left:3px; top:3px; ";
-	lbl_reqStatus.style.color = "yellow";
-	lbl_reqStatus.innerHTML = "&#9728";	// Toggle: 9775
+	lbl_reqStatus.style.color = "green";
+	lbl_reqStatus.innerHTML = "&#9786";//"&#9728" light	// Toggle: 9775 // &#9786 smiley
 	mDiv.appendChild(lbl_reqStatus);
 	lbl_reqStatus.style.position="absolute";
-	lbl_reqStatus.style.left="3px";
-	lbl_reqStatus.style.top="3px";
-	//lbl_reqStatus.style="position: absolute; left:3px; top:3px; ";
-	/*
-	$$(mImg).swipe(function(e) {
-	  //alert(e.pageX);
-	  alert("EventQuo: Swipe");
-	});
-	*/
-	
+	lbl_reqStatus.style.left="0px";
+	lbl_reqStatus.style.top="30px";
+
 	$$(mImg).doubleTap(function(e) {
 		//alert(e.pageX);
 		alert("EventQuo: DoubleTap");
@@ -632,7 +631,7 @@ function addListeners(mDiv, mImg, mResId, indexOfAppInApps){
 		for (var i=0 ; i<appliances.length ; i++){
 			if (appliances[i].resource_id == mResId) {
 				document.getElementById("lbl_reqStatus:"+i).innerHTML = "&#9728";
-				document.getElementById("lbl_reqStatus:"+i).style.color = "yellow";
+				document.getElementById("lbl_reqStatus:"+i).style.color = "red";
 			}
 		}
 	});
@@ -668,8 +667,12 @@ function addListeners(mDiv, mImg, mResId, indexOfAppInApps){
 	});
 	
 	$$(mImg).hold(function(e) {//
-		//alert(e.pageX);
-		alert("EventQuo: hold");
+		//alert("EventQuo: hold");
+		//FloorInMode = FloorMode.OPERATION;
+		openMenu(indexOfAppInApps);
+		
+		
+		/*
 		for(var i=0; i<selectedResArr.length; i++){
 			for (var j=0; j<appliances.length; j++){
 				if(selectedResArr[i].ResId == appliances[j].resource_id){			
@@ -682,11 +685,7 @@ function addListeners(mDiv, mImg, mResId, indexOfAppInApps){
 		selectedResArr = []; //empty the array and restart selection
 		var selectedRes = {ResId:mResId};
 		selectedResArr.push(selectedRes);
-		/*for(var i=0; i<appliances.length; i++){
-			var lbl2rmv = document.getElementById('lbl'+i);
-			appliances[i].mDiv.removeChild(lbl2rmv);
-		}*/
-	
+		
 		//state = 1;
 		FloorInMode = FloorMode.SELECTION;
 		document.getElementById('footerLstImg').src='imgs/test/release1.jpg';
@@ -700,24 +699,11 @@ function addListeners(mDiv, mImg, mResId, indexOfAppInApps){
 			if(appliances[i].resource_id == mResId)
 				document.getElementById("lbl_slct:"+i).innerHTML = "&#10004";
 		}
-		//lbl.innerHTML = "&#10004";
-		
-		
-		//mDiv.appendChild(lbl);
-		//img.style="background-color:green";
-		
-/*	//window.location.replace("schedule.html?OBoxID="+OBoxID+"&FloorNo="+FloorNo+"&ResId="+resId);
-	  window.open="schedule.html?OBoxID="+OBoxID+"&FloorNo="+FloorNo+"&ResId="+resId;
-	  //window.location.replace("#settingsPage");
-	  //img.style="position: absolute; left: 70px; top: 70px; background-color:yellow";
-	  */
-	  
-	  
+		*/
 	});
 	
 	$$(mImg).tap(function(e) {
-	  //alert(e.pageX);
-		alert("EventQuo: tap " + mResId);
+		//alert("EventQuo: tap " + mResId);
 		if(FloorInMode == FloorMode.OPERATION){
 		//sendRequest2OBox(MsgType, Msg, ResOpPairs, Schedule, isRegSoc){ //RegSock Remains Open
 			MsgType = MessageType.REQUEST;
@@ -990,7 +976,7 @@ function sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, trackResp){ /
 	owlMsg.resourceID = ResIdArr;
 	owlMsg.operation  = OpArr;
 	var dataString = constructOwlMessage(owlMsg) + "\n";
-	
+	myAlert("Ready TO Tx: " + dataString, 3);
 	var data = new Uint8Array(dataString.length);
 	for (var i = 0; i < data.length; i++) {
 	  data[i] = dataString.charCodeAt(i);
@@ -1071,11 +1057,11 @@ function sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, trackResp){ /
 	};
 }  
 
-
 function getStatusofAllApps(){
 	MsgType = MessageType.REQUEST;
 	Msg = Message.DO_NOT_CARE;
 	ResIdArr = [];
+	OpArr    = [];
 	//ResOpPairs='';
 	//alert('appliances.length: ' + appliances.length);
 	for(var i=0; i<appliances.length; i++){
@@ -1169,11 +1155,301 @@ function updateResIcon(resId, resState){
 	for (var i=0 ; i<appliances.length ; i++){
 		if ( parseInt(appliances[i].resource_id) == parseInt(resId) ) {
 			//document.getElementById("lbl_slct:"+j).innerHTML = "";
-			document.getElementById("img:"+j).src =	'imgs/apps/' + getResImg(appliances[i].appliance, resState)+ ".png";
+			document.getElementById("img:"+i).src =	'imgs/apps/' + getResImg(appliances[i].appliance, resState)+ ".png";
+			document.getElementById("lbl_reqStatus:"+i).innerHTML = "";//i.e. Status updated after last request sent
 			//appliances[i].img.src =	'imgs/apps/' + getResImg(appliances[i].appliance, resState)+ ".png";
 			myAlert("Image: " + 'imgs/apps/' + getResImg(appliances[i].appliance, resState)+ ".png", 3);
 			
 			//img1.src = 'imgs/apps/' + getResImg(appliance.appliance, State.UK)+ ".png";
 		}
 	}	
+}
+
+function openMenu(indexOfAppInApps){
+	selctdAppindexOfAppInApps = indexOfAppInApps;
+	
+	if(FloorInMode == FloorMode.OPERATION){
+		//document.getElementById('popMliSelRes').innerHTML="Select";
+		document.getElementById('popMhSelRes').textContent = "Select";
+		
+	}else if(FloorInMode == FloorMode.SELECTION){
+		document.getElementById('popMhSelRes').textContent = "Unselect All";
+	}
+	
+	document.getElementById('popupMen1').style.visibility = 'visible';
+		
+	//var rect = element.getBoundingClientRect();
+	//console.log(rect.top, rect.right, rect.bottom, rect.left);
+	
+	rect = document.getElementById('img:'+indexOfAppInApps).getBoundingClientRect();
+	document.getElementById('popupMen1').style.zIndex = "1";
+	document.getElementById('img:'+indexOfAppInApps).style = "background-color:#F9E79F";
+	document.getElementById('popupMen1').style.position="absolute";
+	
+	document.getElementById('popupMen1').style.left=(parseInt(rect.left) + (parseInt(rect.right)-parseInt(rect.left))/2)+"px";
+	document.getElementById('popupMen1').style.top=(parseInt(rect.bottom) - (parseInt(rect.bottom)-parseInt(rect.top))/2)+"px";
+	
+	
+	
+	/*
+	if(vis==1){
+		//document.getElementById('popupMen1').style.zIndex = "-1";
+		document.getElementById('popupMen1').style.visibility = 'hidden';
+		document.getElementById('img:'+indexOfAppInApps).style = "background-color:transparent";
+		
+		vis = 0;
+	}
+	else if(vis==0){
+		document.getElementById('popupMen1').style.visibility = 'visible';
+		
+		//var rect = element.getBoundingClientRect();
+		//console.log(rect.top, rect.right, rect.bottom, rect.left);
+		
+		rect = document.getElementById('img:'+indexOfAppInApps).getBoundingClientRect();
+		document.getElementById('popupMen1').style.zIndex = "1";
+		//document.getElementById('img:'+indexOfAppInApps).style.zIndex = "0";
+		//"background-color:green";
+		document.getElementById('img:'+indexOfAppInApps).style = "background-color:#F9E79F";
+		document.getElementById('popupMen1').style.position="absolute";
+		//document.getElementById('popupMen1').style.left=rect.left+"px";//"50px";
+		
+		document.getElementById('popupMen1').style.left=(parseInt(rect.left) + (parseInt(rect.right)-parseInt(rect.left))/2)+"px";
+		document.getElementById('popupMen1').style.top=(parseInt(rect.bottom) - (parseInt(rect.bottom)-parseInt(rect.top))/2)+"px";//(parseInt(rect.top)+parseInt(30))+"px";//"50px";
+		
+		//document.getElementById('popupMen1').style.left=rect.right+"px";
+		//document.getElementById('popupMen1').style.top=rect.bottom+"px";
+	
+		vis = 1;
+	}
+	*/
+}
+
+function closeMenu(){
+	document.getElementById('popupMen1').style.visibility = 'hidden';
+	document.getElementById('img:'+selctdAppindexOfAppInApps).style = "background-color:transparent";
+}
+
+function turnOFF(){
+	MsgType = MessageType.REQUEST;
+	Msg = Message.DO_NOT_CARE;
+	
+	ResIdArr 	= [];
+	OpArr		= [];
+		
+	if(FloorInMode == FloorMode.OPERATION){
+		ResIdArr = [appliances[selctdAppindexOfAppInApps].resource_id]; //[mResId];
+		OpArr = [Operation.TURN_OFF];
+	}
+	else if(FloorInMode == FloorMode.SELECTION){
+		//Add this resource among selected resources if not already selected
+		addRes2selctdRsrcs();
+		
+		for (var i=0; i<selectedResArr.length; i++){
+			ResIdArr.push(selectedResArr[i].ResId);
+			OpArr.push(Operation.TURN_OFF);
+		}
+		
+		clearSelection();
+	}
+	
+	Schedule = [];
+	isRegSoc = false;
+	
+	sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, isRegSoc);
+	
+	for (var i=0 ; i<appliances.length ; i++){
+		for (var j=0 ; j<ResIdArr.length ; j++){
+			if (appliances[i].resource_id == ResIdArr[j]) {
+				document.getElementById("lbl_reqStatus:"+i).innerHTML = "&#9728";
+				document.getElementById("lbl_reqStatus:"+i).style.color = "black";
+			}
+		}
+	}
+	closeMenu();
+}
+
+function turnON(){
+	MsgType = MessageType.REQUEST;
+	Msg = Message.DO_NOT_CARE;
+	
+	ResIdArr 	= [];
+	OpArr		= [];
+		
+	if(FloorInMode == FloorMode.OPERATION){
+		ResIdArr = [appliances[selctdAppindexOfAppInApps].resource_id]; //[mResId];
+		OpArr = [Operation.TURN_ON];
+	}
+	else if(FloorInMode == FloorMode.SELECTION){
+		//Add this resource among selected resources if not already selected
+		addRes2selctdRsrcs();
+		
+		for (var i=0; i<selectedResArr.length; i++){
+			ResIdArr.push(selectedResArr[i].ResId);
+			OpArr.push(Operation.TURN_ON);
+		}
+		
+		clearSelection();
+	}
+	
+	Schedule = [];
+	isRegSoc = false;
+	
+	sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, isRegSoc);
+	
+	for (var i=0 ; i<appliances.length ; i++){
+		for (var j=0 ; j<ResIdArr.length ; j++){
+			if (appliances[i].resource_id == ResIdArr[j]) {
+				document.getElementById("lbl_reqStatus:"+i).innerHTML = "&#9728";
+				document.getElementById("lbl_reqStatus:"+i).style.color = "red";
+			}
+		}
+	}
+	closeMenu();
+}
+
+function Toggle(){
+	MsgType = MessageType.REQUEST;
+	Msg = Message.DO_NOT_CARE;
+
+	ResIdArr 	= [];
+	OpArr		= [];
+		
+	if(FloorInMode == FloorMode.OPERATION){
+		ResIdArr = [appliances[selctdAppindexOfAppInApps].resource_id]; //[mResId];
+		OpArr = [Operation.TOGGLE_STATE];
+	}
+	else if(FloorInMode == FloorMode.SELECTION){
+		//Add this resource among selected resources if not already selected
+		addRes2selctdRsrcs();
+		
+		for (var i=0; i<selectedResArr.length; i++){
+			ResIdArr.push(selectedResArr[i].ResId);
+			OpArr.push(Operation.TOGGLE_STATE);
+		}
+		
+		clearSelection();
+	}
+	
+	Schedule = [];
+	isRegSoc = false;
+	
+	sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, isRegSoc);
+	
+	for (var i=0 ; i<appliances.length ; i++){
+		for (var j=0 ; j<ResIdArr.length ; j++){
+			if (appliances[i].resource_id == ResIdArr[j]) {
+				document.getElementById("lbl_reqStatus:"+i).innerHTML = "&#9775";
+				document.getElementById("lbl_reqStatus:"+i).style.color = "blue";
+			}
+		}
+	}
+	closeMenu();
+}
+
+function getStatus(){
+	MsgType = MessageType.REQUEST;
+	Msg = Message.DO_NOT_CARE;
+	
+	ResIdArr 	= [];
+	OpArr		= [];
+		
+	if(FloorInMode == FloorMode.OPERATION){
+		ResIdArr = [appliances[selctdAppindexOfAppInApps].resource_id]; //[mResId];
+		OpArr = [Operation.RETURN_STATE];
+	}
+	else if(FloorInMode == FloorMode.SELECTION){
+		//Add this resource among selected resources if not already selected
+		addRes2selctdRsrcs();
+		
+		for (var i=0; i<selectedResArr.length; i++){
+			ResIdArr.push(selectedResArr[i].ResId);
+			OpArr.push(Operation.RETURN_STATE);
+		}
+		
+		clearSelection();
+	}
+	
+	Schedule = [];
+	isRegSoc = false;
+	
+	sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, isRegSoc);
+	
+	for (var i=0 ; i<appliances.length ; i++){
+		for (var j=0 ; j<ResIdArr.length ; j++){
+			if (appliances[i].resource_id == ResIdArr[j]) {
+				document.getElementById("lbl_reqStatus:"+i).innerHTML = "&#63&#63&#63";
+				document.getElementById("lbl_reqStatus:"+i).style.color = "purple";
+			}
+		}
+	}
+	closeMenu();
+}
+
+function selectRes(){
+	//alert("Here-1");
+	if(FloorInMode == FloorMode.SELECTION){//i.e.User gets the UnselectAll Option
+		//alert("Here-2a");
+		clearSelection();
+		//FloorInMode = FloorMode.OPERATION; // already done in clearSelection();
+	}
+	else if (FloorInMode == FloorMode.OPERATION){//i.e. User gets Select Res Option
+		//alert("Here-2b");
+		var mResId = appliances[selctdAppindexOfAppInApps].resource_id;
+		var selectedRes = {ResId:mResId};
+		selectedResArr.push(selectedRes);
+		
+		//state = 1;
+		FloorInMode = FloorMode.SELECTION;
+		document.getElementById('footerLstImg').src='imgs/test/release1.jpg';
+
+		document.getElementById('footerOpImg').style.visibility = 'visible';
+		document.getElementById('footerSchImg').style.visibility = 'visible';
+		
+		document.getElementById('a2').href="schedule.html?OBoxID="+OBoxID+"&FloorNo="+FloorNo+"&ResArr="+JSON.stringify(selectedResArr);
+
+		document.getElementById("lbl_slct:"+selctdAppindexOfAppInApps).innerHTML = "&#10004";
+		/*
+		for(var i=0; i<appliances.length; i++){
+			if(appliances[i].resource_id == mResId)
+				document.getElementById("lbl_slct:"+i).innerHTML = "&#10004";
+		}
+		*/
+	}
+	closeMenu();
+}
+
+function addRes2selctdRsrcs(){
+	//Add this resource among selected resources if not already selected
+	var isResSlctd =  false;
+	for(var j=0; j<selectedResArr.length; j++){
+		if(selectedResArr[j].ResId == appliances[selctdAppindexOfAppInApps].resource_id){// i.e. already selected, so no need to reslect
+			isResSlctd = true;
+		}
+	}
+	if(!isResSlctd){// not already selected, so select it
+		var selectedRes = {ResId:appliances[selctdAppindexOfAppInApps].resource_id};
+		selectedResArr.push(selectedRes);
+		
+		for(var i=0; i<appliances.length; i++){
+			if(appliances[i].resource_id == appliances[selctdAppindexOfAppInApps].resource_id){
+				document.getElementById("lbl_slct:"+i).innerHTML = "&#10004";
+			}
+		}
+	}
+}
+
+function rmvRes4mselctdRsrcs(){
+	
+}
+
+function clearSelection(){
+	for(var i=0; i<selectedResArr.length; i++){
+		for (var j=0; j<appliances.length; j++){
+			if(selectedResArr[i].ResId == appliances[j].resource_id){//alert("Here-3");		
+				document.getElementById("lbl_slct:"+j).innerHTML = "";
+			}
+		}
+	}
+	selectedResArr = [];
+	FloorInMode = FloorMode.OPERATION;
 }

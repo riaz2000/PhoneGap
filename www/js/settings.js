@@ -53,6 +53,15 @@ function test(){
 	}
 	else if(vis==0){
 		document.getElementById('popupMen').style.visibility = 'visible';
+		
+		//var rect = element.getBoundingClientRect();
+		//console.log(rect.top, rect.right, rect.bottom, rect.left);
+
+		var rect = document.getElementById('BtnTesting').getBoundingClientRect();
+		
+		document.getElementById('popupMen').style.position="fixed";
+		document.getElementById('popupMen').style.left="30px";//rect.left+"px";//"50px";
+		document.getElementById('popupMen').style.top="40px";//(parseInt(rect.top)+parseInt(30))+"px";//"50px";
 		vis = 1;
 	}
 	/*
@@ -84,3 +93,26 @@ function popupLogin1(){
 	}
 }
 
+function test1(){
+	//document.getElementById('colDiv').hide;
+	if(vis==1){
+		document.getElementById('popupMen').style.visibility = 'hidden';
+		vis = 0;
+	}
+	else if(vis==0){
+		document.getElementById('popupMen').style.visibility = 'visible';
+		vis = 1;
+	}
+	/*
+	var myDiv = document.createElement('div');
+	var myH2 = document.createElement('h2');
+	document.getElementById('settingsPage').appendChild(myDiv);
+	myDiv.style.position="absolute";
+	myDiv.style.left="200px";
+	myDiv.style.top="200px";
+	//myDiv.data-role="collapsible";
+	//myDiv.data-inset="false";
+	myH2.text = "Operations";
+	myDiv.appendChild(myH2);
+	*/
+}

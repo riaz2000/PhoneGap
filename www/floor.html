@@ -47,6 +47,21 @@
 		<a id="a3" href="#"><img id="footerSchImg" style="visibility:hidden;" src="imgs/test/schedule.jpg"; width=30; height=30; /> </a>
 	<!--/div-->
 	</div>
+	
+	<div id="popupMen1" data-role="content">
+	<div data-role="popup" id="popupMenu" data-theme="d">
+			<ul data-role="listview" data-inset="true" style="min-width:210px;" data-theme="d">
+				<li data-role="divider" data-theme="e" data-icon="delete"><a href="#" onclick="closeMenu()";><h1 id="popMhChsAct">Choose an action ...</h1></a></li>
+				<li data-icon="minus"><a href="#" onclick="turnOFF()";><h2 id="popMhOff">Off</h2></a></li>
+				<li data-icon="plus"><a href="#" onclick="turnON()";><p id="popMhChOn">On</p></a></li>
+				<li data-icon="refresh"><a href="#" onclick="Toggle()";><h2 id="popMhToggle">Toggle</h2></a></li>
+				<li data-icon="home"><a href="#" onclick="getStatus()";><h1 id="popMhUpdt">Update</h2></a></li>
+				<li data-icon="gear"><a href="login.html" data-rel="dialog"><h3 id="popMhSch">Schedule</h3></a></li>
+				<li data-icon="check" id="popMliSelRes"><a href="#"; onclick="selectRes()";><h2 id="popMhSelRes">Select</h2></a></li>
+				<li data-icon="delete"><a href="#" onclick="closeMenu();">Close</a></li>
+			</ul>
+	</div>
+	</div>
  
 </div>
 </body>
