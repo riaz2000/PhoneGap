@@ -976,7 +976,7 @@ function sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, trackResp){ /
 	owlMsg.resourceID = ResIdArr;
 	owlMsg.operation  = OpArr;
 	var dataString = constructOwlMessage(owlMsg) + "\n";
-	myAlert("Ready TO Tx: " + dataString, 3);
+	myAlert("Ready To Tx: " + dataString, 3);
 	var data = new Uint8Array(dataString.length);
 	for (var i = 0; i < data.length; i++) {
 	  data[i] = dataString.charCodeAt(i);
@@ -1025,7 +1025,7 @@ function sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, trackResp){ /
 	socket.onData = function(data) {
 		// invoked after new batch of data is received (typed array of bytes Uint8Array)
 		rcvdMsg = uintToString(data);
-		myAlert("Rcvdd: " + rcvdMsg,3);
+		myAlert("Rcvd: " + rcvdMsg,3);
 		handleResponse(rcvdMsg);
 		/*
 		if(isRegReq){
@@ -1151,14 +1151,14 @@ function handleResponse(rcvdMsg){
 
 function updateResIcon(resId, resState){
 	//alert('appliances.length1 ' + appliances.length);
-	alert("updateResIcon: "+ resId + "::" + resState);
+	//alert("updateResIcon: "+ resId + "::" + resState);
 	for (var i=0 ; i<appliances.length ; i++){
 		if ( parseInt(appliances[i].resource_id) == parseInt(resId) ) {
 			//document.getElementById("lbl_slct:"+j).innerHTML = "";
 			document.getElementById("img:"+i).src =	'imgs/apps/' + getResImg(appliances[i].appliance, resState)+ ".png";
-			document.getElementById("lbl_reqStatus:"+i).innerHTML = "";//i.e. Status updated after last request sent
+			document.getElementById("lbl_reqStatus:"+i).innerHTML = "";//i.e. Status updated after last request sent; not neccessarily response to this query
 			//appliances[i].img.src =	'imgs/apps/' + getResImg(appliances[i].appliance, resState)+ ".png";
-			myAlert("Image: " + 'imgs/apps/' + getResImg(appliances[i].appliance, resState)+ ".png", 3);
+			//myAlert("Image: " + 'imgs/apps/' + getResImg(appliances[i].appliance, resState)+ ".png", 3);
 			
 			//img1.src = 'imgs/apps/' + getResImg(appliance.appliance, State.UK)+ ".png";
 		}
@@ -1338,7 +1338,7 @@ function Toggle(){
 	for (var i=0 ; i<appliances.length ; i++){
 		for (var j=0 ; j<ResIdArr.length ; j++){
 			if (appliances[i].resource_id == ResIdArr[j]) {
-				document.getElementById("lbl_reqStatus:"+i).innerHTML = "&#9775";
+				document.getElementById("lbl_reqStatus:"+i).innerHTML = "&#9728";//"&#9775";
 				document.getElementById("lbl_reqStatus:"+i).style.color = "blue";
 			}
 		}
@@ -1406,14 +1406,12 @@ function selectRes(){
 		document.getElementById('footerSchImg').style.visibility = 'visible';
 		
 		document.getElementById('a2').href="schedule.html?OBoxID="+OBoxID+"&FloorNo="+FloorNo+"&ResArr="+JSON.stringify(selectedResArr);
-
-		document.getElementById("lbl_slct:"+selctdAppindexOfAppInApps).innerHTML = "&#10004";
-		/*
+		
 		for(var i=0; i<appliances.length; i++){
 			if(appliances[i].resource_id == mResId)
 				document.getElementById("lbl_slct:"+i).innerHTML = "&#10004";
 		}
-		*/
+		
 	}
 	closeMenu();
 }
