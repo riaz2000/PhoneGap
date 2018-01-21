@@ -591,11 +591,12 @@ function addListeners(mDiv, mImg, mResId, indexOfAppInApps){
 	var lbl_reqStatus = document.createElement("Label");
 	lbl_reqStatus.id = "lbl_reqStatus:"+indexOfAppInApps;
 	lbl_reqStatus.style.color = "green";
+	lbl_reqStatus.style.fontWeight = "bold";
 	lbl_reqStatus.innerHTML = "&#9786";//"&#9728" light	// Toggle: 9775 // &#9786 smiley
 	mDiv.appendChild(lbl_reqStatus);
 	lbl_reqStatus.style.position="absolute";
 	lbl_reqStatus.style.left="0px";
-	lbl_reqStatus.style.top="30px";
+	lbl_reqStatus.style.top="35px";
 
 	$$(mImg).doubleTap(function(e) {
 		//alert(e.pageX);
@@ -720,7 +721,7 @@ function addListeners(mDiv, mImg, mResId, indexOfAppInApps){
 				if (appliances[i].resource_id == mResId) {
 					var m_lbl_reqStatus = document.getElementById("lbl_reqStatus:"+i);
 					m_lbl_reqStatus.innerHTML = "&#9775";
-					m_lbl_reqStatus.style.color = "blue";
+					m_lbl_reqStatus.style.color = "orange";
 					
 					var m_div = document.getElementById('div:'+i);
 					m_div.style.position = "absolute"; 
@@ -1101,7 +1102,7 @@ function registerOUser(){
 
 function handleResponse(rcvdMsg){
 	owlMsg = parseOwlMessage(rcvdMsg);
-	myAlert("MsgType:Msg " + owlMsg.msgType+":"+owlMsg.message,3);
+	//myAlert("MsgType:Msg " + owlMsg.msgType+":"+owlMsg.message,3);
 	if(parseInt(owlMsg.instIdOrSocStrg) != OBoxID){
 		myAlert("Message from Invalid OBox: " + parseInt(owlMsg.instIdOrSocStrg), 0);
 		return;
@@ -1119,7 +1120,7 @@ function handleResponse(rcvdMsg){
 			//alert('owlMsg.resourceID.length1 ' + owlMsg.resourceID.length);
 			for(var i=0; i<owlMsg.resourceID.length; i++){
 				state = State.UK;
-				alert("ResId:Operation::"+owlMsg.resourceID+":"+parseInt(owlMsg.operation[i]));
+				//alert("ResId:Operation::"+owlMsg.resourceID+":"+parseInt(owlMsg.operation[i]));
 				switch(parseInt(owlMsg.operation[i])){
 					case Operation.TURN_OFF:
 						state = State.OFF;
@@ -1164,16 +1165,21 @@ function updateResIcon(resId, resState){
 		}
 	}	
 }
-
+var scrollPos;
 function openMenu(indexOfAppInApps){
 	selctdAppindexOfAppInApps = indexOfAppInApps;
 	
+	
 	if(FloorInMode == FloorMode.OPERATION){
 		//document.getElementById('popMliSelRes').innerHTML="Select";
-		document.getElementById('popMhSelRes').textContent = "Select";
+		document.getElementById('popMSelRes').style.fontSize = "16px";
+		document.getElementById('popMSelRes').style.fontWeight = 'bold';
+		document.getElementById('popMSelRes').innerHTML = "&#10004  Select";
 		
 	}else if(FloorInMode == FloorMode.SELECTION){
-		document.getElementById('popMhSelRes').textContent = "Unselect All";
+		document.getElementById('popMSelRes').innerHTML = "&#10006 Unselect All";
+		document.getElementById('popMSelRes').style.fontSize = "16px";
+		document.getElementById('popMSelRes').style.fontWeight = 'bold';
 	}
 	
 	document.getElementById('popupMen1').style.visibility = 'visible';
@@ -1184,10 +1190,14 @@ function openMenu(indexOfAppInApps){
 	rect = document.getElementById('img:'+indexOfAppInApps).getBoundingClientRect();
 	document.getElementById('popupMen1').style.zIndex = "1";
 	document.getElementById('img:'+indexOfAppInApps).style = "background-color:#F9E79F";
-	document.getElementById('popupMen1').style.position="absolute";
+	document.getElementById('popupMen1').style.position="fixed";
 	
+	scrollPos = document.getElementById('floor').scrollTop;
 	document.getElementById('popupMen1').style.left=(parseInt(rect.left) + (parseInt(rect.right)-parseInt(rect.left))/2)+"px";
-	document.getElementById('popupMen1').style.top=(parseInt(rect.bottom) - (parseInt(rect.bottom)-parseInt(rect.top))/2)+"px";
+	//document.getElementById('popupMen1').style.top=(parseInt(rect.bottom) - parseInt(scrollPos) - (parseInt(rect.bottom)-parseInt(rect.top))/2)+"px";
+	//document.getElementById('popupMen1').style.top=(parseInt(rect.bottom) - (parseInt(rect.bottom)-parseInt(rect.top))/2)+"px";
+	document.getElementById('popupMen1').style.top = "0px";
+	alert("rect.bottom="+rect.bottom+" :: scrollPos="+scrollPos);
 	
 	
 	
@@ -1377,8 +1387,8 @@ function getStatus(){
 	for (var i=0 ; i<appliances.length ; i++){
 		for (var j=0 ; j<ResIdArr.length ; j++){
 			if (appliances[i].resource_id == ResIdArr[j]) {
-				document.getElementById("lbl_reqStatus:"+i).innerHTML = "&#63&#63&#63";
-				document.getElementById("lbl_reqStatus:"+i).style.color = "purple";
+				document.getElementById("lbl_reqStatus:"+i).innerHTML = "&#9775";
+				document.getElementById("lbl_reqStatus:"+i).style.color = "orange";
 			}
 		}
 	}
