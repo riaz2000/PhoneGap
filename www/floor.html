@@ -49,9 +49,9 @@
 	<!--/div-->
 	
 	<div class="wrap">
-		<a id="a1" href="#" onclick="chgMode(); return false;"><img id="footerLstImg" alt="slider1" src="imgs/test/list.png"; width=30; height=30; style="position: fixed; bottom:0px; left:50%;"/> </a>
-		<a id="a2" href="#"><img  id="footerOpImg" src="imgs/test/operate.jpg"; width=30; height=30; style="position: fixed; bottom:0px; left:40%; visibility:hidden;"/> </a>
-		<a id="a3" href="#"><img id="footerSchImg" src="imgs/test/schedule.jpg"; width=30; height=30; style="position: fixed; bottom:0px; left:60%; visibility:hidden;"/> </a>
+		<a id="a1" href="#" onclick="footerLstImgClick(); return false;"><img id="footerLstImg" alt="slider1" src="imgs/test/list.png"; width=50; height=50; style="position: fixed; bottom:0px; left:50%;"/> </a>
+		<a id="a2" href="#"><img  id="footerOpImg" src="imgs/test/operate.png"; width=50; height=50; style="position: fixed; bottom:0px; left:30%; visibility:hidden;"/> </a>
+		<a id="a3" href="#"><img id="footerSchImg" src="imgs/test/schedule.png"; width=50; height=50; style="position: fixed; bottom:0px; left:70%; visibility:hidden;"/> </a>
 	</div>
 	
 	<!--div class="wrap">
@@ -61,12 +61,12 @@
 	<div id="popupMen1" data-role="content">
 		<div data-role="popup" id="popupMenu" data-theme="d">
 			<ul data-role="listview" data-inset="true" style="min-width:210px;" data-theme="d">
-				<li data-role="divider" data-theme="e" data-icon="delete"><a href="#" onclick="closeMenu()";><h1 id="popMhChsAct">Choose an action ...</h1></a></li>
+				<li data-role="divider" data-theme="e" data-icon="delete" id="ulHdr"><a href="#" onclick="closeMenu()";><h1 id="popMhChsAct">Choose an action ...</h1><img id="lvHdrImg" /></a></li>
 				<li><a href="#" onclick="turnOFF()";><p id="popMOff"><b><font color="black" size=3>&#9728 Off </font></b></p></a></li>
 				<li><a href="#" onclick="turnON()";><p id="popMOn"><b><font color="red" size=3>&#9728 On </font></b></p></a></li>
 				<li><a href="#" onclick="Toggle()";><p id="popMToggle"><b><font color="blue" size=3>&#9728 Toggle </font></b></p></a></li>
-				<li><a href="#" onclick="getStatus()";><p id="popMUpdt"><b><font color="orange" size=3> &#9775 Update</font></b></p></a></li>
-				<li><a href="login.html" data-rel="dialog"><p id="popMSch"><b><font color="purple" size=3>&#9716 Schedule</font></b></p></a></li>
+				<li><a href="#" onclick="getStatus()";><p id="popMUpdt"><b><font color="orange" size=3> &#9728 Update</font></b></p></a></li>
+				<li><a href="login.html" data-rel="dialog"><p id="popMSch"><b><font color="purple" size=3> &#9728 Schedule</font></b></p></a></li>
 				<li><a href="#"; onclick="selectRes()";><font color="green" size=3><p id="popMSelRes"><b> &#10004 Select </b></p></font></b></a></li>
 				<li data-icon="delete"><a href="#" onclick="closeMenu();"><b><font color="black" size=3>Close</font></b></a></li>
 			</ul>
