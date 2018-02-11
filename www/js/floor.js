@@ -70,8 +70,8 @@ function getFloorInfo(){
 	addActionIcons();
 	retrieveAppliances();
 	
-	document.getElementById(popupMenuA).style.visibility = 'hidden';
-	document.getElementById(popupMenuB).style.visibility = 'hidden';
+	document.getElementById('popupMenuA').style.visibility = 'hidden';
+	document.getElementById('popupMenuB').style.visibility = 'hidden';
 	
 	//getStatusofAllApps();
 	

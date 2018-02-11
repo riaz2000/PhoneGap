@@ -17,7 +17,7 @@ function getInstallationInfo(){
 	else{
 		OBox = JSON.parse(oboxObjStr);
 		
-		document.getElementById('msg').innerHTML = "Please Wait, Contacting OWLBox:"+OBoxID;
+		document.getElementById('msg').innerHTML = "Contacting OWLBox:"+OBoxID+" wait . . . ";
 		
 		title = document.getElementById('pgTitle');
 		title.innerHTML = OBox.userId + "@OBox:" + OBox.OBoxNo;
