@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+</head>
+
+<title>Operate Floor</title>
+ 
+<!--body onload="myfunction3()"-->
+<body>
+
+<div id="operatefloor" data-role="page" data-add-back-btn="true">
+	<div data-role="header" data-position="fixed">
+		<h1 id="pgTitle">Operate Floor Resources</h1>
+	</div>
+	
+	<h2><label><font color="olive"><center>Select Operation</center></font></label></h2>
+	<p><select id = "opList" onchange="onChangeOperation()">
+		<option value = "0" style="color:black"><b> Select an Option </option>
+		<option value = "1" style="color:black"><b> &#9728  Turn Off </option>
+		<option value = "2" style="color:red"><b> &#9728 Turn On </option>
+		<option value = "3" style="color:orange"> &#9728 Toggle </option>
+		<option value = "4" style="color:blue"> &#9728 Update </option>
+	</select></p>
+	
+	
+	<h2><label><font color="purple"><center>All</center></font></label></h2>
+	<input id="BtnSelectAllApps" type="button" value="Toggle Select All Appliances" onclick="sltctAllApps()" style="background-color: purple;"/>
+	<input id="BtnSelectAllFans" type="button" value="Toggle Select All Fans" onclick="sltctAllFans()" style="background-color: purple;"/>
+	<input id="BtnSelectAllLights" type="button" value="Toggle Select All Lights" onclick="sltctAllLights()" style="background-color: purple;"/>
+	<div data-role="content">
+         <ul id="AppTypesList" data-role="listview" data-filter="true"></ul>
+    </div>
+	
+	<h2><label><font color="teal"><center>In</center></font></label></h2>
+	<input id="BtnSelectAllAreas" type="button" value="Toggle Select All Locations" onclick="sltctAllAreas()" style="background-color: teal;"/>
+	<div data-role="content">
+         <ul id="AreasList" data-role="listview" data-filter="true"></ul>
+    </div>
+	
+	<input type="datetime-local" name="bdaytime" id="dttm">
+	
+	<!--div class="name">
+        <strong>flatpickr <span class="version">v4</span></strong>
+        
+          <br>
+          chmln/flatpickr
+        
+      </div-->
+	  
+	<label for="datetime-1">Datetime: data-clear-btn="false"</label>
+    <input type="datetime" data-clear-btn="false" name="datetime-1" id="datetime-1" value="">
+	
+	<input id="BtnOpSelected" type="button" value="Operate" onclick="OperateSelected()" />
+	
+	
+	
+</div>
+</body>
+
+</html>

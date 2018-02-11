@@ -4,6 +4,7 @@ var connType;		// if WiFi
 var directAccessIP = "";
 var OBdirectAccess = 0;
 var OBviaInternetAccess = 0;
+//var serviceURL;
 
 FloorMode = {
 	OPERATION 				: 0,

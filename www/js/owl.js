@@ -1,3 +1,5 @@
+var RsrcsOnSlctdFlrArr = [];
+var AreasOnSlctdFlrArr = [];
 Role = {
 	OWLServer	: 0,
 	OWLBox		: 1,
@@ -61,7 +63,7 @@ State = {
 	UR	: 3		//UnRecognized resource i.e. UnRegistered
 }
 
-ResourceType = {
+ResourceType = {	// value must match the 'nr' in tab_appliances
     ceilingFan		:	1, //{value: 1, name: "ceilingFan", imageName: "ceilingFan"}, 
 	bracketFan		:	2,
 	pedestalFan		:	3,

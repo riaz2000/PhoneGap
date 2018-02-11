@@ -22,8 +22,8 @@ $('#installationListPage').live('pageshow', function(event) {
 
 function getInstallationList() {
 	
-	myAlert("Device2: "+getDeviceType(),4);
-	//alert("OBsLstStr: " +localStorage.getItem('OBsLstStr'));
+	myAlert("Device2: "+getDeviceType(),5);
+	
 	if(localStorage.getItem('OBsLstStr')=="" || localStorage.getItem('OBsLstStr')==null)
 		localStorage.setItem('OBsLstStr',"[]");
 	

@@ -7,8 +7,8 @@ $('#installation').live('pageshow', function(event) { //pageshow pageinit
 function getInstallationInfo(){
 	OBoxID = getUrlVars()['OBoxID'];
 	
-	msg = document.getElementById('msgObj');
-	msg.standby = "Retrieving ...";
+	//msg = document.getElementById('msg');
+	//msg.innerHTML = "Please Wait, Contacting OWLBox:"+OBoxID;
 	//alert("OBoxID: " + OBoxID);
 	oboxObjStr = getOBoxObjstr(OBoxID);
 	//alert("oboxObjStr: " + oboxObjStr);
@@ -16,6 +16,8 @@ function getInstallationInfo(){
 		myAlert("OBox Not Registered",1);
 	else{
 		OBox = JSON.parse(oboxObjStr);
+		
+		document.getElementById('msg').innerHTML = "Please Wait, Contacting OWLBox:"+OBoxID;
 		
 		title = document.getElementById('pgTitle');
 		title.innerHTML = OBox.userId + "@OBox:" + OBox.OBoxNo;
@@ -88,6 +90,7 @@ function getInstallationInfo(){
 			}
 		})	.success(function() { 
 				//alert("second success"); 
+				document.getElementById('pgFooter').style.visibility = "hidden";
 			})
 			.error(function() { 
 				//alert("error"); 
