@@ -6,15 +6,14 @@ var allAppsSlctd = false;
 var allLightsSlctd = false;
 var allFansSlctd = false;
 var allAreasSlctd = false;
+var allDaysSlctd = false;
 
 var NoOfAppsTypes = 0;
 var NoOfAreas = 0;
 
-//var resOnFloor;		// String
-var selectedResArr;	// Array
-//var serviceURL;
-
-var appliances = [];	// Array of applianceTypes
+//var selectedResArr;	// Array: will get from floor.js
+//var appliances = "[]";	// will get from floor.js
+var applianceTypes = [];	// Array of applianceTypes
 var areas = [];			// Array of areas on this floor
 $('#operatefloor').live('pageshow', function(event) { //pageshow pageinit
 
@@ -25,23 +24,72 @@ function initializeOpFloor(){
 	OBoxID = getUrlVars()['OBoxID'];
 	FloorNo = getUrlVars()['FloorNo'];
 	Context = getUrlVars()['Context'];
-	//resOnFloor = getUrlVars()['ResArr'];
 	
-	selectedResArr = [];
-	
-	if(Context == 1){
-		//alert("Here");
-		document.getElementById('BtnOpSelected').style.visibility = 'hidden';
+	if(Context == 1){ // i.e. schedule 
+		//alert("SlctdResArr: " + SlctdResArr);
+		//SlctdResArr = JSON.parse(SlctdRess);
+		//document.getElementById('BtnOpSelected').style.visibility = 'hidden';
 		title = document.getElementById('pgTitle');
-		title.innerHTML = "Schedule Floor Resources";
-		$('dttm').val(new Date().toJSON().slice(0,19));
+		//showLstOfSlctdRess();
+		if(selectedResArr.length > 0){ // Resources to be scheduled are already selected in floor.js
+			title.innerHTML = "Schedule Selected";
+			//showLstOfSlctdRess();
+			document.getElementById('lblAll').style.display = 'none';
+			document.getElementById('divAppTypes').style.display = 'none';
+			document.getElementById('AppTypesList').style.display = 'none';
+			document.getElementById('lblIn').style.display = 'none';
+			document.getElementById('divAreas').style.display = 'none';
+			document.getElementById('AreasList').style.display = 'none';
+			document.getElementById('divChkBxShSlctn').style.display = 'none';
+		}
+		else{ // Give option to select the resources and then schedule selected
+			title.innerHTML = "Select and Schedule";
+			document.getElementById('slctdResList').style.display = 'none';
+		}
+		
+		//var timeControl = document.getElementById('tm');//document.querySelector('input[type="time"]');
+		//timeControl.value = '15:30';
+		//timeControl.value = 'now';
+		
+		//var dateControl = document.getElementById('dt');//document.querySelector('input[type="time"]');
+		//dateControl.value = '2018-02-15';
+		//dateControl.value = 'now';
 	}
-	else{
-		document.getElementById('dttm').style.visibility = 'hidden';
+	else{ // i.e. operate
+		selectedResArr = [];
+		
+		//document.getElementById('slctdResList').style.display = 'none';
+		
+		document.getElementById('lblAt').style.display = 'none';
+		document.getElementById('tm').style.display = 'none';
+		document.getElementById('lblOn').style.display = 'none';
+		document.getElementById('dt').style.display = 'none';
+		document.getElementById('lblRpt').style.display = 'none';
+		document.getElementById('rptForm').style.display = 'none';
+		document.getElementById('untildt').style.display = 'none';
+		document.getElementById('lblEvery').style.display = 'none';
+		document.getElementById('divBtnSelectAllDays').style.display = 'block';
+		document.getElementById('DaysList').style.display = 'block';
 	}
 
 	fillAppsList();
-	fillAreasList();
+	//fillAreasList(); only after fillAppsList() has completed
+	fillDaysList();
+	
+	initDtsNtime();
+	
+	handleOnce();
+	
+	/*document.getElementById('untildt').style.visibility = 'hidden';
+	document.getElementById('lblEvery').style.visibility = 'hidden';
+	document.getElementById('BtnSelectAllDays').style.visibility = 'hidden';
+	document.getElementById('DaysList').style.visibility = 'hidden';
+	
+	//Position the "Operate Button"
+	var rect = document.getElementById('rptForm').getBoundingClientRect();
+	document.getElementById('BtnOpSelected').style.position="fixed";
+	document.getElementById('BtnOpSelected').style.top = rect.bottom+"px";
+	*/
 }
 
 function fillAppsList(){
@@ -49,18 +97,18 @@ function fillAppsList(){
 	var retObj = $.getJSON(serviceURL + 'select.php?sql='+query, function(data) {
 		isneedtoKillAjax = false;
 		
-		appliances = data.items;
-		NoOfAppsTypes = appliances.length;
+		applianceTypes = data.items;
+		NoOfAppsTypes = applianceTypes.length;
 		$('#AppTypesList li').remove();
 		for(i=0; i<NoOfAppsTypes; i++){
 			
 			//linkToPage = "floor.html?OBoxID="+OBoxID+"&FloorNo="+i+"&CtrlAtmcLvl="+floors[0].ctrl_atomic_lvl;
 			linkToPage = "#";
 
-			//$('#AppTypesList').append('<li style="background-color:#FF0000;">' + '<a href="' + linkToPage + '">' + '<B><center>' + appliances[i].appliance_name + '</center></B></a></li>');
-			var chkBx = '<label for="chk' + i + '"><input type="checkbox" name="chk' + i + '" id="chk'+i+'">';
-			var imgApp = '<img src="imgs/apps/' + getResImg(appliances[i].nr, State.ON) +'.png";/>'
-			$('#AppTypesList').append('<li>' + chkBx + '<B><center><h2><font color="purple">' + appliances[i].appliance_name + 's</font></h2></center></B></label>'+imgApp+'</li>');
+			//$('#AppTypesList').append('<li style="background-color:#FF0000;">' + '<a href="' + linkToPage + '">' + '<B><center>' + applianceTypes[i].appliance_name + '</center></B></a></li>');
+			var chkBx = '<label for="chk' + i + '"><input type="checkbox" name="chk' + i + '" id="chk'+i+'" onchange="hideSelection()">';
+			var imgApp = '<img src="imgs/apps/' + getResImg(applianceTypes[i].nr, State.ON) +'.png";/>'
+			$('#AppTypesList').append('<li>' + chkBx + '<B><center><h2><font color="purple">' + applianceTypes[i].appliance_name + 's</font></h2></center></B></label>'+imgApp+'</li>');
 		}
 		$('#AppTypesList').listview('refresh');
 	})	.success(function() { 
@@ -71,6 +119,8 @@ function fillAppsList(){
 		})
 		.complete(function() { 
 			//alert("complete"); 
+			fillAreasList();
+			
 		}
 	);
 	//setTimeout(function(){ p.abort(); alert(JSON.stringify(p)); }, 500);
@@ -103,9 +153,9 @@ function fillAreasList(){
 			//linkToPage = "floor.html?OBoxID="+OBoxID+"&FloorNo="+i+"&CtrlAtmcLvl="+floors[0].ctrl_atomic_lvl;
 			linkToPage = "#";
 
-			//$('#AreasList').append('<li style="background-color:#FF0000;">' + '<a href="' + linkToPage + '">' + '<B><center>' + appliances[i].appliance_name + '</center></B></a></li>');
-			var chkBx = '<label for="Areachk' + i + '"><input type="checkbox" name="Areachk' + i + '" id="Areachk'+i+'">';
-			var imgApp = '';//'<img src="imgs/apps/' + getResImg(appliances[i].nr, State.ON) +'.png"; width=30; height=30; />'
+			//$('#AreasList').append('<li style="background-color:#FF0000;">' + '<a href="' + linkToPage + '">' + '<B><center>' + applianceTypes[i].appliance_name + '</center></B></a></li>');
+			var chkBx = '<label for="Areachk' + i + '"><input type="checkbox" name="Areachk' + i + '" id="Areachk'+i+'" onchange="hideSelection()">';
+			var imgApp = '';//'<img src="imgs/apps/' + getResImg(applianceTypes[i].nr, State.ON) +'.png"; width=30; height=30; />'
 			$('#AreasList').append('<li style="background-color:#FF0000;">' + chkBx + '<B><center><h2><font color="teal">' + areas[i].area + '</font></h2></center></B></label>'+imgApp+'</li>');
 			//$('#AreasList').append('<li style="background-color:#FF0000;">' + chkBx + areas[i].area + '</label>'+imgApp+'</li>');
 		}
@@ -119,6 +169,9 @@ function fillAreasList(){
 		.complete(function() { 
 			//alert("complete"); 
 			AreasOnSlctdFlrArr = areas;
+			if(selectedResArr.length > 0){
+				showLstOfSlctdRess();
+			}
 		}
 	);
 	//setTimeout(function(){ p.abort(); alert(JSON.stringify(p)); }, 500);
@@ -137,6 +190,29 @@ function fillAreasList(){
 			//alert('no need to kill ajax');
 		}
 	}
+}
+
+function fillDaysList(){
+	var days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+	var txtcolor = ['violet', 'indigo', 'blue', 'green', 'gold', 'orange', 'red'];
+	//$('#DaysList').remove();
+	for(i=0; i<days.length; i++){
+		var chkBx = '<label for="Daychk' + i + '"><input type="checkbox" name="Daychk' + i + '" id="Daychk'+i+'">';
+		var imgApp = '';
+		$('#DaysList').append('<li style="background-color:#FF0000;">' + chkBx + '<B><center><h1><font color="'+txtcolor[i]+'">' + days[i] + '</font></h1></center></B></label>'+imgApp+'</li>');
+	}
+	$('#DaysList').listview('refresh');
+}
+
+function initDtsNtime(){
+	var date = new Date();
+	var currentDate = date.toISOString().slice(0,10);
+	var currentTime = date.getHours() + ':' + date.getMinutes();
+
+	document.getElementById('tm').value = currentTime;
+	document.getElementById('dt').value = currentDate;
+	document.getElementById('untildt').value = currentDate;
+	//document.getElementById('untildt1').value = new Date().toDateInputValue();
 }
 
 function sltctAllApps(){
@@ -205,6 +281,20 @@ function sltctAllAreas(){
 	allAreasSlctd = newStatus;
 }
 
+function sltctAllDays(){
+	if(allDaysSlctd)
+		newStatus = false;
+	else
+		newStatus =  true;
+
+	NoOfDays = document.getElementById('DaysList').length;
+	//for(i=0; i<NoOfDays; i++){
+	for(i=0; i<7; i++){
+		document.getElementById('Daychk'+i).checked = newStatus;
+	}
+	allDaysSlctd = newStatus;
+}
+
 function OperateSelected(){
 	getSelectedResrcs();
 	
@@ -213,6 +303,15 @@ function OperateSelected(){
 		return;
 	}
 	var operation = document.getElementById('opList').value;
+	var rptMode;
+	if (document.getElementById('radio-choice-0a').checked)
+		rptMode = 0;
+	else if (document.getElementById('radio-choice-0b').checked)
+		rptMode = 1;
+	else if (document.getElementById('radio-choice-0c').checked)
+		rptMode = 2;
+	
+	alert("RepeatMode: " + rptMode);
 	if(operation == 0)
 		myAlert("Please select a valid operation", 2);
 	else
@@ -250,11 +349,11 @@ function isResTypeOfResSlctd(appNR){
 	resTypeOfResIsSlctd = false;
 	//alert(appliances.length + " :: " + JSON.stringify(appliances) );
 	//alert(appNR);
-	for(var i=0; i<appliances.length; i++){
+	for(var i=0; i<applianceTypes.length; i++){
 		//alert(appNR);
 		if(document.getElementById('chk'+i).checked && 
-				parseInt(appliances[i].nr) == parseInt(appNR)){
-			//alert("Here---" + appliances[i].nr + " : " + appNR);
+				parseInt(applianceTypes[i].nr) == parseInt(appNR)){
+			//alert("Here---" + applianceTypes[i].nr + " : " + appNR);
 			resTypeOfResIsSlctd = true;
 		}
 	}
@@ -309,6 +408,7 @@ function operate(opOption){
 }
 
 function onChangeOperation(){
+	showLstOfSlctdRess();
 	var slctdOp = document.getElementById('opList').value;
 	var myOpBtn = document.getElementById('BtnOpSelected');
 	switch(parseInt(slctdOp)) {
@@ -332,3 +432,131 @@ function onChangeOperation(){
 			myOpBtn.style.backgroundColor = "Blue";
 	}
 }
+/*
+function updateSlctdRessImgs(operation){
+	for(var i=0; i<$('#slctdResList').length; i++){
+		document.getElementById('slctdResImg'+i).src=getResImg(, parseInt(operation))
+	}
+}
+*/
+function handleOnce(){
+	//alert("Once Option Selected");
+	//document.getElementById('untildt').style.visibility = 'hidden';
+	document.getElementById('untildt').style.display = 'none';
+	document.getElementById('lblEvery').style.display = 'none';
+	document.getElementById('divBtnSelectAllDays').style.display = 'none';
+	document.getElementById('DaysList').style.display = 'none';
+	
+	/*
+	//Position the "Operate Button"
+	var rect = document.getElementById('radio-choice-0c').getBoundingClientRect();
+	document.getElementById('BtnOpSelected').style.position="fixed";
+	document.getElementById('BtnOpSelected').style.top = rect.bottom+"px";
+	*/
+}
+
+function handleContinued(){
+	//alert("Always Option Selected");
+	//document.getElementById('untildt').style.visibility = 'hidden';
+	document.getElementById('untildt').style.display = 'none';
+	document.getElementById('lblEvery').style.display = 'block';
+	document.getElementById('divBtnSelectAllDays').style.display = 'block';
+	document.getElementById('DaysList').style.display = 'block';
+	
+	/*
+	//Position the "Operate Button"
+	var rect = document.getElementById('DaysList').getBoundingClientRect();
+	document.getElementById('BtnOpSelected').style.position="fixed";
+	document.getElementById('BtnOpSelected').style.top = rect.bottom+"px";
+	*/
+}
+
+function handleUntil(){
+	//alert("Until Option Selected");
+	//document.getElementById('untildt').style.visibility = 'visible';
+	document.getElementById('untildt').style.display = 'block';
+	document.getElementById('lblEvery').style.display = 'block';
+	document.getElementById('divBtnSelectAllDays').style.display = 'block';
+	document.getElementById('DaysList').style.display = 'block';
+	
+	/*
+	//Position the "Operate Button"
+	var rect = document.getElementById('DaysList').getBoundingClientRect();
+	document.getElementById('BtnOpSelected').style.position="fixed";
+	document.getElementById('BtnOpSelected').style.top = rect.bottom+"px";
+	*/
+}
+
+function showLstOfSlctdRess(){
+	//alert("selectedResArr.length:: " +selectedResArr.length);
+	var slctdOp = document.getElementById('opList').value;
+	$('#slctdResList').empty();
+	for(var i=0; i< selectedResArr.length; i++){
+		//alert(selectedResArr[i].ResId);
+		//mResId = selectedResArr[i].ResId;
+		for (var j=0 ; j<appliances.length; j++){
+			if(selectedResArr[i].ResId == appliances[j].resource_id){
+				var chkBx = '<label for="slctdReschk' + i + '"><input type="checkbox"  checked name="slctdReschk' + i + '" id="slctdReschk'+i+'">';
+				//var imgApp = getResImg(ResourceType.bulb, State.ON);//'';
+				var op2Perform;
+				if(slctdOp == 1)
+					op2Perform = State.OFF;
+				else if(slctdOp == 2)
+					op2Perform = State.ON;
+				else 
+					op2Perform = State.UK
+				var imgApp ='<img src="imgs/apps/' + getResImg(appliances[j].appliance, op2Perform) +'.png"; id="slctdResImg"'+i+'/>'
+				var areaOfRes = getResAreaName(appliances[j].loc_lvl2);
+				var descrpApp = getResTypeName(appliances[j].appliance) + " in " + areaOfRes; // + " @ Floor#" + FloorNo; 
+				$('#slctdResList').append('<li style="background-color:#FF0000;">' + chkBx + '<B><center><h1><font color="'+'Green'+'">' + selectedResArr[i].ResId + '</font></h1><h2>'+ descrpApp +'</h2></center></B></label>'+imgApp+'</li>');
+				//break;
+			}
+		}
+	}
+	$('#slctdResList').listview('refresh');
+}
+
+function getResTypeName(resTypeNR){
+	//alert("applianceTypes.length: " + applianceTypes.length);
+	//alert("resTypeNR: " + resTypeNR);
+	
+	for (var i=0; i<applianceTypes.length; i++){
+		if(applianceTypes[i].nr == resTypeNR)
+			return applianceTypes[i].appliance_name;
+	}
+}
+
+function getResAreaName(resAreaNR){
+	for (var i=0; i<areas.length; i++){
+		if(areas[i].nr == resAreaNR)
+			return areas[i].area;
+	}
+}
+
+function chkBxShSlctnChngd(){
+	//alert("chkBxShSlctnChanged");
+	if(document.getElementById('chkBxShSlctn').checked){
+		document.getElementById('divSlctdRess').style.display = 'block';
+		showSelection();
+	}
+	else{
+		document.getElementById('divSlctdRess').style.display = 'none';
+	}
+}
+
+function showSelection(){
+	getSelectedResrcs();
+	showLstOfSlctdRess();
+}
+
+function hideSelection(){
+	document.getElementById('divSlctdRess').style.display = 'none';
+	document.getElementById('chkBxShSlctn').checked = false;
+}
+/*
+Date.prototype.toDateInputValue = (function() {
+    var local = new Date(this);
+    local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+    return local.toJSON().slice(0,10);
+});
+*/

@@ -133,7 +133,7 @@ function retrieveAppliances(){
 		
 		//alert('appliances: ' + JSON.stringify(appliances));
 		if(appliances.length == 0)
-			MyAlert("No Registered Appliances on This Floor", 0);
+			myAlert("No Registered Appliances on This Floor", 0);
 
 		$.each(appliances, function(index, appliance) {
 			if(CtrlAtomicLvl == 0){
@@ -176,10 +176,12 @@ function retrieveAppliances(){
 						
 						*/
 						document.getElementById('ahrefFlrOpMenuA').href="operateFloor.html?OBoxID="+OBoxID+"&FloorNo="+FloorNo+"&SlctdResArr="+JSON.stringify("[]")+"&Context="+0; // Operate
-						document.getElementById('ahrefFlrSchMenuA').href="operateFloor.html?OBoxID="+OBoxID+"&FloorNo="+FloorNo+"&SlctdResArr="+JSON.stringify("[]")+"&Context="+1; // Schedule
+						//document.getElementById('ahrefFlrSchMenuA').href="operateFloor.html?OBoxID="+OBoxID+"&FloorNo="+FloorNo+"&SlctdResArr="+JSON.stringify("[]")+"&Context="+1; // Schedule
+						document.getElementById('ahrefFlrSchMenuA').href="schedule.html?OBoxID="+OBoxID+"&FloorNo="+FloorNo+"&SlctdResArr="+JSON.stringify("[]")+"&Context="+1; // Schedule
 						
 						document.getElementById('ahrefFlrOpMenuB').href="operateFloor.html?OBoxID="+OBoxID+"&FloorNo="+FloorNo+"&SlctdResArr="+JSON.stringify("[]")+"&Context="+0; // Operate
-						document.getElementById('ahrefFlrSchMenuB').href="operateFloor.html?OBoxID="+OBoxID+"&FloorNo="+FloorNo+"&SlctdResArr="+JSON.stringify("[]")+"&Context="+1; // Schedule
+						//document.getElementById('ahrefFlrSchMenuB').href="operateFloor.html?OBoxID="+OBoxID+"&FloorNo="+FloorNo+"&SlctdResArr="+JSON.stringify("[]")+"&Context="+1; // Schedule
+						document.getElementById('ahrefFlrSchMenuB').href="schedule.html?OBoxID="+OBoxID+"&FloorNo="+FloorNo+"&SlctdResArr="+JSON.stringify("[]")+"&Context="+1; // Schedule
 					}
 				);
 				
@@ -205,11 +207,12 @@ function retrieveAppliances(){
 			document.getElementById('ahrefFlrSchMenuB').href="schedule.html?OBoxID="+OBoxID+"&FloorNo="+FloorNo+"&ResArr="+JSON.stringify(appliances)+"&SlctdResArr="+JSON.stringify("[]");
 			*/
 			document.getElementById('ahrefFlrOpMenuA').href="operateFloor.html?OBoxID="+OBoxID+"&FloorNo="+FloorNo+"&SlctdResArr="+JSON.stringify("[]")+"&Context="+0; // Operate
-			document.getElementById('ahrefFlrSchMenuA').href="operateFloor.html?OBoxID="+OBoxID+"&FloorNo="+FloorNo+"&SlctdResArr="+JSON.stringify("[]")+"&Context="+1; // Shedule
+			//document.getElementById('ahrefFlrSchMenuA').href="operateFloor.html?OBoxID="+OBoxID+"&FloorNo="+FloorNo+"&SlctdResArr="+JSON.stringify("[]")+"&Context="+1; // Shedule
+			document.getElementById('ahrefFlrSchMenuA').href="schedule.html?OBoxID="+OBoxID+"&FloorNo="+FloorNo+"&SlctdResArr="+JSON.stringify("[]")+"&Context="+1; // Shedule
 			
 			document.getElementById('ahrefFlrOpMenuB').href="operateFloor.html?OBoxID="+OBoxID+"&FloorNo="+FloorNo+"&SlctdResArr="+JSON.stringify("[]")+"&Context="+0;  // Operate
-			document.getElementById('ahrefFlrSchMenuB').href="operateFloor.html?OBoxID="+OBoxID+"&FloorNo="+FloorNo+"&SlctdResArr="+JSON.stringify("[]")+"&Context="+1; // Shedule
-
+			//document.getElementById('ahrefFlrSchMenuB').href="operateFloor.html?OBoxID="+OBoxID+"&FloorNo="+FloorNo+"&SlctdResArr="+JSON.stringify("[]")+"&Context="+1; // Shedule
+			document.getElementById('ahrefFlrSchMenuB').href="schedule.html?OBoxID="+OBoxID+"&FloorNo="+FloorNo+"&SlctdResArr="+JSON.stringify("[]")+"&Context="+1; // Shedule
 		}
 	);
 	//setTimeout(function(){ p.abort(); alert(JSON.stringify(p)); }, 500);
@@ -885,8 +888,8 @@ function addListeners(mDiv, mImg, mResId, indexOfAppInApps){
 						document.getElementById("lbl_slct:"+i).innerHTML = "&#10004";
 				}
 			}
-			document.getElementById('ahrefSchMenuB').href="schedule.html?OBoxID="+OBoxID+"&FloorNo="+FloorNo+"&ResArr="+JSON.stringify(selectedResArr);
-			document.getElementById('ahrefSchMenu1').href="schedule.html?OBoxID="+OBoxID+"&FloorNo="+FloorNo+"&ResArr="+JSON.stringify(selectedResArr);
+			document.getElementById('ahrefSchMenuB').href="schedule.html?OBoxID="+OBoxID+"&FloorNo="+FloorNo+"&SlctdResArr="+JSON.stringify(selectedResArr)+"&Context="+1;
+			document.getElementById('ahrefSchMenu1').href="schedule.html?OBoxID="+OBoxID+"&FloorNo="+FloorNo+"&SlctdResArr="+JSON.stringify(selectedResArr)+"&Context="+1;
 			
 			//lbl.innerHTML = "&#10004";
 			
@@ -1063,7 +1066,8 @@ function getResImg(ResType, state){
 	return app;
 }
 
-function sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, trackResp){ //RegSock Remains Open
+//function sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, trackResp){ //RegSock Remains Open
+function sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, Wait4Response){ //RegSock Remains open for any Updates/Messages from the OBox
 	var socket = new Socket();
 	var owlMsg = new Object();
 	owlMsg.role = Role.OWLUser;
@@ -1096,7 +1100,8 @@ function sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, trackResp){ /
 	}
 	
 	var isneedtoKillAjax;
-	if(owlMsg.msgType == MessageType.REGISTRATION){
+	//if(owlMsg.msgType == MessageType.REGISTRATION){
+	if(Wait4Response){
 		setTimeout(function() {checkajaxkill(); }, 4000);
 		isneedtoKillAjax = true;
 	}
@@ -1109,9 +1114,11 @@ function sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, trackResp){ /
 			socket.write(data);
 			myAlert("Txd: " + dataString, 3);
 			//isneedtoKillAjax = false;
-			if(owlMsg.msgType != MessageType.REGISTRATION)
+			//if(owlMsg.msgType != MessageType.REGISTRATION)
+			if(!Wait4Response)
 				socket.close();
-			if(trackResp){
+			//if(trackResp){
+			else{
 				// track each resource of in message if it has got the response for the action or not
 				// in case of timeout get the updated status as it has been observed that OBox sometimes
 				// performs the action but does not respond.
@@ -1131,7 +1138,9 @@ function sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, trackResp){ /
 			socket.close();
 			myAlert('Request Timeout: \n'+dataString,0);                 
 		}else{
-			//alert('no need to kill ajax');
+			myAlert('no need to kill ajax: '+dataString,4);
+			if(owlMsg.msgType != MessageType.REGISTRATION)
+				socket.close();
 		}
 	}
 	
@@ -1185,9 +1194,9 @@ function getStatusofAllApps(){
 	}
 	
 	Schedule = [];
-	trackResp = false;
+	Wait4Response = false;	// Don't wait for response on this socket, only handle the response through regSoc
 
-	sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, trackResp);
+	sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, Wait4Response);
 }
 
 function registerOUser(){
@@ -1206,9 +1215,9 @@ function registerOUser(){
 		ResIdArr = [];
 		OpArr    = [];
 		Schedule = [];
-		trackResp = true;
+		Wait4Response = true;	// Wait for the response on this socket and keep it open as its regSoc
 
-		sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, trackResp);
+		sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, Wait4Response);
 	}
 }
 
@@ -1226,7 +1235,8 @@ function handleResponse(rcvdMsg){
 	}
 	else if(owlMsg.msgType == MessageType.RESPONSE){
 		if(owlMsg.Message == Message.SCHEDULE_RETURN){
-			
+			// Pass onto schedule.js  function displaySch()
+			displaySch(rcvdMsg);
 		}
 		else{
 			//alert('owlMsg.resourceID.length1 ' + owlMsg.resourceID.length);
@@ -1520,7 +1530,7 @@ function Toggle(){
 		for (var j=0 ; j<ResIdArr.length ; j++){
 			if (appliances[i].resource_id == ResIdArr[j]) {
 				document.getElementById("lbl_reqStatus:"+i).innerHTML = "&#9728";//"&#9775";
-				document.getElementById("lbl_reqStatus:"+i).style.color = "blue";
+				document.getElementById("lbl_reqStatus:"+i).style.color = "orange";
 			}
 		}
 	}
@@ -1567,7 +1577,7 @@ function getStatus(){
 		for (var j=0 ; j<ResIdArr.length ; j++){
 			if (appliances[i].resource_id == ResIdArr[j]) {
 				document.getElementById("lbl_reqStatus:"+i).innerHTML = "&#9728";//"&#9775";
-				document.getElementById("lbl_reqStatus:"+i).style.color = "orange";
+				document.getElementById("lbl_reqStatus:"+i).style.color = "blue";
 			}
 		}
 	}
@@ -1603,10 +1613,10 @@ function selectRes(){
 				document.getElementById("lbl_slct:"+i).innerHTML = "&#10004";
 		}
 		
-		document.getElementById('ahrefSchMenuB').href="schedule.html?OBoxID="+OBoxID+"&FloorNo="+FloorNo+"&ResArr="+JSON.stringify(selectedResArr);
+		document.getElementById('ahrefSchMenuB').href="schedule.html?OBoxID="+OBoxID+"&FloorNo="+FloorNo+"&SlctdResArr="+JSON.stringify(selectedResArr)+"&Context="+1;
 		
 		
-		document.getElementById('ahrefSchMenu1').href="schedule.html?OBoxID="+OBoxID+"&FloorNo="+FloorNo+"&ResArr="+JSON.stringify(selectedResArr);
+		document.getElementById('ahrefSchMenu1').href="schedule.html?OBoxID="+OBoxID+"&FloorNo="+FloorNo+"&SlctdResArr="+JSON.stringify(selectedResArr)+"&Context="+1;
 		
 	}
 	closeMenu();
@@ -1694,6 +1704,19 @@ function setModeSel(){
 	FloorInMode = FloorMode.SELECTION;
 	document.getElementById('optionImg').src='imgs/test/select.png';
 	clearSelection();
+}
+
+function scheRes(){
+	if(FloorInMode == FloorMode.OPERATION){
+		var selectedRes = {ResId:appliances[selctdAppindexOfAppInApps].resource_id};
+		selectedResArr = [];
+		selectedResArr.push(selectedRes);
+						
+		document.getElementById('ahrefSchMenu1').href="schedule.html?OBoxID="+OBoxID+"&FloorNo="+FloorNo+"&SlctdResArr="+JSON.stringify(selectedResArr)+"&Context="+1;
+	}
+	else if(FloorInMode == FloorMode.SELECTION){
+		document.getElementById('ahrefSchMenu1').href="schedule.html?OBoxID="+OBoxID+"&FloorNo="+FloorNo+"&SlctdResArr="+JSON.stringify(selectedResArr)+"&Context="+1;
+	}
 }
 
 function abcd(){
