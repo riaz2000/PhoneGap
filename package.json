@@ -17,7 +17,6 @@
     "cordova-plugin-whitelist-dev": "^1.1.6",
     "flatpickr": "^4.2.4",
     "rpc-websocket": "^0.7.11",
-    "rpc-websockets": "^4.3.2",
     "socket.io": "^2.0.3",
     "udp-node": "^2.1.0",
     "utfx": "^1.0.1",
