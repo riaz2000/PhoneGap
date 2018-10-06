@@ -12,7 +12,7 @@ function getSettings(){
 	osaddr = document.getElementById('OSAddress');
 	//verbos = document.getElementById('Verbosity');
 	verbosSldr = document.getElementById('VerbositySldr');
-	
+
 	obaddr.value = localStorage.getItem('owlbaddr');
 	osaddr.value = localStorage.getItem('owlsaddr');
 	//verbos.value = localStorage.getItem('verboseLvl');
@@ -21,7 +21,7 @@ function getSettings(){
 	verbosSldr.value=parseInt(localStorage.getItem('verboseLvl'));
 	//verbosSldr.slider("option", "value", verbosSldr.value);
 	//verbosSldr.slider('refresh');
-	
+
 	document.getElementById('popupLgMenu').style.visibility = 'hidden';
 	vis = 0;
 }
@@ -32,14 +32,14 @@ function updateSettings(){
 	var osaddr = document.getElementById('OSAddress').value;
 	//var verbos = document.getElementById('Verbosity').value;
 	var verbos = document.getElementById('VerbositySldr').value;
-	
+
 	localStorage.setItem('owlbaddr',obaddr);
 	localStorage.setItem('owlsaddr',osaddr);
 	localStorage.setItem('verboseLvl',verbos);
-	
-	
+
+
 	alert("Information Updated");
-	
+
 	goBack();
 
 }
@@ -58,7 +58,7 @@ function testWS3(){
     reconnectTimeout: 5000,
     reconnectCount: 2,
 	}
-	 
+
 	WS.start(params).then(function(){
 		// on success
 		alert("Start: Success");
@@ -66,7 +66,7 @@ function testWS3(){
 		// on failure
 		alert("Start: Failure");
 	})
-	
+
 	WS.send("GPIO.Write", {
         "pin":2,
         "value":1,
@@ -80,26 +80,26 @@ function testWS3(){
 }
 
 var wsUri = "ws://192.168.0.100/rpc";
-//var output; 
+//var output;
 
 var websocket;
 var ws;
 function testWS(){
 	alert("Running Function testWS");
-	
-	websocket = new WebSocket(wsUri);//, "rpc"); 
+
+	websocket = new WebSocket(wsUri);//, "rpc");
 	//ws = new RpcSocket(websocket);
-	websocket.onopen = function(evt) { onOpen(evt) }; 
-	websocket.onclose = function(evt) { onClose(evt) }; 
-	websocket.onmessage = function(evt) { onMessage(evt) }; 
-	websocket.onerror = function(evt) { onError(evt) }; 
-	
+	websocket.onopen = function(evt) { onOpen(evt) };
+	websocket.onclose = function(evt) { onClose(evt) };
+	websocket.onmessage = function(evt) { onMessage(evt) };
+	websocket.onerror = function(evt) { onError(evt) };
+
 	//websocket.doSend(message);
 }
 
-function onOpen(evt) { 
-  writeToScreen("CONNECTED: " + JSON.stringify(event)); 
-  //doSend("WebSocket rocks"); 
+function onOpen(evt) {
+  writeToScreen("CONNECTED: " + JSON.stringify(event));
+  //doSend("WebSocket rocks");
   /*
   ws.send("GPIO.Write", {
         "pin":2,
@@ -116,10 +116,10 @@ function onOpen(evt) {
 		"pin": 2,
 		"value": 1
 	  };
-  
+
   //message = JSON.stringify(msg);
   message = "call GPIO.Write '" + JSON.stringify(msg) + "'";
-  
+
   //message = "RPC.call(\"GPIO.Write\", {\"pin\":2, \"value\":1})";
   //message = "GPIO.Write '{\"pin\":2, \"value\":1}' ";
   //message = "RPC.List";
@@ -128,9 +128,9 @@ function onOpen(evt) {
   //"call GPIO.Write '{\"pin\": 2, \"value\": 1}'";
   //websocket.call(message);
   //message = " GPIO.Toggle ('{\"pin\":2}'); ";
-  
+
   doSend(message);
-  
+
   /*
   var request = {
         action: "GPIO.Write",
@@ -139,33 +139,33 @@ function onOpen(evt) {
             "value": 1
         }
     };
-  doSend(JSON.stringify(request)); 
+  doSend(JSON.stringify(request));
   */
-}  
-function onClose(evt) { 
-  writeToScreen("DISCONNECTED: " + JSON.stringify(evt) + " " + evt.reason + " " + evt.wasClean + " " + evt.code); 
-}  
-function onMessage(evt) { 
-  writeToScreen('<span style="color: blue;">RESPONSE: ' + evt.data+'</span>'); 
-  websocket.close(); 
-}  
-function onError(evt) { 
-  writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data); 
-}  
-function doSend(message) { 
-  writeToScreen("SENDING: " + message);  
-  websocket.send(message); 
-}  
-function writeToScreen(message) { 
-  //var pre = document.createElement("p"); 
-  //pre.style.wordWrap = "break-word"; 
+}
+function onClose(evt) {
+  writeToScreen("DISCONNECTED: " + JSON.stringify(evt) + " " + evt.reason + " " + evt.wasClean + " " + evt.code);
+}
+function onMessage(evt) {
+  writeToScreen('<span style="color: blue;">RESPONSE: ' + evt.data+'</span>');
+  websocket.close();
+}
+function onError(evt) {
+  writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data);
+}
+function doSend(message) {
+  writeToScreen("SENDING: " + message);
+  websocket.send(message);
+}
+function writeToScreen(message) {
+  //var pre = document.createElement("p");
+  //pre.style.wordWrap = "break-word";
   alert(message);
-  //pre.innerHTML = message; output.appendChild(pre); 
+  //pre.innerHTML = message; output.appendChild(pre);
 }
 
 function testWS1(){
 	alert("Running Function testWS1");
-	
+
 	var accessToken = "abcdefghiklmnopqrstuvwxyz";
 	var wsOptions = {
 		url: "ws://192.168.0.100/rpc/",
@@ -185,7 +185,7 @@ function testWS1(){
 						console.log("Connected to WebSocket with id: " + success.webSocketId);
 						webSocketId = success.webSocketId
 						alert("WS: success");
-						
+
 						message = "call GPIO.Write '{\"pin\": 2, \"value\": 1}'"
 						CordovaWebsocketPlugin.wsSend(webSocketId, message);
 					},
@@ -196,9 +196,9 @@ function testWS1(){
 									", exception: "+error["exception"]);
 									alert("WS: error");
 					}
-					
+
 				);
-				
+
 	//CordovaWebsocketPlugin.wsSend(webSocketId, message);
 }
 
@@ -210,12 +210,12 @@ function test(){
 	}
 	else if(vis==0){
 		document.getElementById('popupMen').style.visibility = 'visible';
-		
+
 		//var rect = element.getBoundingClientRect();
 		//console.log(rect.top, rect.right, rect.bottom, rect.left);
 
 		var rect = document.getElementById('BtnTesting').getBoundingClientRect();
-		
+
 		document.getElementById('popupMen').style.position="fixed";
 		document.getElementById('popupMen').style.left="30px";//rect.left+"px";//"50px";
 		document.getElementById('popupMen').style.top="40px";//(parseInt(rect.top)+parseInt(30))+"px";//"50px";
@@ -275,12 +275,12 @@ function test1(){
 }
 
 function WebSocketTest2(){
-	networkinterface.getWiFiIPAddress(function (ip) { 
-		//alert('WiFi-IP = ' + ip); 
+	networkinterface.getWiFiIPAddress(function (ip) {
+		//alert('WiFi-IP = ' + ip);
 		WifiIPaddr = ip;
-		
+
 		IPoctts = WifiIPaddr.split('.');
-		for (i = 1; i < 255; i++) { 
+		for (i = 1; i < 255; i++) {
 			//alert('startIPoctt[3]+count: '+startIPoctt[3]+count);
 			ipPrefix = IPoctts[0] + '.' + IPoctts[1] + '.' + IPoctts[2] + '.';
 			var wsUri = 'ws://' + ipPrefix + i +'/rpc';
@@ -288,12 +288,12 @@ function WebSocketTest2(){
 			WebSocketTest(wsUri);
 			//try2Discover(serviceURL,Direct);
 			if(i==254)
-			 alert("Search Complete");
+			 alert("Searching started ...");
 		}
 	});
 	/*
 	IPoctts = "192.168.1.1".split('.');
-	for (i = 1; i < 255; i++) { 
+	for (i = 1; i < 255; i++) {
 		//alert('startIPoctt[3]+count: '+startIPoctt[3]+count);
 		ipPrefix = IPoctts[0] + '.' + IPoctts[1] + '.' + IPoctts[2] + '.';
 		var wsUri = 'ws://' + ipPrefix + i +'/rpc';
@@ -303,7 +303,7 @@ function WebSocketTest2(){
 		if(i==254)
 			alert("Search Complete");
 	}*/
-	
+
 }
 
 function WebSocketTest(wsUri) {
@@ -341,16 +341,16 @@ function WebSocketTest(wsUri) {
               }));
           };
 
-          ws.onmessage = function (evt) { 
+          ws.onmessage = function (evt) {
               var received_msg = evt.data;
               console.log(received_msg);
 			  alert(wsUri + ": " + received_msg);
           };
 
-          ws.onclose = function() { 
+          ws.onclose = function() {
 
               // websocket is closed.
-              //alert("Connection is closed..."); 
+              //alert("Connection is closed...");
           };
         } else {
 
