@@ -4,7 +4,7 @@
 </head>
 
 <title>Settings</title>
- 
+
 <!--body onload="myfunction3()"-->
 <body>
 
@@ -13,8 +13,12 @@
 	<div data-role="header">
 		<h1>Settings</h1>
 	</div>
-	
+
 	<form>
+		<p>
+			<label for="SAddress"; align="middle"> <font size="" color="0000ff"><B> Server Address: </B></font></label>
+			<input id="SAddress" type="text" placeholder="Server Address">
+		</p>
 		<p>
 			<label for="OBAddress"; align="middle"> <font size="" color="0000ff"><B> OWLBox Address: </B></font></label>
 			<input id="OBAddress" type="text" placeholder="OWLBox IP or URL">
@@ -23,7 +27,7 @@
 			<label for="OSAddress"; align="center"> <font size="" color="0000ff"><B> OWLServer Address: </B></font></label>
 			<input id="OSAddress" type="text" placeholder="OWLServer IP or URL">
 		</p>
-		
+
 		<p>
 			<label for="VerbositySldr"; align="center"> <font size="" color="0000ff"><B> Verbosity: </B></font></label>
 			<!--input id="Verbosity" type="number" placeholder="Verbosity Level: 0 - 5"-->
@@ -31,27 +35,29 @@
 				<input type="range" min="0" max="5" value="2" class="slider" id="VerbositySldr">
 			<!--/div-->
 		</p>
-		
+
 		<!--button onclick="update()">OK</button-->
 		<input id="BtnOK" type="button" value="OK" onclick="updateSettings()" />
 		<!--button onclick="cancel()">Cancel</button-->
 		<input id="BtnCancel" type="button" value="Cancel" onclick="cancel()" />
-		
-		<!--input type="submit" id="submit" onclick="myfunction1()" value="OK"-->	
-		
+
+		<!--input type="submit" id="submit" onclick="myfunction1()" value="OK"-->
+
 	</form>
-	
+
 	<input id="BtnTestWS" type="button" value="Test WebSocket" onclick="WebSocketTest2()" />
 
+  <input id="BtnTestAWS" type="button" value="Test AWS" onclick="awsTest()" />
+
 	<input id="BtnTesting" type="button" value="Test" onclick="test()" />
-	
+
 	<input id="BtnTesting1" type="button" value="Test1" onclick="test1()" />
 	<!--input type="text" id="textline" value="Here" placeholder="OWLBox Address"/>
 	<button onclick="myfunction1()">OK</button>
 	<button onclick="myfunction2()">Close</button>
-	
+
 	<h3 id="fullName"></h3-->
-	
+
 	<div data-role="collapsible" data-inset="false" id="colDiv">
 		<h2>Farm animals</h2>
 		<ul data-role="listview">
@@ -61,9 +67,9 @@
 			<li><a href="#" data-rel="dialog">Sheep</a></li>
 		</ul>
 	</div>
-	
+
 	<div data-role="content">
-		
+
 		<div data-role="popup" id="popupNested" data-theme="none">
 			<div data-role="collapsible-set" data-theme="b" data-content-theme="c" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d" style="margin:0; width:250px;">
 				<div data-role="collapsible" data-inset="true">
@@ -92,7 +98,7 @@
 			</ul>
 	</div>
 	</div>
-	
+
 	<a href="#" onclick="popupLogin1()" data-rel="popup" data-position-to="window" data-role="button" data-inline="true" data-icon="check" data-theme="a" data-transition="pop">Sign in</a>
 	<div data-role="popup" id="popupLgMenu" data-theme="a">
 		<div data-role="popup" id="popupLogin" data-theme="a" class="ui-corner-all">
@@ -108,7 +114,7 @@
 			</form>
 		</div>
 	</div>
-	
+
 </div>
 	<!--script src="js/settgins.js"></script-->
 </body>

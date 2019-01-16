@@ -1,9 +1,11 @@
-var deviceType;		//ANDROID, ios, WINDOWS or BROWSER, 
+var deviceType;		//ANDROID, ios, WINDOWS or BROWSER,
 var internetStatus;	// 0: No Acces, 1: Accessible
 var connType;		// if WiFi
+var firebaseInitialized = 0;
 var directAccessIP = "";
 var OBdirectAccess = 0;
 var OBviaInternetAccess = 0;
+var defaultServerAddress = 'jrosos1.freemyip.com:8080';//'203.124.40.232';
 //var serviceURL;
 
 FloorMode = {
@@ -13,13 +15,13 @@ FloorMode = {
 }
 //timeoutTimer = 4000;
 function myAlert(msg, msgPriority){ // msgPriority = 1 - 5 (1:Highest, 5:Lowest)
-	
+
 	var verbosity = localStorage.getItem('verboseLvl');
 	if(msgPriority <= verbosity)	//remember msgPriority=1 highest
 		alert(msg);
 }
 
-
+/*
 function onDeviceReady() {
     // cordova.plugins.backgroundMode is now available
 	alert("Device Ready ");
@@ -27,7 +29,7 @@ function onDeviceReady() {
 	setDeviceType();
 }
 
-/*
+
 document.addEventListener('deviceready', function () {
     // cordova.plugins.backgroundMode is now available
 	alert("Device Ready ");
@@ -83,38 +85,38 @@ function getInernetStatus(){
 
 function getOBoxIpPort(OBoxID){
 	var ipPort = "0.0.0.0:0";
-	
+
 	$.ajaxSetup({
         async: false
     });
-	
-	//1. If WiFi On 
+
+	//1. If WiFi On
 	//	1-a. Attempt to reach via last IP address
 	if(deviceType != "BROWSER")
-	networkinterface.getWiFiIPAddress(function (ip) { 
-		//alert('WiFi-IP = ' + ip); 
+	networkinterface.getWiFiIPAddress(function (ip) {
+		//alert('WiFi-IP = ' + ip);
 		WifiIPaddr = ip;
 		checkConnection();
 		alert('Got-WiFiIp = ' + ip);
 	});
-	
+
 	//  1-b. Search through Broadcast
-	
-	
-	//2. If internet 
+
+
+	//2. If internet
 	//  Access via server
-	
+
 	$.ajaxSetup({
         async: true
     });
-	
+
 	return ipPort;
-	
+
 }
 
 function checkConnection() {
     var networkState = navigator.connection.type;
-	
+
     var states = {};
     states[Connection.UNKNOWN]  = 'Unknown connection';
     states[Connection.ETHERNET] = 'Ethernet connection';
@@ -124,8 +126,11 @@ function checkConnection() {
     states[Connection.CELL_4G]  = 'Cell 4G connection';
     states[Connection.CELL]     = 'Cell generic connection';
     states[Connection.NONE]     = 'No network connection';
+		if(states[networkState]=='WiFi connection' ||
+					states[networkState]=='Unknown connection')
+					connType = "WiFi";
 
-    alert('Connection type: ' + states[networkState]);
+    console.log('Connection type: ' + states[networkState]);
 }
 
 function setDeviceType(){
@@ -147,12 +152,19 @@ function setDeviceType(){
 			deviceType = "PhoneGapApp";
 		} else {
 			deviceType = "BROWSER";
-		} 
+		}
     }
 }
 
 function getDeviceType(){
 	return deviceType;
+}
+
+function setServerAddress(){
+	var serverAddress = localStorage.getItem('serveraddr');
+	//alert('serverAddress: ' + serverAddress);
+	if(serverAddress == null || serverAddress == "")
+		localStorage.setItem('serveraddr', defaultServerAddress);
 }
 
 function setDirectAccessIP(ipAddr){

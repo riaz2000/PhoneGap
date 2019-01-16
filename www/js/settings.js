@@ -1,6 +1,7 @@
 //document.addEventListener("deviceready", function(){
     //mycode
 //import WS from 'websocket-rpc-client';
+//var awsIot = require('aws-iot-device-sdk');
 var vis=1;
 $('#settingsPage').live('pageshow', function(event) { //pageshow pageinit
 	getSettings();
@@ -8,6 +9,11 @@ $('#settingsPage').live('pageshow', function(event) { //pageshow pageinit
 
 //});
 function getSettings(){
+	saddr = document.getElementById('SAddress');
+	if(localStorage.getItem('serveraddr') == '')
+		serveraddr = defaultServerAddress;//'203.124.40.232';		//default server address
+	saddr.value=localStorage.getItem('serveraddr');
+
 	obaddr = document.getElementById('OBAddress');
 	osaddr = document.getElementById('OSAddress');
 	//verbos = document.getElementById('Verbosity');
@@ -28,15 +34,18 @@ function getSettings(){
 
 function updateSettings(){
     //remember code
+	var saddr = document.getElementById('SAddress').value;
+
 	var obaddr = document.getElementById('OBAddress').value;
 	var osaddr = document.getElementById('OSAddress').value;
 	//var verbos = document.getElementById('Verbosity').value;
 	var verbos = document.getElementById('VerbositySldr').value;
 
+	localStorage.setItem('serveraddr',saddr);
+
 	localStorage.setItem('owlbaddr',obaddr);
 	localStorage.setItem('owlsaddr',osaddr);
 	localStorage.setItem('verboseLvl',verbos);
-
 
 	alert("Information Updated");
 
@@ -288,7 +297,7 @@ function WebSocketTest2(){
 			WebSocketTest(wsUri);
 			//try2Discover(serviceURL,Direct);
 			if(i==254)
-			 alert("Searching started ...");
+			 alert("Search Complete");
 		}
 	});
 	/*
@@ -307,54 +316,114 @@ function WebSocketTest2(){
 }
 
 function WebSocketTest(wsUri) {
-        //var wsUri = 'ws://192.168.1.13/rpc';
+  //var wsUri = 'ws://192.168.1.13/rpc';
 
-        if ("WebSocket" in window) {
-          //console.log("WebSocket is supported by your Browser! IP:" + wsUri);
-		  //alert("WebSocket is supported by your Browser! IP:" + wsUri);
+  if ("WebSocket" in window) {
+    //console.log("WebSocket is supported by your Browser! IP:" + wsUri);
+//alert("WebSocket is supported by your Browser! IP:" + wsUri);
 
-          // Let us open a web socket
-          let ws = new WebSocket(wsUri);
+    // Let us open a web socket
+    let ws = new WebSocket(wsUri);
 
-          ws.onopen = function() {
+    ws.onopen = function() {
 
-              // Web Socket is connected, send data using send()
-              /*ws.send(JSON.stringify({
-                method: "Num.Set",
-                args: {
-                  num: 9999
-                }
-              }));*/
-			  /*
-			  ws.send(JSON.stringify({
-                method: "GPIO.Write",
-                args: {
-                  "pin": 2,
-				  "value": 0
-                }
-              }));*/
-			  ws.send(JSON.stringify({
-                method: "GPIO.Toggle",
-                args: {
-                  "pin": 2
-                }
-              }));
-          };
+        // Web Socket is connected, send data using send()
+        /*ws.send(JSON.stringify({
+          method: "Num.Set",
+          args: {
+            num: 9999
+          }
+        }));*/
+  /*
+  ws.send(JSON.stringify({
+          method: "GPIO.Write",
+          args: {
+            "pin": 2,
+	  "value": 0
+          }
+        }));*/
+  ws.send(JSON.stringify({
+          method: "GPIO.Toggle",
+          args: {
+            "pin": 2
+          }
+        }));
+    };
 
-          ws.onmessage = function (evt) {
-              var received_msg = evt.data;
-              console.log(received_msg);
-			  alert(wsUri + ": " + received_msg);
-          };
+    ws.onmessage = function (evt) {
+        var received_msg = evt.data;
+        console.log(received_msg);
+  alert(wsUri + ": " + received_msg);
+    };
 
-          ws.onclose = function() {
+    ws.onclose = function() {
 
-              // websocket is closed.
-              //alert("Connection is closed...");
-          };
-        } else {
+        // websocket is closed.
+        //alert("Connection is closed...");
+    };
+  } else {
 
-          // The browser doesn't support WebSocket
-          alert("WebSocket NOT supported by your Browser!");
-        }
-      }
+    // The browser doesn't support WebSocket
+    alert("WebSocket NOT supported by your Browser!");
+  }
+}
+
+function awsTest(){
+  //var wsUri = 'ws://192.168.1.13/rpc';
+	//var wsUri = 'mqtt://MQTT_SERVER:PORT/DEVICE_ID';
+	//var wsUri = 'mqtt://MQTT_SERVER:PORT/DEVICE_ID';
+	//var wsUri = 'mqtts://a3c57v3s4sa58t.iot.ap-northeast-1.amazonaws.com:8883/esp32_089F84';
+	var wsUri = 'wss://a3c57v3s4sa58t.iot.ap-northeast-1.amazonaws.com:8883/esp32_089F84/rpc';
+
+	alert('awsTest-here-1');
+  if ("WebSocket" in window) {
+    //console.log("WebSocket is supported by your Browser! IP:" + wsUri);
+//alert("WebSocket is supported by your Browser! IP:" + wsUri);
+alert('awsTest-here-1');
+    // Let us open a web socket
+    //let ws = new WebSocket(wsUri);
+	let ws = new WebSocket(wsUri);
+alert('awsTest-here-2');
+    ws.onopen = function() {
+alert('awsTest-here-3');
+        // Web Socket is connected, send data using send()
+        /*ws.send(JSON.stringify({
+          method: "Num.Set",
+          args: {
+            num: 9999
+          }
+        }));*/
+  /*
+  ws.send(JSON.stringify({
+          method: "GPIO.Write",
+          args: {
+            "pin": 2,
+	  "value": 0
+          }
+        }));*/
+  ws.send(JSON.stringify({
+          method: "GPIO.Toggle",
+          args: {
+            "pin": 2
+          }
+        }));
+    };
+
+    ws.onmessage = function (evt) {
+        var received_msg = evt.data;
+        console.log(received_msg);
+  alert(wsUri + ": " + received_msg);
+    };
+
+    ws.onclose = function() {
+
+        // websocket is closed.
+        //alert("Connection is closed...");
+    };
+  } else {
+
+    // The browser doesn't support WebSocket
+    alert("WebSocket NOT supported by your Browser!");
+  }
+
+}

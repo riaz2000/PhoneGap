@@ -5,18 +5,23 @@ var CtrlAtomicLvl;
 var SlctdResArr;
 //var ImgsArr = [];
 //var resIdsArr = [];
-var webServer='';
+//var webServer='';
 var appliances = "[]";
-var OBoxIP = '';
-var OBoxPort = 0;
-var regSoc = null;
+//var OBoxIP = '';
+//var OBoxPort = 0;
+//var regSoc = null;
 $('#schedule').live('pageshow', function(event) { //pageshow pageinit
 	OBoxID = getUrlVars()['OBoxID'];
 	FloorNo = getUrlVars()['FloorNo'];
 	SlctdResArr = getUrlVars()['SlctdResArr'];
 	Context = getUrlVars()['Context'];
 	//CtrlAtomicLvl = getUrlVars()['CtrlAtmcLvl'];
-	
+	if(internetStatus == 0){console.log('No Internet Access'); }
+	else {console.log('You Have Internet Access');	}
+
+	if(connType == "WiFi"){console.log('WiFi is UP'); }
+	else {console.log('WiFi is DOWN');	}
+	/*
 	if(getOBdirectAccess()==1){
 		OBoxIP = getDirectAccessIP();
 		OBoxPort = 1213;
@@ -33,10 +38,11 @@ $('#schedule').live('pageshow', function(event) { //pageshow pageinit
 		alert("OWLBox " + OBoxID + " Neither on LAN Nor Accessible over Internet");
 		return;
 	}
+	*/
 	initSchedulePg();
 	//addSch();
 	//initSchedulePg();
-	
+
 });
 
 function initSchedulePg(){
@@ -51,51 +57,61 @@ function initSchedulePg(){
 		title = document.getElementById('pgTitle');
 		title.innerHTML = OBox.userId + "@Floor:" + FloorNo + " of OB" + OBox.OBoxNo;
 	}
-	
+
 	/*resIconObj = document.getElementById('resIcon');
-	
+
 	resIconObj.src = "imgs/place.png";
 	resIconObj.height = "50";
 	resIconObj.width = "70";
 	resIconObj.text = "OWLBox#";
 	*/
-	
+
 	retrieveSchedules();
 
 }
 
 function retrieveSchedules(){
-	MsgType = MessageType.REQUEST;
-	Msg = Message.SCHEDULE_RETURN;
-	
-	ResIdArr 	= [];
-	OpArr		= [];	
-	
-	if (selectedResArr.length == 0){
-		myAlert('No resources selected', 3);
+	var Resource = getObjectByValue(resources, "resource_id", selectedResArr[0].ResId);
+	//console.log(Resource[0].nr);
+	if(Resource.length<1){
+		console.log('No Matching Resource');
 		return;
 	}
+	var resource = Resource[0];
+	var fbdbref = '/Installation-' + OBoxID + '/Device-' +
+									resource.device_number + '/ResSchedule';
+	//console.log(fbdbref);
+	var fbdbResId = 'res-' + resource.device_subid;
+	//console.log(fbdbResId);
+	var dbref = firebase.database().ref(fbdbref).child(fbdbResId);
 
-	for (var i=0; i<selectedResArr.length; i++){
-		ResIdArr.push(selectedResArr[i].ResId);
-		OpArr.push(Operation.RETURN_STATE);
-	}
-	
-	Schedule = [];
-	Wait4Response = true;
-	
-	sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, Wait4Response);
-	
+	var rcvdSch="";
+	//console.log('Here-1');
+	dbref.once("value", function(data) {
+		//console.log(data);
+		rcvdSch = '{'+data.val()+'}';
+		console.log(rcvdSch);
+		var schObj = JSON.parse(rcvdSch);
+		console.log('Here-2');
+		var rcvdSchArr = schObj.Sch;
+		console.log(":: :: "+JSON.stringify(rcvdSchArr));
+		for(var k=0; k<rcvdSchArr.length; k++){
+			console.log(rcvdSchArr[k].op);
+		}
+	});
+
+
+
 	/*
 	$('#scheduleList li').empty();
-	
+
 	$('#scheduleList').append('<li>' + '<a href="' + linkToPage + '">' +
 								'<img src="'+ instType + '"/>' +
 								'<h4>' + obj[i].instAddr1 + '</h4><p><B>' + obj[i].instAddr2 + ',</p></B>' +
 								'<p><B>' + obj[i].instCity + '</B> ' +  obj[i].instState + ' ' + obj[i].instZip + ' ' + obj[i].instCountry + '</p>'  +
-								'<font size="4" color="maroon"><center>' + obj[i].OBoxNo + '</center></font>' + 
+								'<font size="4" color="maroon"><center>' + obj[i].OBoxNo + '</center></font>' +
 								'<span class="ui-li-count"><img src="' + lockImg + '" height=30, width=25/></span></a>' + href3 + '</li> ');
-										
+
 	$('#scheduleList').listview('refresh');
 	*/
 }
@@ -106,25 +122,25 @@ function addSch(){
 }
 
 function deleteSch(){
-	
+
 }
 
 function displaySch(rcvdMsg){
 	owlMsg = parseOwlMessage(rcvdMsg);
 	scheduleArr = owlMsg.schedule;
-	
+
 	$('#scheduleList li').empty();
 	for(var i=0; i<ScheduleArr.length; i++){
 		scheduleObj = parseSchedule(scheduleArr[i]);
-		
+
 		$('#scheduleList').append('<li>' + '<a href="' + linkToPage + '">' +
 									'<img src="'+ instType + '"/>' +
 									'<h4>' + obj[i].instAddr1 + '</h4><p><B>' + obj[i].instAddr2 + ',</p></B>' +
 									'<p><B>' + obj[i].instCity + '</B> ' +  obj[i].instState + ' ' + obj[i].instZip + ' ' + obj[i].instCountry + '</p>'  +
-									'<font size="4" color="maroon"><center>' + obj[i].OBoxNo + '</center></font>' + 
+									'<font size="4" color="maroon"><center>' + obj[i].OBoxNo + '</center></font>' +
 									'<span class="ui-li-count"><img src="' + lockImg + '" height=30, width=25/></span></a>' + href3 + '</li> ');
 	}
-										
+
 	$('#scheduleList').listview('refresh');
 }
 

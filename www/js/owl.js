@@ -37,10 +37,10 @@ Operation = {
 	TURN_ON			: 1,
 	TOGGLE_STATE	: 2,
 	RETURN_STATE	: 3,
-	REGISTER		: 4,
+	SCHEDULE		: 4,
 	SPEED_DN		: 5,
 	SPEED_UP		: 6,
-	//7 - 9 For Future Use	
+	//7 - 9 For Future Use
 	SPEED_MIN		: 10,
 	SPEED_MIN_1		: 11,
 	SPEED_MIN_2		: 12,
@@ -57,14 +57,14 @@ Operation = {
 }
 
 State = {
-	OFF : 0,	
+	OFF : 0,
 	ON	: 1,
 	UK	: 2,	//UnKnown state
 	UR	: 3		//UnRecognized resource i.e. UnRegistered
 }
 
 ResourceType = {	// value must match the 'nr' in tab_appliances
-    ceilingFan		:	1, //{value: 1, name: "ceilingFan", imageName: "ceilingFan"}, 
+  ceilingFan		:	1, //{value: 1, name: "ceilingFan", imageName: "ceilingFan"},
 	bracketFan		:	2,
 	pedestalFan		:	3,
 	exhaustFan		:	4,
@@ -88,13 +88,13 @@ ResourceType = {	// value must match the 'nr' in tab_appliances
 	geyser			:	22,
 	thermometer		:	23,
 	remote_control	:	24,
-	video_camera	:	25		 
+	video_camera	:	25
 }
 
 /*
 OwlMessage = {
-	role,			
-	msgType,		
+	role,
+	msgType,
 	instIdOrSocStrg,	//OWLBoxID to contact
 	message,
 	resourceID,
@@ -121,7 +121,7 @@ function parseOwlMessage(receivedMsg){ // receivedMsg is a string
 	owlMsg.msgType = parseInt(reqs[1]);
 	owlMsg.instIdOrSocStrg = reqs[2];
 	owlMsg.message = parseInt(reqs[3]);
-	
+
 	if(owlMsg.message==Message.SCHEDULE_RETURN){
 		var Schedule = [];
 		if(reqs.length>6){ // reqs[4] means no schedule for the resource
@@ -132,7 +132,7 @@ function parseOwlMessage(receivedMsg){ // receivedMsg is a string
 			Schedule[0] = reqs[4]+":"+reqs[5]+":"+"0"+":"+"0"+":"+"0"+":"+"0"+":"+
 												"0"+":"+"0"+":"+"0"+":"+"0";
 		}
-		
+
 		for(var i=1; i<recs.length; i++){
 			var reqs1 = recs[i].split(":");
 			if(reqs1.length>2)
@@ -143,11 +143,11 @@ function parseOwlMessage(receivedMsg){ // receivedMsg is a string
 			}
 		}
 		owlMsg.schedule = Schedule;
-		
+
 		return owlMsg;
 	} // else move forward and parse other types of messages
 	var addParms = 0;	//Additional Parameters
-	if( owlMsg.message==Message.SCHEDULE_ADD || 
+	if( owlMsg.message==Message.SCHEDULE_ADD ||
 			owlMsg.message==Message.SCHEDULE_REMOVE ){
 		owlMsg.day = parseInt(reqs[4]);
 		owlMsg.month = parseInt(reqs[5]);
@@ -157,10 +157,10 @@ function parseOwlMessage(receivedMsg){ // receivedMsg is a string
 		owlMsg.sec = parseInt(reqs[9]);
 		owlMsg.repeatPattern = reqs[10];
 		owlMsg.forNdays = parseInt(reqs[11]);
-		
+
 		addParms = 8;
 	}
-	
+
 	var j=0;
 	owlMsg.resourceID = [];	//new int[(reqs.length-4-addParms)/2];
 	owlMsg.operation = [];//new int[(reqs.length-4-addParms)/2];
@@ -175,31 +175,31 @@ function parseOwlMessage(receivedMsg){ // receivedMsg is a string
 
 // creates a string for transmission, don't forget to append "\n" when sending data over TCP
 // myOWLmsg is an object
-function constructOwlMessage(myOWLmsg){ 
+function constructOwlMessage(myOWLmsg){
 	myOWLmsgStr = '';
 	//alert('Role: ' + myOWLmsg.role);
-	
+
 	myOWLmsgStr = myOWLmsg.role + ":" +
 				myOWLmsg.msgType + ":" +
 				myOWLmsg.instIdOrSocStrg + ":" +
 				myOWLmsg.message;
-				
-	
+
+
 	if(myOWLmsg.message == Message.SCHEDULE_ADD || myOWLmsg.message == Message.SCHEDULE_REMOVE ){
-		myOWLmsgStr = myOWLmsgStr + 	":" + myOWLmsg.day + 
+		myOWLmsgStr = myOWLmsgStr + 	":" + myOWLmsg.day +
 								":" + myOWLmsg.month +
 								":" + myOWLmsg.year +
 								":" + myOWLmsg.hr +
 								":" + myOWLmsg.min +
 								":" + myOWLmsg.sec +
 								":" + myOWLmsg.repeatPattern +
-								":" + myOWLmsg.forNdays;							
+								":" + myOWLmsg.forNdays;
 	}
 	//alert('myOWLmsg.resourceID: ' + myOWLmsg.resourceID.length);
 	if(myOWLmsg.resourceID.length!=0){
 		for(var i=0; i<myOWLmsg.resourceID.length; i++)
 			myOWLmsgStr = myOWLmsgStr + ":" + myOWLmsg.resourceID[i] + ":" + myOWLmsg.operation[i];
 	}
-	
+
 	return myOWLmsgStr;
 }

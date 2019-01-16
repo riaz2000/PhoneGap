@@ -4,7 +4,7 @@
 </head>
 
 <title>Schedule</title>
- 
+
 <!--body onload="myfunction3()"-->
 <body>
 
@@ -15,40 +15,40 @@
 	</div>
 
 	<div class="wrap">
-		<a id="SchA1" href="#" onclick="addSch(); return false;"><img src="imgs/sch_add.png"; width=50; height=50; style="position: fixed; right:50px; top:50px;"/> </a>
+		<a id="SchA1" href="#" onclick="addSch(); return false;"><img src="img/sch_add.png"; width=50; height=50; style="position: fixed; right:50px; top:50px;"/> </a>
 	</div>
 	<div class="wrap">
-		<a id="SchA2" href="#" onclick="deleteSch(); return false;"><img id="imgRmvSch" src="imgs/sch_rmvi.png"; width=50; height=50; style="position: fixed; left:50px; top:50px;"/> </a>
+		<a id="SchA2" href="#" onclick="deleteSch(); return false;"><img id="imgRmvSch" src="img/sch_rmvi.png"; width=50; height=50; style="position: fixed; left:50px; top:50px;"/> </a>
 	</div>
-	
-	<div align='center' style="top:60px;"> 
+
+	<div align='center' style="top:60px;">
 		<label id="lblRes2Sch"; align="middle"> <font size="" color="0000ff"><B> Resources to Schedule</B></font></label>
 	</div>
-	
+
 	<div data-role="content">
          <ul id="lstOfSlctdRess" data-role="listview" data-filter="false"></ul>
     </div>
-	
-	<!--div align='center', topmargin='50'> 
-		<img id="resIcon" src="imgs/add.png" height=30, width=25, align="center"> <label id="resId"; align="middle"> <font size="" color="0000ff"><B> resId </B></font></label> </img>
+
+	<!--div align='center', topmargin='50'>
+		<img id="resIcon" src="img/add.png" height=30, width=25, align="center"> <label id="resId"; align="middle"> <font size="" color="0000ff"><B> resId </B></font></label> </img>
 	</div-->
-	
-	<div align='center', topmargin='150'> 
+
+	<div align='center', topmargin='150'>
 		<label id="lblRes2Sch"; align="middle"> <font size="" color="0000ff"><B> Existing Schedules of Resources</B></font></label>
 	</div>
-	
-	<!--div align='center', topmargin='150'> 
+
+	<!--div align='center', topmargin='150'>
 		<label id="AppDetails"; align="middle"> <font size="" color="0000ff"><B> Bulb in TV Lounge on Floor:0</B></font></label>
 	</div-->
-	
+
 	<div data-role="content">
          <ul id="scheduleList" data-role="listview" data-filter="true"></ul>
     </div>
-	
+
 	<!--input id="BtnDelete" type="button" value="Delete Schedule" onclick="deleteSch()" />
 	<input id="BtnAdd" type="button" value="Add Schedule" onclick="addSche()" />
 	<input id="BtnCancel" type="button" value="Cancel" onclick="cancel()" /-->
- 
+
 </div>
 </body>
 

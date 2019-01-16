@@ -10,13 +10,13 @@ var allDaysSlctd = false;
 
 var NoOfAppsTypes = 0;
 var NoOfAreas = 0;
+var webServer;
 
 //var selectedResArr;	// Array: will get from floor.js
 //var appliances = "[]";	// will get from floor.js
 var applianceTypes = [];	// Array of applianceTypes
 var areas = [];			// Array of areas on this floor
 $('#operatefloor').live('pageshow', function(event) { //pageshow pageinit
-
 	initializeOpFloor();
 });
 
@@ -24,8 +24,8 @@ function initializeOpFloor(){
 	OBoxID = getUrlVars()['OBoxID'];
 	FloorNo = getUrlVars()['FloorNo'];
 	Context = getUrlVars()['Context'];
-	
-	if(Context == 1){ // i.e. schedule 
+	webServer = 'http://'+localStorage.getItem('serveraddr')+'/OWL/Services/';
+	if(Context == 1){ // i.e. schedule
 		//alert("SlctdResArr: " + SlctdResArr);
 		//SlctdResArr = JSON.parse(SlctdRess);
 		//document.getElementById('BtnOpSelected').style.visibility = 'hidden';
@@ -46,20 +46,20 @@ function initializeOpFloor(){
 			title.innerHTML = "Select and Schedule";
 			document.getElementById('slctdResList').style.display = 'none';
 		}
-		
+
 		//var timeControl = document.getElementById('tm');//document.querySelector('input[type="time"]');
 		//timeControl.value = '15:30';
 		//timeControl.value = 'now';
-		
+
 		//var dateControl = document.getElementById('dt');//document.querySelector('input[type="time"]');
 		//dateControl.value = '2018-02-15';
 		//dateControl.value = 'now';
 	}
 	else{ // i.e. operate
 		selectedResArr = [];
-		
+
 		//document.getElementById('slctdResList').style.display = 'none';
-		
+
 		document.getElementById('lblAt').style.display = 'none';
 		document.getElementById('tm').style.display = 'none';
 		document.getElementById('lblOn').style.display = 'none';
@@ -73,18 +73,20 @@ function initializeOpFloor(){
 	}
 
 	fillAppsList();
-	//fillAreasList(); only after fillAppsList() has completed
+
+	fillAreasList();
+
 	fillDaysList();
-	
+
 	initDtsNtime();
-	
+
 	handleOnce();
-	
+
 	/*document.getElementById('untildt').style.visibility = 'hidden';
 	document.getElementById('lblEvery').style.visibility = 'hidden';
 	document.getElementById('BtnSelectAllDays').style.visibility = 'hidden';
 	document.getElementById('DaysList').style.visibility = 'hidden';
-	
+
 	//Position the "Operate Button"
 	var rect = document.getElementById('rptForm').getBoundingClientRect();
 	document.getElementById('BtnOpSelected').style.position="fixed";
@@ -93,101 +95,51 @@ function initializeOpFloor(){
 }
 
 function fillAppsList(){
-	var query = "SELECT * FROM tab_appliances";// WHERE loc_lvl1="+FloorNo;
-	var retObj = $.getJSON(serviceURL + 'select.php?sql='+query, function(data) {
-		isneedtoKillAjax = false;
-		
-		applianceTypes = data.items;
-		NoOfAppsTypes = applianceTypes.length;
-		$('#AppTypesList li').remove();
-		for(i=0; i<NoOfAppsTypes; i++){
-			
-			//linkToPage = "floor.html?OBoxID="+OBoxID+"&FloorNo="+i+"&CtrlAtmcLvl="+floors[0].ctrl_atomic_lvl;
-			linkToPage = "#";
+	applianceTypes = JSON.parse(localStorage.getItem('applianceTypesStr'));
+	NoOfAppsTypes = applianceTypes.length;
+	$('#AppTypesList li').remove();
+	for(i=0; i<NoOfAppsTypes; i++){
 
-			//$('#AppTypesList').append('<li style="background-color:#FF0000;">' + '<a href="' + linkToPage + '">' + '<B><center>' + applianceTypes[i].appliance_name + '</center></B></a></li>');
-			var chkBx = '<label for="chk' + i + '"><input type="checkbox" name="chk' + i + '" id="chk'+i+'" onchange="hideSelection()">';
-			var imgApp = '<img src="imgs/apps/' + getResImg(applianceTypes[i].nr, State.ON) +'.png";/>'
-			$('#AppTypesList').append('<li>' + chkBx + '<B><center><h2><font color="purple">' + applianceTypes[i].appliance_name + 's</font></h2></center></B></label>'+imgApp+'</li>');
-		}
-		$('#AppTypesList').listview('refresh');
-	})	.success(function() { 
-			//alert("second success"); 
-		})
-		.error(function() { 
-			//alert("error"); 
-		})
-		.complete(function() { 
-			//alert("complete"); 
-			fillAreasList();
-			
-		}
-	);
-	//setTimeout(function(){ p.abort(); alert(JSON.stringify(p)); }, 500);
-	//p.push(retObj);
-	
-	function checkajaxkill(){
+		//linkToPage = "floor.html?OBoxID="+OBoxID+"&FloorNo="+i+"&CtrlAtmcLvl="+floors[0].ctrl_atomic_lvl;
+		linkToPage = "#";
 
-		// Check isneedtoKillAjax is true or false, 
-		// if true abort the getJsonRequest
-
-		if(isneedtoKillAjax){
-			//p[i].abort();
-			retObj.abort();
-			alert('Timeout: Could NOT get Installation Info');                 
-		}else{
-			//alert('no need to kill ajax');
-		}
+		//$('#AppTypesList').append('<li style="background-color:#FF0000;">' + '<a href="' + linkToPage + '">' + '<B><center>' + applianceTypes[i].appliance_name + '</center></B></a></li>');
+		var chkBx = '<label for="chk' + i + '"><input type="checkbox" name="chk' + i + '" id="chk'+i+'" onchange="hideSelection()">';
+		var imgApp = '<img src="img/apps/' + getResImg(applianceTypes[i].nr, State.ON) +'.png";/>'
+		$('#AppTypesList').append('<li>' + chkBx + '<B><center><h2><font color="purple">' + applianceTypes[i].appliance_name + 's</font></h2></center></B></label>'+imgApp+'</li>');
 	}
+	$('#AppTypesList').listview('refresh');
 }
 
 function fillAreasList(){
-	var query = "SELECT * FROM tab_areas WHERE floor_number="+FloorNo;
-	var retObj = $.getJSON(serviceURL + 'select.php?sql='+query, function(data) {
-		isneedtoKillAjax = false;
-		
-		areas = data.items;
+	var OBox;
+	oboxObjStr = getOBoxObjstr(OBoxID);
+	OBox = JSON.parse(oboxObjStr);
+	if(oboxObjStr == "InvalidOBox"){
+		myAlert("OBox Not Registered",1);
+		console.log("OBox Not Registered");
+	}
+	else{
+		var slctdFlrObj = getObjectByValue(OBox.floors, "flrNo", FloorNo);
+		areas = slctdFlrObj[0].flrAreas;
+
 		NoOfAreas = areas.length;
 		for(i=0; i<NoOfAreas; i++){
-			
+
 			//linkToPage = "floor.html?OBoxID="+OBoxID+"&FloorNo="+i+"&CtrlAtmcLvl="+floors[0].ctrl_atomic_lvl;
 			linkToPage = "#";
 
 			//$('#AreasList').append('<li style="background-color:#FF0000;">' + '<a href="' + linkToPage + '">' + '<B><center>' + applianceTypes[i].appliance_name + '</center></B></a></li>');
 			var chkBx = '<label for="Areachk' + i + '"><input type="checkbox" name="Areachk' + i + '" id="Areachk'+i+'" onchange="hideSelection()">';
-			var imgApp = '';//'<img src="imgs/apps/' + getResImg(applianceTypes[i].nr, State.ON) +'.png"; width=30; height=30; />'
+			var imgApp = '';//'<img src="img/apps/' + getResImg(applianceTypes[i].nr, State.ON) +'.png"; width=30; height=30; />'
 			$('#AreasList').append('<li style="background-color:#FF0000;">' + chkBx + '<B><center><h2><font color="teal">' + areas[i].area + '</font></h2></center></B></label>'+imgApp+'</li>');
 			//$('#AreasList').append('<li style="background-color:#FF0000;">' + chkBx + areas[i].area + '</label>'+imgApp+'</li>');
 		}
 		$('#AreasList').listview('refresh');
-	})	.success(function() { 
-			//alert("second success"); 
-		})
-		.error(function() { 
-			//alert("error"); 
-		})
-		.complete(function() { 
-			//alert("complete"); 
-			AreasOnSlctdFlrArr = areas;
-			if(selectedResArr.length > 0){
-				showLstOfSlctdRess();
-			}
-		}
-	);
-	//setTimeout(function(){ p.abort(); alert(JSON.stringify(p)); }, 500);
-	//p.push(retObj);
-	
-	function checkajaxkill(){
 
-		// Check isneedtoKillAjax is true or false, 
-		// if true abort the getJsonRequest
-
-		if(isneedtoKillAjax){
-			//p[i].abort();
-			retObj.abort();
-			alert('Timeout: Could NOT get Installation Info');                 
-		}else{
-			//alert('no need to kill ajax');
+		AreasOnSlctdFlrArr = areas;
+		if(selectedResArr.length > 0){
+			showLstOfSlctdRess();
 		}
 	}
 }
@@ -236,19 +188,19 @@ function sltctAllApps(){
 function sltctAllLights(){
 	if(allLightsSlctd){
 		newStatus = false;
-		
+
 	}
 	else{
 		newStatus =  true;
-		
+
 	}
-	
+
 	for(i=4; i<9; i++){
 		document.getElementById('chk'+i).checked = newStatus;
 	}
-	
+
 	allLightsSlctd = newStatus;
-	
+
 	if(!newStatus)
 		allAppsSlctd = false;
 }
@@ -258,13 +210,13 @@ function sltctAllFans(){
 		newStatus = false;
 	else
 		newStatus =  true;
-	
+
 	for(i=0; i<4; i++){
 		document.getElementById('chk'+i).checked = newStatus;
 	}
-	
+
 	allFansSlctd = newStatus;
-	
+
 	if(!newStatus)
 		allAppsSlctd = false;
 }
@@ -297,7 +249,7 @@ function sltctAllDays(){
 
 function OperateSelected(){
 	getSelectedResrcs();
-	
+
 	if (selectedResArr.length == 0){
 		myAlert('No resources selected', 3);
 		return;
@@ -310,13 +262,13 @@ function OperateSelected(){
 		rptMode = 1;
 	else if (document.getElementById('radio-choice-0c').checked)
 		rptMode = 2;
-	
+
 	alert("RepeatMode: " + rptMode);
 	if(operation == 0)
 		myAlert("Please select a valid operation", 2);
 	else
 	operate(operation);
-	
+
 	//goBack();
 }
 
@@ -324,8 +276,8 @@ function getSelectedResrcs(){
 	selectedResArr = [];
 	/*
 	for(i=0; i<resOnFloorArr.length; i++){
-		if(resOnFloorArr[i].usrCtrlLvlonRes > 5 && 
-			isResTypeOfResSlctd(resOnFloorArr[i].appliance)	&& 
+		if(resOnFloorArr[i].usrCtrlLvlonRes > 5 &&
+			isResTypeOfResSlctd(resOnFloorArr[i].appliance)	&&
 			isAreaOfResSlctd(resOnFloorArr[i].loc_lvl2) ){
 			var selectedRes = {ResId:resOnFloorArr[i].resource_id};
 			selectedResArr.push(selectedRes);
@@ -336,8 +288,8 @@ function getSelectedResrcs(){
 	for(var i=0; i<RsrcsOnSlctdFlrArr.length; i++){
 		//alert("LVL = " + RsrcsOnSlctdFlrArr[i].usrCtrlLvlonRes + " :: App = " +  RsrcsOnSlctdFlrArr[i].appliance + " :: Area = " + RsrcsOnSlctdFlrArr[i].loc_lvl2);
 		//alert("i="+i+" : "+RsrcsOnSlctdFlrArr[i].resource_id);
-		if(parseInt(RsrcsOnSlctdFlrArr[i].usrCtrlLvlonRes) > 5 && 
-			isResTypeOfResSlctd(RsrcsOnSlctdFlrArr[i].appliance) && 
+		if(parseInt(RsrcsOnSlctdFlrArr[i].usrCtrlLvlonRes) > 5 &&
+			isResTypeOfResSlctd(RsrcsOnSlctdFlrArr[i].appliance) &&
 			isAreaOfResSlctd(RsrcsOnSlctdFlrArr[i].loc_lvl2) ){
 			var selectedRes = {ResId:RsrcsOnSlctdFlrArr[i].resource_id};
 			selectedResArr.push(selectedRes);
@@ -351,7 +303,7 @@ function isResTypeOfResSlctd(appNR){
 	//alert(appNR);
 	for(var i=0; i<applianceTypes.length; i++){
 		//alert(appNR);
-		if(document.getElementById('chk'+i).checked && 
+		if(document.getElementById('chk'+i).checked &&
 				parseInt(applianceTypes[i].nr) == parseInt(appNR)){
 			//alert("Here---" + applianceTypes[i].nr + " : " + appNR);
 			resTypeOfResIsSlctd = true;
@@ -364,7 +316,7 @@ function isAreaOfResSlctd(areaNR){
 	areaOfResIsSlctd = false;
 	//alert(areas.length + " :: " + JSON.stringify(areas) );
 	for(var i=0; i<areas.length; i++){
-		if(document.getElementById('Areachk'+i).checked && 
+		if(document.getElementById('Areachk'+i).checked &&
 				parseInt(areas[i].nr) == parseInt(areaNR) ){
 			//alert("Here++++" + areas[i].nr + " : " + areaNR);
 			areaOfResIsSlctd = true;
@@ -376,10 +328,10 @@ function isAreaOfResSlctd(areaNR){
 function operate(opOption){
 	MsgType = MessageType.REQUEST;
 	Msg = Message.DO_NOT_CARE;
-	
+
 	ResIdArr 	= [];
 	OpArr		= [];
-	
+
 	var operation;
 	if(opOption == 1)
 		operation = Operation.TURN_OFF;
@@ -389,8 +341,8 @@ function operate(opOption){
 		operation = Operation.TOGGLE_STATE;
 	else if(opOption == 4)
 		operation = Operation.RETURN_STATE;
-		
-	
+
+
 	if (selectedResArr.length == 0){
 		myAlert('No resources selected', 3);
 		return;
@@ -400,10 +352,10 @@ function operate(opOption){
 		ResIdArr.push(selectedResArr[i].ResId);
 		OpArr.push(operation);
 	}
-	
+
 	Schedule = [];
 	isRegSoc = false;
-	
+
 	sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, isRegSoc);
 }
 
@@ -446,7 +398,7 @@ function handleOnce(){
 	document.getElementById('lblEvery').style.display = 'none';
 	document.getElementById('divBtnSelectAllDays').style.display = 'none';
 	document.getElementById('DaysList').style.display = 'none';
-	
+
 	/*
 	//Position the "Operate Button"
 	var rect = document.getElementById('radio-choice-0c').getBoundingClientRect();
@@ -462,7 +414,7 @@ function handleContinued(){
 	document.getElementById('lblEvery').style.display = 'block';
 	document.getElementById('divBtnSelectAllDays').style.display = 'block';
 	document.getElementById('DaysList').style.display = 'block';
-	
+
 	/*
 	//Position the "Operate Button"
 	var rect = document.getElementById('DaysList').getBoundingClientRect();
@@ -478,7 +430,7 @@ function handleUntil(){
 	document.getElementById('lblEvery').style.display = 'block';
 	document.getElementById('divBtnSelectAllDays').style.display = 'block';
 	document.getElementById('DaysList').style.display = 'block';
-	
+
 	/*
 	//Position the "Operate Button"
 	var rect = document.getElementById('DaysList').getBoundingClientRect();
@@ -503,11 +455,11 @@ function showLstOfSlctdRess(){
 					op2Perform = State.OFF;
 				else if(slctdOp == 2)
 					op2Perform = State.ON;
-				else 
+				else
 					op2Perform = State.UK
-				var imgApp ='<img src="imgs/apps/' + getResImg(appliances[j].appliance, op2Perform) +'.png"; id="slctdResImg"'+i+'/>'
+				var imgApp ='<img src="img/apps/' + getResImg(appliances[j].appliance, op2Perform) +'.png"; id="slctdResImg"'+i+'/>'
 				var areaOfRes = getResAreaName(appliances[j].loc_lvl2);
-				var descrpApp = getResTypeName(appliances[j].appliance) + " in " + areaOfRes; // + " @ Floor#" + FloorNo; 
+				var descrpApp = getResTypeName(appliances[j].appliance) + " in " + areaOfRes; // + " @ Floor#" + FloorNo;
 				$('#slctdResList').append('<li style="background-color:#FF0000;">' + chkBx + '<B><center><h1><font color="'+'Green'+'">' + selectedResArr[i].ResId + '</font></h1><h2>'+ descrpApp +'</h2></center></B></label>'+imgApp+'</li>');
 				//break;
 			}
@@ -519,7 +471,7 @@ function showLstOfSlctdRess(){
 function getResTypeName(resTypeNR){
 	//alert("applianceTypes.length: " + applianceTypes.length);
 	//alert("resTypeNR: " + resTypeNR);
-	
+
 	for (var i=0; i<applianceTypes.length; i++){
 		if(applianceTypes[i].nr == resTypeNR)
 			return applianceTypes[i].appliance_name;

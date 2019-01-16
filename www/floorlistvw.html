@@ -1,0 +1,138 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<!--script src="https://www.gstatic.com/firebasejs/5.7.2/firebase.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/5.7.0/firebase-app.js"></script>
+
+	<script src="https://www.gstatic.com/firebasejs/5.7.0/firebase-auth.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/5.7.0/firebase-database.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/5.7.0/firebase-firestore.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/5.7.0/firebase-messaging.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/5.7.0/firebase-functions.js"></script-->
+
+	<!--script>
+	  // Initialize Firebase
+	  var config = {
+	    apiKey: "AIzaSyB3NiPBR8YEOoTl6GTjMJvukexE86cELoI",
+	    authDomain: "owltest-8b3c8.firebaseapp.com",
+	    databaseURL: "https://owltest-8b3c8.firebaseio.com",
+	    projectId: "owltest-8b3c8",
+	    storageBucket: "",
+	    messagingSenderId: "244059420939"
+	  };
+	  firebase.initializeApp(config);
+
+	</script-->
+
+</head>
+
+<title>Floor List View</title>
+
+<body>
+<div id="floorlistvw" data-role="page" data-add-back-btn="true">
+
+	<div data-role="header" data-position="fixed">
+		<h1 id="pgTitle">Floor List Vw</h1>
+	</div>
+
+  <div data-role="content">
+		<a id="a1" href="#" onclick="openOptionMenu(); return false;">
+			<img id="optionImg" src="img/test/list.png"; style="margin-left: 0px"; alt="img/operate.png"; index=1; height="52" width="52"/>
+		</a>
+		<h1 id="header"> ABC </h1>
+		<a id="ahrefAddPlace" href="#">
+		</a>
+	</div>
+
+	<div data-role="content">
+		<ul id="floorResLst" data-role="listview" data-filter="true"></ul>
+	</div>
+
+	<div id="popupMen1" data-role="content" data-transition="slideup">
+		<div data-role="popup" id="popupMenu" data-theme="d">
+			<ul data-role="listview" data-inset="true" style="min-width:210px;" data-theme="d">
+				<li data-role="divider" data-theme="e" data-icon="delete" id="ulHdr"><a href="#" onclick="closeMenu()";><h1 id="popMhChsAct">Choose an action ...</h1><img id="lvHdrImg" /></a></li>
+				<li><a href="#" onclick="turnOFF()";><p id="popMOff"><b><font color="black" size=3>&#9728 Off </font></b></p></a></li>
+				<li><a href="#" onclick="turnON()";><p id="popMOn"><b><font color="red" size=3>&#9728 On </font></b></p></a></li>
+				<li><a href="#" onclick="Toggle()";><p id="popMToggle"><b><font color="orange" size=3>&#9728 Toggle </font></b></p></a></li>
+				<li><a href="#" onclick="getStatus()";><p id="popMUpdt"><b><font color="blue" size=3> &#9728 Update</font></b></p></a></li>
+				<li><a href="#" id="ahrefSchMenu1" onclick="scheRes()"><p id="popMSch"><b><font color="purple" size=3> &#9728 Schedule</font></b></p></a></li>
+				<li><a href="#"; onclick="selectRes()";><font color="green" size=3><p id="popMSelRes"><b> &#10004 Select </b></p></font></b></a></li>
+				<li data-icon="delete"><a href="#" onclick="closeMenu();"><b><font color="black" size=3>Close</font></b></a></li>
+			</ul>
+		</div>
+	</div>
+
+  <div id="popupMenuA" data-role="content">
+	<div data-role="popup" id="popupNestedA" data-theme="none">
+		<div data-role="collapsible-set" id="popupNestedCSsetA" data-theme="b" data-content-theme="c" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d" style="margin:0; width:150px;">
+			<div data-role="collapsible" data-inset="false">
+				<h2>Mode</h2>
+				<ul data-role="listview">
+					<li><a href="#" data-rel="dialog" onclick="setModeOp()";>Operation</a></li>
+					<li><a href="#" data-rel="dialog" onclick="setModeSel()";>Selection</a></li>
+				</ul>
+			</div><!-- /collapsible -->
+			<div data-role="collapsible" data-inset="false">
+				<h2>Floor</h2>
+				<ul data-role="listview">
+					<li><a id="ahrefFlrOpMenuA">Operate</a></li>
+					<li><a href="#" id="ahrefFlrSchMenuA">Schedule</a></li>
+				</ul>
+			</div><!-- /collapsible -->
+			<div data-role="collapsible" data-inset="false">
+				<h2>Resources</h2>
+				<ul data-role="listview">
+					<li><a id="ahrefSrchResMenuA"; onclick="discoverDevices()">Search Res</a></li>
+					<li><a href="#" id="ahrefShowResMenuA"; onclick="showDicvrdRes()";>Show Res</a></li>
+				</ul>
+			</div><!-- /collapsible -->
+			<div data-role="collapsible" data-inset="false" onclick="closeOptionMenu();" id="closeOptMen">
+				<h2>Close</h2>
+				<ul>
+				</ul>
+			</div><!-- /collapsible -->
+		</div><!-- /collapsible set -->
+	</div><!-- /popup -->
+	</div>
+
+	<div id="popupMenuB" data-role="content">
+	<div data-role="popup" id="popupNestedB" data-theme="none">
+		<div data-role="collapsible-set" id="popupNestedCSsetB" data-theme="b" data-content-theme="c" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d" style="margin:0; width:150px;">
+			<div data-role="collapsible" data-inset="false">
+				<h2>Mode</h2>
+				<ul data-role="listview">
+					<li><a href="#" data-rel="dialog" onclick="setModeOp()";>Operation</a></li>
+					<li><a href="#" data-rel="dialog" onclick="setModeSel()";>Selection</a></li>
+				</ul>
+			</div><!-- /collapsible -->
+			<div data-role="collapsible" data-inset="false">
+				<h2>Floor</h2>
+				<ul data-role="listview">
+					<li><a href="#" id="ahrefFlrOpMenuB">Operate</a></li>
+					<li><a href="#" id="ahrefFlrSchMenuB">Schedule</a></li>
+				</ul>
+			</div><!-- /collapsible -->
+			<div data-role="collapsible" data-inset="false" id="opts4SlctdRes">
+				<h2>All Selected Resources</h2>
+				<ul data-role="listview">
+					<li><a href="#" data-rel="dialog" onclick="turnOFF()";><b><font color="black" size=3>&#9728 OFF </font></b></a></li>
+					<li><a href="#" data-rel="dialog" onclick="turnON()";><b><font color="red" size=3>&#9728 ON </font></b></a></li>
+					<li><a href="#" data-rel="dialog" onclick="Toggle()";><b><font color="orange" size=3>&#9728 Toggle </font></b></a></li>
+					<li><a href="#" data-rel="dialog" onclick="getStatus()";><b><font color="blue" size=3>&#9728 Update </font></b></a></li>
+					<li><a href="#" id="ahrefSchMenuB" onclick="scheRes()"><b><font color="purple" size=3>&#9728 Schedule</font></b></a></li>
+					<li><a href="#" data-rel="dialog" onclick="selectRes()";><b><font color="green" size=3>&#9728 Unselect </font></b></a></li>
+				</ul>
+			</div><!-- /collapsible -->
+			<div data-role="collapsible" data-inset="false" onclick="closeOptionMenu();" id="closeOptMen">
+				<h2>Close</h2>
+				<ul>
+				</ul>
+			</div><!-- /collapsible -->
+		</div><!-- /collapsible set -->
+	</div><!-- /popup -->
+	</div>
+</div>
+</body>
+
+</html>
