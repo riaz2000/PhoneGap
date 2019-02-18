@@ -205,3 +205,96 @@ function uintToString(uintArray) {
         decodedString = decodeURIComponent(escape(encodedString));
     return decodedString;
 }
+
+function getNoOfDays( date1, date2 ) {
+  //Get 1 day in milliseconds
+  var one_day=1000*60*60*24;
+
+  // Convert both dates to milliseconds
+  var date1_ms = date1.getTime();
+  var date2_ms = date2.getTime();
+
+  // Calculate the difference in milliseconds
+  var difference_ms = date2_ms - date1_ms;
+
+  // Convert back to days and return
+  return Math.round(difference_ms/one_day);
+}
+
+function getDateNoOfDaysAfter( frmDate, noOfDays ) {
+  //Get 1 day in milliseconds
+  var one_day=1000*60*60*24;
+
+  // Convert from date to milliseconds
+	var frmDate_ms = frmDate.getTime();
+
+	//Add number of days
+	var toDate_ms = frmDate_ms + (noOfDays-1)*one_day;
+
+	//var toDate = new Date(toDate_ms);
+	//console.log('toDate: '+toDate.toString());
+	return toDate_ms;
+}
+
+function getMonthName(monthNo){
+	var monthName = "";
+	switch(parseInt(monthNo)) {
+		case 1:
+			monthName="Jan" ;
+		break;
+		case 2:
+			monthName="Feb" ;
+		break;
+		case 3:
+			monthName="Mar" ;
+		break;
+		case 4:
+			monthName="Apr" ;
+		break;
+		case 5:
+			monthName="May" ;
+		break;
+		case 6:
+			monthName="Jun" ;
+		break;
+		case 7:
+			monthName="Jul" ;
+		break;
+		case 8:
+			monthName="Aug" ;
+		break;
+		case 9:
+			monthName="Sep" ;
+		break;
+		case 10:
+			monthName="Oct" ;
+		break;
+		case 11:
+			monthName="Nov" ;
+		break;
+		case 12:
+			monthName="Dec" ;
+		break;
+		default:
+			monthName="UKN" ;
+	}
+	return monthName;
+}
+
+function getEventDays(daysChecked){
+	var eventDays = '-------';
+	var days = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+	for(var k=0; k<daysChecked.length; k++){
+		if(daysChecked.charAt(k) == '1')
+			eventDays = replaceAt(eventDays, k, days[k]);
+	}
+	return eventDays;
+}
+
+function replaceAt(string, index, replace) {
+  return string.substring(0, index) + replace + string.substring(index + 1);
+}
+
+/*String.prototype.replaceAt=function(index, replacement) {
+    return this.substr(0, index) + replacement+ this.substr(index + replacement.length);
+}*/

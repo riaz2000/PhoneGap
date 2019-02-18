@@ -37,9 +37,9 @@
 
   <div data-role="content">
 		<a id="a1" href="#" onclick="openOptionMenu(); return false;">
-			<img id="optionImg" src="img/test/list.png"; style="margin-left: 0px"; alt="img/operate.png"; index=1; height="52" width="52"/>
+			<img id="optionImg" src="img/test/list.png"; style="margin-left: 0px"; alt="img/operate.png"; z-index=2; index=1; height="52" width="52"/>
 		</a>
-		<h1 id="header"> ABC </h1>
+		<p id="msgFromFBase"> Getting Updated Status, Please Wait ... </p>
 		<a id="ahrefAddPlace" href="#">
 		</a>
 	</div>
@@ -58,6 +58,7 @@
 				<li><a href="#" onclick="getStatus()";><p id="popMUpdt"><b><font color="blue" size=3> &#9728 Update</font></b></p></a></li>
 				<li><a href="#" id="ahrefSchMenu1" onclick="scheRes()"><p id="popMSch"><b><font color="purple" size=3> &#9728 Schedule</font></b></p></a></li>
 				<li><a href="#"; onclick="selectRes()";><font color="green" size=3><p id="popMSelRes"><b> &#10004 Select </b></p></font></b></a></li>
+				<li><a href="#" onclick="initResInFBase()";><p id="popMInit"><b><font color="aqua" size=3> &#9728 Initialize </font></b></p></a></li>
 				<li data-icon="delete"><a href="#" onclick="closeMenu();"><b><font color="black" size=3>Close</font></b></a></li>
 			</ul>
 		</div>

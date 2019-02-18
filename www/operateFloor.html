@@ -4,7 +4,7 @@
 </head>
 
 <title>Operate Floor</title>
- 
+
 <!--body onload="myfunction3()"-->
 <body>
 
@@ -12,7 +12,7 @@
 	<div data-role="header" data-position="fixed">
 		<h1 id="pgTitle">Operate Floor Resources</h1>
 	</div>
-	
+
 	<h2><label><font color="olive"><center>Select Operation</center></font></label></h2>
 	<p><select id = "opList" onchange="onChangeOperation()">
 		<option value = "0" style="color:black"><b> Select an Option </option>
@@ -21,8 +21,8 @@
 		<option value = "3" style="color:orange"> &#9728 Toggle </option>
 		<option value = "4" style="color:blue"> &#9728 Update </option>
 	</select></p>
-	
-	
+
+
 	<div id="divAppTypes">
 	<h2 id="lblAll"><label><font color="purple"><center>All</center></font></label></h2>
 	<input id="BtnSelectAllApps" type="button" value="Toggle Select All Appliances" onclick="sltctAllApps()" style="background-color: purple;"/>
@@ -32,7 +32,7 @@
          <ul id="AppTypesList" data-role="listview" data-filter="true"></ul>
     </div>
 	</div>
-	
+
 	<div id="divAreas">
 	<h2 id="lblIn"><label><font color="teal"><center>In</center></font></label></h2>
 	<input id="BtnSelectAllAreas" type="button" value="Toggle Select All Locations" onclick="sltctAllAreas()" style="background-color: teal;"/>
@@ -40,18 +40,18 @@
          <ul id="AreasList" data-role="listview" data-filter="true"></ul>
     </div>
 	</div>
-	
+
 	<center>
 	<div id="divChkBxShSlctn">
-		<input type="checkbox" id="chkBxShSlctn" onchange="chkBxShSlctnChngd()">
-		<label for="subscribeNews"><h2><font color="aqua">Show Selection</font></h2></label>
+		<center><input type="checkbox" id="chkBxShSlctn" onchange="chkBxShSlctnChngd()">
+		<label for="chkBxShSlctn"><font color="aqua" size=4>Show Selection</font></label></center>
 	</div>
 	</center>
-	
+
 	<div data-role="content" id="divSlctdRess">
 		<ul id="slctdResList" data-role="listview" data-filter="true"></ul>
     </div>
-	
+
 	<!--br>
 	<input type="datetime-local" name="bdaytime" id="dttm"-->
 
@@ -68,15 +68,15 @@
 		<label for="radio-choice-0c"><input type="radio" name="radio-choice-0" id="radio-choice-0c" class="custom" onchange="handleUntil()"><font color="DarkOrchid"><center>Until</center></font></label>
 	</form>
 	<center><input type="date" name="untildate" id="untildt"></center>
-	
+
 	<h2 id="lblEvery"><label><font color="Indigo"><center>Every</center></font></label></h2>
 	<div id="divBtnSelectAllDays">
 	<input id="BtnSelectAllDays" type="button" value="Toggle Select All Days" onclick="sltctAllDays()" style="background-color: Indigo;"/>
 	</div>
 	<div data-role="content">
-         <ul id="DaysList" data-role="listview" data-filter="false"></ul>
-    </div>
-	
+    <ul id="DaysList" data-role="listview" data-filter="false"></ul>
+  </div>
+
 	<!--form action="/action_page.php" method="get">
 		<input type="checkbox" name="Monday" value="0"> Monday <br>
 		<input type="checkbox" name="Tuesday" value="1"> Tuesday <br>
@@ -87,25 +87,25 @@
 		<input type="checkbox" name="Sunday" value="6"> Sunday <br>
 	</form>
 	</div-->
-	
+
 	<!--h2><label><font color="Amethyst"><center>Until</center></font></label></h2>
 	<center><input type="date" name="untildate1" id="untildt1"></center-->
-	
+
 	<!--div class="name">
         <strong>flatpickr <span class="version">v4</span></strong>
-        
+
           <br>
           chmln/flatpickr
-        
+
       </div-->
-	  
+
 	<!--label for="datetime-1">Datetime: data-clear-btn="false"</label>
     <input type="datetime" data-clear-btn="true" name="datetime-1" id="datetime-1" value=""-->
-	
+
 	<input id="BtnOpSelected" type="button" value="Operate" onclick="OperateSelected()" />
-	
-	
-	
+
+
+
 </div>
 </body>
 

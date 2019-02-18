@@ -48,7 +48,9 @@ function getUserOptions(){
 		$('#uopts').append('<li><a href="chgPswd.html?OBoxID='+OBoxID+'"><img id="chgPswdImg" src="img/chgpwd.png" /><font size="" color="800000"><h1>Change Password</h1></font></a></li>');
 
 		$('#uopts').append('<li onclick="removeInst()"><a href="#"><img id="removeInstImg" src="img/place_rmv.png" /><font size="" color="800000"><h1>Delete</h1></font></a></li>');
-
+//login.html?OBoxID="+obj[i].OBoxNo;
+		//$('#uopts').append('<li onclick="refreshInst()"><a href="#"><img id="refreshInstImg" src="img/refresh.png" /><font size="" color="800000"><h1>Refresh</h1></font></a></li>');
+		$('#uopts').append('<li><a href="login.html?OBoxID='+OBoxID+'"><img id="chgPswdImg" src="img/refresh.png" /><font size="" color="800000"><h1>Refresh</h1></font></a></li>');
 
 		$('#uopts').listview('refresh');
 	}

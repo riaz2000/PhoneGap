@@ -1,8 +1,8 @@
 var OBoxID;
 var FloorNo;
 var CtrlAtomicLvl;
-var resources = [];
-var selectedResArr = [];
+//var resources = [];
+//var selectedResArr = [];
 var FloorInMode;
 var vis = 0;
 var selctdResindexOfResInResrs = -1;
@@ -16,19 +16,30 @@ var selectedResArr = [];
 //var devicesOfThisInst = [];
 
 $('#floormapvw').live('pageshow', function(event) { //pageshow pageinit
-	//state = 0;
 	FloorInMode = FloorMode.OPERATION;
 	selectedResArr = [];
 	OBoxID = getUrlVars()['OBoxID'];
 	FloorNo = getUrlVars()['FloorNo'];
 	CtrlAtomicLvl = getUrlVars()['CtrlAtmcLvl'];
 
+	checkConnection();
+	initializeFirebase();
+
+	if(internetStatus==0 && connType!="WiFi"){
+		alert("Unfortunately, You Do NOT have Network Access");
+		goBack();
+	}
+	if(internetStatus==0 && connType=="WiFi"){
+		alert("You Can Operate Resources Only on WLAN");
+	}
+	//state = 0;
+
 	webServer = 'http://'+localStorage.getItem('serveraddr')+'/OWL/Services/';
 
 	getFloorInfo();
 
-	//if(WiFi is UP But Internet is DOWN) //Will be implemented after AWS success
-	discoverDevices();
+	//getUpdatedStatusOnce(); // required as in mapview going back from page and comming back does NOT update status
+
 });
 
 function getFloorInfo(){
@@ -51,6 +62,12 @@ function getFloorInfo(){
 	myObj.data = webServer+"getFloorPlan.php?InstallationNo=" + OBoxID + "&FloorNo="+FloorNo;
 
 	myObj.style="margin: 0px 0px 0px 0px; "; //top bottom right left
+
+	$$('main').tap(function(e) {
+		console.log('floorObj-init');
+		closeMenu();
+		closeOptionMenu();
+	});
 
 	//registerOUser();
 	addActionIcons();
@@ -82,7 +99,7 @@ function addFlrResources(){
 	}
 	//console.log('RsrcsOnSlctdFlrArr:: ' + JSON.stringify(RsrcsOnSlctdFlrArr));
 
-	getStatusofFlrRsrcs();
+	//getStatusofFlrRsrcs();
 
 	document.getElementById('ahrefFlrOpMenuA').href="operateFloor.html?OBoxID="+OBoxID+"&FloorNo="+FloorNo+"&SlctdResArr="+JSON.stringify("[]")+"&Context="+0; // Operate
 	//document.getElementById('ahrefFlrSchMenuA').href="operateFloor.html?OBoxID="+OBoxID+"&FloorNo="+FloorNo+"&SlctdResArr="+JSON.stringify("[]")+"&Context="+1; // Shedule
@@ -98,8 +115,8 @@ function addActionIcons(){
 	var linkTo = "schedule.html?OBoxID="+OBoxID+"&FloorNo="+FloorNo;//+"&ResId="+resId;
 }
 
-
 function addResource(resource){
+	//alert('NR: ' + resource.nr);
 	var indexOfResInResrs = -1;
 	indexOfResInResrs = resources.findIndex(obj => obj.nr==resource.nr);
 
@@ -130,12 +147,19 @@ function addResource(resource){
 	newImg.height=60;
 	newImg.width=60;
 
-	addListeners(newDiv, newImg, resource.resource_id, indexOfResInResrs);
-	//addListeners(indexOfResInResrs);
-
 	newDiv.style.position="absolute";
 	newDiv.style.left=posX+"px";
 	newDiv.style.top=posY+"px";
+
+	addListeners(newDiv, newImg, resource.resource_id, indexOfResInResrs);
+
+	if(firebaseInitialized==1){
+		var fbdbref = '/Installation-' + OBoxID + '/Device-' +
+										resource.device_number + '/ResState';
+		var fbdbResId = 'res-' + resource.device_subid;
+  	var dbref = firebase.database().ref(fbdbref).child(fbdbResId);
+		dbref.on('value', snap => updateResIcon(resource.resource_id, snap.val()));
+	}
 }
 
 function onConfirm1(buttonIndex) {
@@ -175,6 +199,7 @@ function addListeners(mDiv, mImg, mResId, indexOfResInResrs){
 	lbl_reqStatus.style.top="35px";
 
 	$$(mImg).doubleTap(function(e) {
+		console.log('doubleTapped' + e.message);
 		getStatus();
 	});
 
@@ -207,18 +232,23 @@ function addListeners(mDiv, mImg, mResId, indexOfResInResrs){
 	$$(mImg).tap(function(e) {
 		//alert("EventQuo: tap " + mResId);
 		if(FloorInMode == FloorMode.OPERATION){
-		//sendRequest2OBox(MsgType, Msg, ResOpPairs, Schedule, isRegSoc){ //RegSock Remains Open
-			MsgType = MessageType.REQUEST;
-			Msg = Message.DO_NOT_CARE;
-			//ResOpPairs = mResId + ":" + Operation.TOGGLE_STATE + ":";
-			ResIdArr = [mResId];
-			OpArr = [Operation.TOGGLE_STATE];
-			Schedule = [];
-			isRegSoc = false;
+			selctdResindexOfResInResrs = indexOfResInResrs;
+			Toggle();
+			var ResrsWithSameResID = getObjectByValue(resources, "resource_id", mResId);
+			for(var k=0; k<ResrsWithSameResID.length; k++){
+				var slctdResIndexInResrs = resources.findIndex(obj => obj.nr==ResrsWithSameResID[k].nr);
 
-			sendRequest2OBox(MsgType, Msg, ResIdArr, OpArr, Schedule, isRegSoc);
+				var m_lbl_reqStatus = document.getElementById("lbl_reqStatus:"+slctdResIndexInResrs);
+				m_lbl_reqStatus.innerHTML = "&#9728";
+				m_lbl_reqStatus.style.color = "orange";
 
-			for (var i=0 ; i<resources.length ; i++){
+				var m_div = document.getElementById('div:'+slctdResIndexInResrs);
+				m_div.style.position = "absolute";
+				m_div.style.left = resources[slctdResIndexInResrs].pos_x+"px";
+				m_div.style.top  = resources[slctdResIndexInResrs].pos_y+"px";
+			}
+
+			/*for (var i=0 ; i<resources.length ; i++){
 				if (resources[i].resource_id == mResId) {
 					var m_lbl_reqStatus = document.getElementById("lbl_reqStatus:"+i);
 					m_lbl_reqStatus.innerHTML = "&#9728";
@@ -231,7 +261,7 @@ function addListeners(mDiv, mImg, mResId, indexOfResInResrs){
 
 					//document.getElementById('div:'+i).style="position: absolute; left:"+resources[i].pos_x+"px; top:"+resources[i].pos_y+"px;";
 				}
-			}
+			}*/
 
 			//mImg.style="background-color:transparent";
 		}
@@ -264,6 +294,22 @@ function addListeners(mDiv, mImg, mResId, indexOfResInResrs){
 
 		}
 	});
+}
+
+function getUpdatedStatusOnce(){
+	alert('getUpdatedStatusOnce');
+	if(firebaseInitialized==1){
+		//var fbdbResId = OBoxID + '-' + resId; //Firebase database resId
+		for (var i=0 ; i<resources.length ; i++){
+			var resource = resources[i];
+			var fbdbref = '/Installation-' + OBoxID + '/Device-' +
+											resource.device_number + '/ResState';
+			var fbdbResId = 'res-' + resource.device_subid;
+									console.log(fbdbResId);
+	  	var dbref = firebase.database().ref(fbdbref).child(fbdbResId);
+			dbref.once('value', snap => updateResIcon(resource.resource_id, snap.val()));
+		}
+	}
 }
 
 function handleResponse(rcvdMsg){
@@ -317,125 +363,6 @@ function handleResponse(rcvdMsg){
 	}
 }
 
-var hImgText;
-function openMenu(indexOfResInResrs){
-
-	selctdResindexOfResInResrs = indexOfResInResrs;
-	//document.getElementById('popMhChsAct').style.visibility = 'hidden';
-
-	var m_div = document.getElementById('div:'+selctdResindexOfResInResrs);
-	var rect = m_div.getBoundingClientRect();
-	console.log(rect.top, rect.right, rect.bottom, rect.left);
-
-	var hText;
-	if(FloorInMode == FloorMode.OPERATION){
-		hText = "Select an option ...";
-	}
-	else if(FloorInMode == FloorMode.SELECTION){
-		hText = "All Selected ...";
-	}
-	document.getElementById('popMhChsAct').innerHTML = hText; //"ResID: "+resources[indexOfResInResrs].resource_id;
-
-	var hImg = document.getElementById('lvHdrImg');
-	if(parseInt(indexOfResInResrs)<0){
-		hImg.style.visibility = "hidden";
-	}
-	else{
-		hImg.src = 'img/apps/' + getResImg(resources[indexOfResInResrs].appliance, State.UK)+ ".png";
-		hImg.height=50;
-		hImg.width=50;
-
-		if(hImgText == undefined)
-			hImgText = document.createElement("Label");
-		hImgText.id = "hImgText:"+indexOfResInResrs;
-		hImgText.style.color = "blue";
-		hImgText.innerHTML = resources[indexOfResInResrs].resource_id;
-		document.getElementById('ulHdr').appendChild(hImgText);
-		hImgText.style.position="absolute";
-		hImgText.style.left="1%";//lbl_resId.style.left="30%";
-		hImgText.style.top="3%";
-		hImgText.style.fontSize = "16px";
-		hImgText.style.fontWeight = 'bold';
-	}
-
-
-	if(FloorInMode == FloorMode.OPERATION){
-		//document.getElementById('popMliSelRes').innerHTML="Select";
-		document.getElementById('popMSelRes').style.fontSize = "16px";
-		document.getElementById('popMSelRes').style.fontWeight = 'bold';
-		document.getElementById('popMSelRes').innerHTML = "&#10004  Select";
-
-	}else if(FloorInMode == FloorMode.SELECTION){
-		document.getElementById('popMSelRes').innerHTML = "&#10006 Unselect";
-		document.getElementById('popMSelRes').style.fontSize = "16px";
-		document.getElementById('popMSelRes').style.fontWeight = 'bold';
-	}
-	document.getElementById('popupMen1').style.visibility = 'visible';
-	//var rect = element.getBoundingClientRect();
-	//console.log(rect.top, rect.right, rect.bottom, rect.left);
-
-	document.getElementById('popupMen1').style.zIndex = "1";
-	if(parseInt(indexOfResInResrs)>-1){
-		rect = document.getElementById('img:'+indexOfResInResrs).getBoundingClientRect();
-		document.getElementById('img:'+indexOfResInResrs).style = "background-color:#F9E79F";
-	}
-	document.getElementById('popupMen1').style.position="fixed";
-
-	//scrollPos = document.getElementById('floormapvw').scrollTop;
-	//document.getElementById('popupMen1').style.left=(parseInt(rect.left) + (parseInt(rect.right)-parseInt(rect.left))/2)+"px";
-	document.getElementById('popupMen1').style.left=rect.left+"px";//"30%";
-	//document.getElementById('popupMen1').style.top=(parseInt(rect.bottom) - parseInt(scrollPos) - (parseInt(rect.bottom)-parseInt(rect.top))/2)+"px";
-	//document.getElementById('popupMen1').style.top=(parseInt(rect.bottom) - (parseInt(rect.bottom)-parseInt(rect.top))/2)+"px";
-	document.getElementById('popupMen1').style.top = rect.top+"px";//"20px";
-	//alert("rect.bottom="+rect.bottom+" :: scrollPos="+scrollPos);
-
-}
-
-function closeMenu(){
-	document.getElementById('popupMen1').style.visibility = 'hidden';
-	for (var i=0 ; i<resources.length ; i++){
-		//document.getElementById('img:'+selctdResindexOfResInResrs).style = "background-color:transparent";
-		document.getElementById('img:'+i).style = "background-color:transparent";
-	}
-}
-
-function selectRes(){
-	//alert("Here-1");
-	if(FloorInMode == FloorMode.SELECTION){//i.e.User gets the UnselectAll Option
-		//alert("Here-2a");
-		//clearSelection();
-		setModeOp();
-	}
-	else if (FloorInMode == FloorMode.OPERATION){//i.e. User gets Select Res Option
-		//alert("Here-2b");
-		setModeSel();
-		var mResId = resources[selctdResindexOfResInResrs].resource_id;
-		var selectedRes = {ResId:mResId};
-		selectedResArr.push(selectedRes);
-
-		//state = 1;
-		//FloorInMode = FloorMode.SELECTION;
-
-		//document.getElementById('footerLstImg').src='img/test/release1.jpg';
-		//document.getElementById('footerOpImg').style.visibility = 'visible';
-		//document.getElementById('footerSchImg').style.visibility = 'visible';
-
-
-		//alert(JSON.stringify(selectedResArr));
-		for(var i=0; i<resources.length; i++){
-			if(resources[i].resource_id == mResId)
-				document.getElementById("lbl_slct:"+i).innerHTML = "&#10004";
-		}
-
-		document.getElementById('ahrefSchMenuB').href="schedule.html?OBoxID="+OBoxID+"&FloorNo="+FloorNo+"&SlctdResArr="+JSON.stringify(selectedResArr)+"&Context="+1;
-
-
-		document.getElementById('ahrefSchMenu1').href="schedule.html?OBoxID="+OBoxID+"&FloorNo="+FloorNo+"&SlctdResArr="+JSON.stringify(selectedResArr)+"&Context="+1;
-
-	}
-	closeMenu();
-	closeOptionMenu();
-}
 
 /*
 function addRes2selctdRsrcs(){
